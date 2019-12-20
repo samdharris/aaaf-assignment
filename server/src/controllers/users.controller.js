@@ -100,3 +100,59 @@ exports.update = async (req, res) => {
         console.error(e.message);
     }
 };
+
+exports.enableUser = async (req, res) => {
+    try {
+        User.findByIdAndUpdate(
+            req.params.userId,
+            { enabled: true },
+            (err, user) => {
+                if (_.isNil(user)) {
+                    res.status(httpCodes.NOT_FOUND).send();
+                    return;
+                }
+
+                if (!_.isNil(err)) {
+                    res.status(httpCodes.INTERNAL_SERVER_ERROR).json({
+                        message: 'Something went wrong',
+                        err,
+                    });
+                    return;
+                }
+
+                res.status(httpCodes.OK).json({
+                    message: `${user.name} enabled!`,
+                    user,
+                });
+            }
+        );
+    } catch (error) {}
+};
+
+exports.disableUser = async (req, res) => {
+    try {
+        User.findByIdAndUpdate(
+            req.params.userId,
+            { enabled: false },
+            (err, user) => {
+                if (_.isNil(user)) {
+                    res.status(httpCodes.NOT_FOUND).send();
+                    return;
+                }
+
+                if (!_.isNil(err)) {
+                    res.status(httpCodes.INTERNAL_SERVER_ERROR).json({
+                        message: 'Something went wrong',
+                        err,
+                    });
+                    return;
+                }
+
+                res.status(httpCodes.OK).json({
+                    message: `${user.name} disabled!`,
+                    user,
+                });
+            }
+        );
+    } catch (error) {}
+};
