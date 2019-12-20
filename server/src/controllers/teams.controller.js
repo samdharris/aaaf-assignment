@@ -67,4 +67,36 @@ exports.destory = (req, res) => {
     }
 };
 
-exports.update = async (req, res) => {};
+exports.update = async (req, res) => {
+    try {
+        Team.findByIdAndUpdate(
+            req.params.teamId,
+            { ...req.body },
+            { new: true },
+            (err, team) => {
+                if (_.isNil(team)) {
+                    res.status(httpCodes.NOT_FOUND).send();
+                    return;
+                }
+
+                if (!_.isNil(err)) {
+                    res.status(httpCodes.INTERNAL_SERVER_ERROR).json({
+                        message: 'Something went wrong',
+                        err,
+                    });
+                    return;
+                }
+
+                res.status(httpCodes.OK).json({
+                    message: `${team.name} updated!`,
+                    team,
+                });
+            }
+        );
+    } catch (e) {
+        res.status(httpCodes.INTERNAL_SERVER_ERROR).json({
+            message: `Something went wrong updating team ${req.params.teamId}`,
+        });
+        console.error(e.message);
+    }
+};
