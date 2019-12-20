@@ -1,13 +1,70 @@
 const httpCodes = require('http-status-codes');
+const teamModel = require('../database/models/team.model');
+const _ = require('lodash');
 
-exports.index = (req, res) => {
-    res.status(httpCodes.OK).json({
-        message: 'Working!',
-    });
+exports.index = async (req, res) => {
+    try {
+        const teams = await teamModel.find();
+        res.status(httpCodes.OK).json({
+            message: 'Retrieved teams',
+            teams,
+        });
+    } catch (e) {
+        res.status(httpCodes.INTERNAL_SERVER_ERROR).json({
+            message: 'Something went wrong getting teams',
+        });
+    }
 };
 
-exports.show = (req, res) => {};
-exports.store = (req, res) => {};
-exports.destory = (req, res) => {};
+exports.show = async (req, res) => {
+    try {
+        const team = await teamModel.findById(req.params.teamId);
 
-exports.update = (req, res) => {};
+        if (_.isNil(team)) {
+            res.status(httpCodes.NOT_FOUND).send();
+            return;
+        }
+
+        res.status(httpCodes.OK).json({
+            message: 'Team found!',
+            team,
+        });
+    } catch (e) {
+        res.status(httpCodes.INTERNAL_SERVER_ERROR).json({
+            message: `Something went wrong getting team ${req.params.teamId}`,
+        });
+        console.error(e.message);
+    }
+};
+exports.store = async (req, res) => {
+    try {
+        const team = new teamModel({
+            name: req.body.name,
+        });
+
+        await team.save();
+
+        res.status(httpCodes.CREATED).json({
+            message: 'Team created',
+            team,
+        });
+    } catch (e) {
+        res.status(httpCodes.INTERNAL_SERVER_ERROR).json({
+            message: `Something went wrong creating team`,
+        });
+        console.error(e.message);
+    }
+};
+exports.destory = (req, res) => {
+    try {
+        teamModel.findByIdAndDelete(req.params.teamId).exec();
+        res.status(httpCodes.NO_CONTENT).send();
+    } catch (e) {
+        res.status(httpCodes.INTERNAL_SERVER_ERROR).json({
+            message: `Something went wrong deleting team ${req.params.teamId}`,
+        });
+        console.error(e.message);
+    }
+};
+
+exports.update = async (req, res) => {};
