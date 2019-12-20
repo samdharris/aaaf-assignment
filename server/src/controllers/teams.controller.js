@@ -1,5 +1,6 @@
 const httpCodes = require('http-status-codes');
 const Team = require('../database/models/team.model');
+const validation = require('../validation/team.validation');
 const _ = require('lodash');
 
 exports.index = async (req, res) => {
@@ -38,8 +39,10 @@ exports.show = async (req, res) => {
 };
 exports.store = async (req, res) => {
     try {
+        const validated = await validation.validateAsync(req.body);
+
         const team = new Team({
-            name: req.body.name,
+            ...validated,
         });
 
         await team.save();
@@ -48,9 +51,10 @@ exports.store = async (req, res) => {
             message: 'Team created',
             team,
         });
-    } catch (e) {
+    } catch (error) {
         res.status(httpCodes.INTERNAL_SERVER_ERROR).json({
             message: `Something went wrong creating team`,
+            error,
         });
         console.error(e.message);
     }
@@ -69,10 +73,10 @@ exports.destory = (req, res) => {
 
 exports.update = async (req, res) => {
     try {
+        const validated = await validation.validateAsync(req.body);
         Team.findByIdAndUpdate(
             req.params.teamId,
-            { ...req.body },
-            { new: true },
+            { ...validated },
             (err, team) => {
                 if (_.isNil(team)) {
                     res.status(httpCodes.NOT_FOUND).send();
@@ -93,9 +97,10 @@ exports.update = async (req, res) => {
                 });
             }
         );
-    } catch (e) {
+    } catch (error) {
         res.status(httpCodes.INTERNAL_SERVER_ERROR).json({
             message: `Something went wrong updating team ${req.params.teamId}`,
+            error,
         });
         console.error(e.message);
     }
