@@ -55,5 +55,15 @@ exports.store = async (req, res) => {
         console.error(error.message);
     }
 };
-exports.destory = (req, res) => {};
+exports.destory = (req, res) => {
+    try {
+        User.findByIdAndDelete(req.params.userId).exec();
+        res.status(httpCodes.NO_CONTENT).send();
+    } catch (e) {
+        res.status(httpCodes.INTERNAL_SERVER_ERROR).json({
+            message: `Something went wrong deleting user ${req.params.teamId}`,
+        });
+        console.error(e.message);
+    }
+};
 exports.update = async (req, res) => {};
