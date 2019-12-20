@@ -66,4 +66,37 @@ exports.destory = (req, res) => {
         console.error(e.message);
     }
 };
-exports.update = async (req, res) => {};
+exports.update = async (req, res) => {
+    try {
+        const validated = await validation.validateAsync(req.body);
+        User.findByIdAndUpdate(
+            req.params.userId,
+            { ...validated },
+            (err, user) => {
+                if (_.isNil(user)) {
+                    res.status(httpCodes.NOT_FOUND).send();
+                    return;
+                }
+
+                if (!_.isNil(err)) {
+                    res.status(httpCodes.INTERNAL_SERVER_ERROR).json({
+                        message: 'Something went wrong',
+                        err,
+                    });
+                    return;
+                }
+
+                res.status(httpCodes.OK).json({
+                    message: `${user.name} updated!`,
+                    user,
+                });
+            }
+        );
+    } catch (error) {
+        res.status(httpCodes.INTERNAL_SERVER_ERROR).json({
+            message: `Something went wrong updating user ${req.params.userId}`,
+            error,
+        });
+        console.error(e.message);
+    }
+};
