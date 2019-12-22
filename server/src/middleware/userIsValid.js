@@ -17,9 +17,9 @@ module.exports = async (req, res, next) => {
             return;
         }
 
-        const tokenIsValid = securityUtils.validateToken(authToken);
+        const tokenDecoded = securityUtils.validateToken(authToken);
 
-        const user = await User.findById(tokenIsValid.id);
+        const user = await User.findById(tokenDecoded.id);
         if (!user.enabled) {
             res.status(httpCodes.UNAUTHORIZED).json({
                 message: 'User is disabled!',
