@@ -31,6 +31,13 @@ exports.login = async (req, res) => {
             return;
         }
 
+        if (!user.enabled) {
+            res.status(httpCodes.UNAUTHORIZED).json({
+                message: 'User is disabled!',
+            });
+            return;
+        }
+
         user.password = undefined;
         res.json({
             message: 'Login successful!',
