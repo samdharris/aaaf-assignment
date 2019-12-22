@@ -37,11 +37,4 @@ userSchema.post('find', (res, next) => {
     next();
 });
 
-userSchema.post('findOne', (user, next) => {
-    if (!_.isNil(user)) {
-        user.password = undefined;
-    }
-    next();
-});
-
 module.exports = mongoose.model('User', userSchema);

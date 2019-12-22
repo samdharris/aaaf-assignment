@@ -2,7 +2,7 @@ const httpCodes = require('http-status-codes');
 const User = require('../database/models/user.model');
 const validation = require('../validation/user.validation');
 const _ = require('lodash');
-const bcrypt = require('bcryptjs');
+const securityUtils = require('../securityUtils');
 
 exports.index = async (req, res) => {
     try {
@@ -22,6 +22,13 @@ exports.index = async (req, res) => {
 exports.show = async (req, res) => {
     try {
         const user = await User.findById(req.params.userId);
+        if (_.isNil(user)) {
+            res.status(httpCodes.NOT_FOUND).send();
+            return;
+        }
+
+        user.password = undefined;
+
         res.status(httpCodes.OK).json({
             message: `Found user`,
             user,
@@ -37,8 +44,9 @@ exports.store = async (req, res) => {
     try {
         const validated = await validation.validateAsync(req.body);
 
-        const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(validated.password, salt);
+        const hashedPassword = await securityUtils.hashedPassword(
+            validated.password
+        );
 
         const user = new User({ ...validated, password: hashedPassword });
 
