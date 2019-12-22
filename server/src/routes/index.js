@@ -8,7 +8,7 @@ const userIsValid = require('../middleware/userIsValid');
 const router = Router();
 
 router.use('/api/teams', userIsValid, teamRoutes);
-router.use('/api/users', userRoutes);
+router.use('/api/users', userIsValid, userRoutes);
 router.use(authRoutes);
 
 module.exports = router;
