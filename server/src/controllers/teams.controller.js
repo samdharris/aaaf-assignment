@@ -5,7 +5,7 @@ const _ = require('lodash');
 
 exports.index = async (req, res) => {
     try {
-        const teams = await Team.find();
+        const teams = await Team.find().populate('members');
         res.status(httpCodes.OK).json({
             message: 'Retrieved teams',
             teams,
@@ -19,7 +19,7 @@ exports.index = async (req, res) => {
 
 exports.show = async (req, res) => {
     try {
-        const team = await Team.findById(req.params.teamId);
+        const team = await Team.findById(req.params.teamId).populate('members');
 
         if (_.isNil(team)) {
             res.status(httpCodes.NOT_FOUND).send();
@@ -103,5 +103,34 @@ exports.update = async (req, res) => {
             error,
         });
         console.error(e.message);
+    }
+};
+
+exports.addUser = async (req, res) => {
+    try {
+        const newMemberId = req.body.memberId;
+        const team = await Team.findById(req.params.teamId);
+        team.members.push(newMemberId);
+        await team.save();
+        res.json({
+            message: 'Member added!',
+        });
+    } catch (error) {
+        throw error;
+    }
+};
+
+exports.removeUser = async (req, res) => {
+    try {
+        const { memberId, teamId } = req.params;
+        const team = await Team.findById(teamId);
+        const members = _.remove(team.members, member => member === memberId);
+        team.members = members;
+        await team.save();
+        res.json({
+            message: 'Member removed!',
+        });
+    } catch (error) {
+        throw error;
     }
 };

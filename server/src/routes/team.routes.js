@@ -8,4 +8,7 @@ router.post('/', controller.store);
 router.delete('/:teamId', controller.destory);
 router.put('/:teamId', controller.update);
 
+router.post('/:teamId/members', controller.addUser);
+router.delete('/:teamId/members/:memberId', controller.removeUser);
+
 module.exports = router;
