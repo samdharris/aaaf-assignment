@@ -110,6 +110,12 @@ exports.addUser = async (req, res) => {
     try {
         const newMemberId = req.body.memberId;
         const team = await Team.findById(req.params.teamId);
+        if (!_.isNil(team.members.indexOf(newMemberId))) {
+            res.status(httpCodes.BAD_REQUEST).json({
+                message: 'User cannot be added twice!',
+            });
+            return;
+        }
         team.members.push(newMemberId);
         await team.save();
         res.json({
