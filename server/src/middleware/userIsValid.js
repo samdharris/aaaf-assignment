@@ -6,6 +6,11 @@ const User = require('../database/models/user.model');
 module.exports = async (req, res, next) => {
     try {
         const header = req.header('Authorization');
+
+        /**
+         * Since we're using bearer tokens, split the string by the [space] in the value of the Authorization header
+         * and then get the last element of the array which should be the token itself.
+         **/
         const authToken = header.split(' ')[1];
         if (_.isNil(authToken)) {
             res.status(httpCodes.UNAUTHORIZED).send();
