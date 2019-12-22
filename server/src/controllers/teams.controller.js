@@ -5,7 +5,7 @@ const _ = require('lodash');
 
 exports.index = async (req, res) => {
     try {
-        const teams = await Team.find().populate('members');
+        const teams = await Team.find();
         res.status(httpCodes.OK).json({
             message: 'Retrieved teams',
             teams,
