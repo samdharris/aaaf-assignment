@@ -12,6 +12,10 @@ exports.generateToken = payload => {
     });
 };
 
-exports.validateToken = async () => {};
+exports.validateToken = token => {
+    return jwt.verify(token, process.env.JWT_SECRET, {
+        maxAge: '60m',
+    });
+};
 
 const genSalt = async () => await bcrypt.genSalt(10);
