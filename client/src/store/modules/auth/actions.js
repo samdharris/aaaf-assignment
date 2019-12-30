@@ -1,6 +1,7 @@
 import { SET_AUTHENTICATING, SET_ERRORS, SET_CURRENT_USER } from "./auth-types";
 import { SET_SNACKBAR } from "../general/general-types";
 import axios from "../../../util/axios";
+import router from "../../../router";
 
 export default {
     login: async (ctx, credentials) => {
@@ -12,6 +13,7 @@ export default {
 
             localStorage.setItem("token", data.token);
             ctx.commit(SET_CURRENT_USER, data.user);
+            router.push("/");
             ctx.commit(
                 `general/${SET_SNACKBAR}`,
                 {
