@@ -34,7 +34,7 @@ exports.login = async (req, res) => {
 
         if (!user.enabled) {
             res.status(httpCodes.UNAUTHORIZED).json({
-                message: 'User is disabled!',
+                email: 'User is disabled!',
             });
             return;
         }

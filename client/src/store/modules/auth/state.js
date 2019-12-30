@@ -6,5 +6,9 @@ export default {
     /**
      * Stores server side validation error messages.
      */
-    errors: {}
+    errors: {},
+    /**
+     * Stores the currently logged in user.
+     */
+    currentUser: {}
 };
