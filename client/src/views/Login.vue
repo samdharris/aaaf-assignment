@@ -8,6 +8,7 @@
                     </v-toolbar>
                     <v-card-text>
                         <ValidationObserver
+                            ref="form"
                             v-slot="{ invalid, validated, passes, validate }"
                         >
                             <v-form>
@@ -45,6 +46,7 @@
                                     color="success"
                                     @click="passes(onSubmit)"
                                     :disabled="invalid && validated"
+                                    :loading="isAuthenticating"
                                     >Login</v-btn
                                 >
                             </v-form>
@@ -56,6 +58,7 @@
     </v-container>
 </template>
 <script>
+import { mapActions, mapState } from "vuex";
 export default {
     name: "login",
     data() {
@@ -66,9 +69,23 @@ export default {
             }
         };
     },
+    computed: mapState({
+        isAuthenticating: state => state.auth.isAuthenticating,
+        errors: state => state.auth.errors
+    }),
     methods: {
+        ...mapActions({
+            login: "auth/login"
+        }),
         onSubmit() {
-            alert("Submitted");
+            this.login(this.loginData);
+        }
+    },
+    watch: {
+        errors: {
+            handler(value) {
+                this.$refs.form.setErrors(value);
+            }
         }
     }
 };

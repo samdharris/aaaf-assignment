@@ -1,0 +1,2 @@
+export const SET_AUTHENTICATING = "SET_AUTHENTICATING";
+export const SET_ERRORS = "SET_ERRORS";
