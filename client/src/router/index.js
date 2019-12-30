@@ -48,17 +48,13 @@ router.beforeEach((to, from, next) => {
         record => record.meta.visitWithAuth
     );
 
-    console.log(routeRequiresAuth);
     if (routeRequiresAuth && !userAuthenticated) {
         next({
             path: "/login"
         });
         return;
     }
-    console.log(`authenticated: ${userAuthenticated}`);
-    console.log(
-        `can view page when logged in: ${routeCanBeViewedWhenLoggedIn}`
-    );
+
     if (userAuthenticated && !routeCanBeViewedWhenLoggedIn) {
         next({
             path: "/"
