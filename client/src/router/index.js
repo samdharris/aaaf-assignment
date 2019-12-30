@@ -20,21 +20,24 @@ router.beforeEach((to, from, next) => {
         record => record.meta.visitWithAuth
     );
 
+    console.log(`User authenticated: ${userAuthenticated}`);
+    console.log(`routeRequiresAuth: ${routeRequiresAuth}`);
+    console.log(
+        `routeCanBeViewedWhenLoggedIn: ${routeCanBeViewedWhenLoggedIn}`
+    );
     if (routeRequiresAuth && userAuthenticated === false) {
         next({
             path: "/login"
         });
         return;
-    }
-
-    if (userAuthenticated && routeCanBeViewedWhenLoggedIn === false) {
+    } else if (userAuthenticated && routeCanBeViewedWhenLoggedIn === false) {
         next({
             path: "/"
         });
         return;
+    } else {
+        next();
     }
-
-    next();
 });
 
 export default router;

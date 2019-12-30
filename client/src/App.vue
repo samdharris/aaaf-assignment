@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations, mapGetters } from "vuex";
+import { mapState, mapMutations, mapGetters, mapActions } from "vuex";
 import { RESET_SNACKBAR } from "./store/modules/general/general-types";
 export default {
     name: "App",
@@ -40,6 +40,9 @@ export default {
         })
     },
     methods: {
+        ...mapActions({
+            verifyToken: "auth/verifyToken"
+        }),
         ...mapMutations({
             closeSnackbar: `general/${RESET_SNACKBAR}`
         }),
@@ -50,6 +53,9 @@ export default {
                 this.closeSnackbar();
             }
         }
+    },
+    mounted() {
+        this.verifyToken();
     }
 };
 </script>
