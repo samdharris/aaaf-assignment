@@ -12,7 +12,26 @@
                     :headers="headers"
                     :items="teams"
                     class="elevation-1"
-                ></v-data-table>
+                >
+                    <template v-slot:top>
+                        <v-toolbar flat>
+                            <v-spacer> </v-spacer>
+                            <v-dialog>
+                                <template v-slot:activator="{ on }">
+                                    <v-btn text v-on="on">
+                                        <v-icon>add</v-icon>
+                                        New Team
+                                    </v-btn>
+                                </template>
+                            </v-dialog>
+                        </v-toolbar>
+                    </template>
+                    <template v-slot:item.action="{ item }">
+                        <v-icon small>edit</v-icon>
+                        <v-icon small>delete</v-icon>
+                        <v-icon small>remove_red_eye</v-icon>
+                    </template>
+                </v-data-table>
             </v-col>
         </v-row>
     </v-container>
@@ -37,6 +56,11 @@ export default {
                     text: "Updated",
                     sortable: false,
                     value: "updatedAt"
+                },
+                {
+                    text: "Actions",
+                    sortable: false,
+                    value: "action"
                 }
             ]
         };
