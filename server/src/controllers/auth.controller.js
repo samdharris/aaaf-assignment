@@ -54,3 +54,15 @@ exports.login = async (req, res) => {
         console.error(error.message);
     }
 };
+
+exports.verify = async (req, res) => {
+    try {
+        const user = await User.findById(req.userId);
+        res.json({
+            message: 'User verified!',
+            user,
+        });
+    } catch (error) {
+        res.status(httpCodes.UNAUTHORIZED).send();
+    }
+};
