@@ -1,78 +1,85 @@
 <template>
     <v-app>
-        <v-app-bar app color="primary" dark> </v-app-bar>
-
-        <v-content>
-            <v-navigation-drawer permanent v-if="isAuthenticated">
-                <template v-slot:prepend>
-                    <v-list>
-                        <v-list-item>
-                            <v-list-item-avatar center>
-                                <v-img
-                                    src="https://randomuser.me/api/portraits/men/85.jpg"
-                                ></v-img>
-                            </v-list-item-avatar>
+        <v-navigation-drawer
+            v-if="isAuthenticated"
+            v-model="drawer"
+            app
+            clipped
+        >
+            <template v-slot:prepend>
+                <v-list>
+                    <v-list-item>
+                        <v-list-item-avatar center>
+                            <v-img
+                                src="https://randomuser.me/api/portraits/men/85.jpg"
+                            ></v-img>
+                        </v-list-item-avatar>
+                    </v-list-item>
+                    <v-list-group>
+                        <template v-slot:activator>
+                            <v-list-item-content>
+                                <v-list-item-title class="title">
+                                    {{ user.name }}
+                                </v-list-item-title>
+                                <v-list-item-subtitle>
+                                    {{ user.email }}
+                                </v-list-item-subtitle>
+                            </v-list-item-content>
+                        </template>
+                        <v-list-item link>
+                            <v-list-item-title>My Account</v-list-item-title>
+                            <v-list-item-icon
+                                ><v-icon
+                                    >account_circle</v-icon
+                                ></v-list-item-icon
+                            >
                         </v-list-item>
-                        <v-list-group>
-                            <template v-slot:activator>
-                                <v-list-item-content>
-                                    <v-list-item-title class="title">
-                                        {{ user.name }}
-                                    </v-list-item-title>
-                                    <v-list-item-subtitle>
-                                        {{ user.email }}
-                                    </v-list-item-subtitle>
-                                </v-list-item-content>
-                            </template>
-                            <v-list-item link>
-                                <v-list-item-title
-                                    >My Account</v-list-item-title
-                                >
-                                <v-list-item-icon
-                                    ><v-icon
-                                        >account_circle</v-icon
-                                    ></v-list-item-icon
-                                >
-                            </v-list-item>
-                            <v-list-item link @click="logout">
-                                <v-list-item-title>Logout</v-list-item-title>
-                                <v-list-item-icon>
-                                    <v-icon>exit_to_app</v-icon>
-                                </v-list-item-icon>
-                            </v-list-item>
-                        </v-list-group>
-                    </v-list>
-                </template>
-
-                <v-divider></v-divider>
-
-                <v-list nav>
-                    <v-list-item link to="/">
-                        <v-list-item-icon>
-                            <v-icon>home</v-icon>
-                        </v-list-item-icon>
-                        <v-list-item-content>
-                            <v-list-item-title>Dashboard</v-list-item-title>
-                        </v-list-item-content>
-                    </v-list-item>
-                    <v-list-item link to="/teams">
-                        <v-list-item-icon>
-                            <v-icon>people</v-icon>
-                        </v-list-item-icon>
-                        <v-list-item-content>
-                            <v-list-item-title>Teams</v-list-item-title>
-                        </v-list-item-content>
-                    </v-list-item>
-                    <v-list-item link to="/users">
-                        <v-list-item-icon>
-                            <v-icon>supervisor_account</v-icon>
-                        </v-list-item-icon>
-                        <v-list-item-content>
-                            <v-list-item-title>Users</v-list-item-title>
-                        </v-list-item-content>
-                    </v-list-item>
+                        <v-list-item link @click="logout">
+                            <v-list-item-title>Logout</v-list-item-title>
+                            <v-list-item-icon>
+                                <v-icon>exit_to_app</v-icon>
+                            </v-list-item-icon>
+                        </v-list-item>
+                    </v-list-group>
                 </v-list>
-            </v-navigation-drawer>
+            </template>
+
+            <v-divider></v-divider>
+
+            <v-list nav>
+                <v-list-item link to="/">
+                    <v-list-item-icon>
+                        <v-icon>home</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                        <v-list-item-title>Dashboard</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+                <v-list-item link to="/teams">
+                    <v-list-item-icon>
+                        <v-icon>people</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                        <v-list-item-title>Teams</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+                <v-list-item link to="/users">
+                    <v-list-item-icon>
+                        <v-icon>supervisor_account</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                        <v-list-item-title>Users</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+            </v-list>
+        </v-navigation-drawer>
+        <v-app-bar app clipped-left color="primary" dark v-if="isAuthenticated">
+            <v-app-bar-nav-icon
+                @click.stop="drawer = !drawer"
+            ></v-app-bar-nav-icon>
+            <v-toolbar-title>Foo</v-toolbar-title>
+        </v-app-bar>
+        <v-content>
             <router-view></router-view>
             <v-snackbar
                 v-on:input="shouldCloseSnackbar"
@@ -95,6 +102,11 @@ import { mapState, mapMutations, mapGetters, mapActions } from "vuex";
 import { RESET_SNACKBAR } from "./store/modules/general/general-types";
 export default {
     name: "App",
+    data() {
+        return {
+            drawer: true
+        };
+    },
     computed: {
         ...mapState({
             snackbar: state => state.general.snackbar,
