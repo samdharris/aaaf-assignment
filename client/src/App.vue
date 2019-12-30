@@ -1,6 +1,12 @@
 <template>
     <v-app>
-        <v-app-bar app color="primary" dark> </v-app-bar>
+        <v-app-bar app color="primary" dark>
+            <v-spacer></v-spacer>
+            <v-btn text v-if="isAuthenticated">
+                <v-icon>mdi-exit-to-app</v-icon>
+                Logout
+            </v-btn>
+        </v-app-bar>
 
         <v-content>
             <router-view></router-view>
@@ -21,13 +27,18 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from "vuex";
+import { mapState, mapMutations, mapGetters } from "vuex";
 import { RESET_SNACKBAR } from "./store/modules/general/general-types";
 export default {
     name: "App",
-    computed: mapState({
-        snackbar: state => state.general.snackbar
-    }),
+    computed: {
+        ...mapState({
+            snackbar: state => state.general.snackbar
+        }),
+        ...mapGetters({
+            isAuthenticated: "auth/isAuthenticated"
+        })
+    },
     methods: {
         ...mapMutations({
             closeSnackbar: `general/${RESET_SNACKBAR}`
