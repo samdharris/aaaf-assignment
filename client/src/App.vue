@@ -2,7 +2,7 @@
     <v-app>
         <v-app-bar app color="primary" dark>
             <v-spacer></v-spacer>
-            <v-btn text v-if="isAuthenticated">
+            <v-btn text v-if="isAuthenticated" @click="logout">
                 <v-icon>mdi-exit-to-app</v-icon>
                 Logout
             </v-btn>
@@ -41,7 +41,8 @@ export default {
     },
     methods: {
         ...mapActions({
-            verifyToken: "auth/verifyToken"
+            verifyToken: "auth/verifyToken",
+            logout: "auth/logout"
         }),
         ...mapMutations({
             closeSnackbar: `general/${RESET_SNACKBAR}`

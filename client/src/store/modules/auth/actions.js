@@ -46,5 +46,19 @@ export default {
         } catch (error) {
             removeToken();
         }
+    },
+    logout: async ctx => {
+        removeToken();
+        ctx.commit(SET_CURRENT_USER, {});
+        ctx.commit(
+            `general/${SET_SNACKBAR}`,
+            {
+                color: "success",
+                text: "You have been logged out!",
+                open: true
+            },
+            { root: true }
+        );
+        router.push("/login");
     }
 };
