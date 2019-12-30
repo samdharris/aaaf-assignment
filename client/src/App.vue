@@ -4,12 +4,33 @@
 
         <v-content>
             <router-view></router-view>
+            <v-snackbar
+                v-model="snackbar.open"
+                top
+                right
+                :color="snackbar.color"
+            >
+                {{ snackbar.text }}
+                <v-btn dark icon rounded @click="closeSnackbar">
+                    <v-icon>mdi-close</v-icon>
+                </v-btn>
+            </v-snackbar>
         </v-content>
     </v-app>
 </template>
 
 <script>
+import { mapState, mapMutations } from "vuex";
+import { RESET_SNACKBAR } from "./store/modules/general/general-types";
 export default {
-    name: "App"
+    name: "App",
+    computed: mapState({
+        snackbar: state => state.general.snackbar
+    }),
+    methods: {
+        ...mapMutations({
+            closeSnackbar: `general/${RESET_SNACKBAR}`
+        })
+    }
 };
 </script>
