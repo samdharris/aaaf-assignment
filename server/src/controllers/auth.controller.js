@@ -5,7 +5,6 @@ const _ = require('lodash');
 const securityUtils = require('../securityUtils');
 
 exports.login = async (req, res) => {
-    console.log('Login called!');
     try {
         const validated = await validation.validateAsync(req.body);
 
