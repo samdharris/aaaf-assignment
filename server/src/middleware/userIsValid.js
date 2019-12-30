@@ -7,6 +7,11 @@ module.exports = async (req, res, next) => {
     try {
         const header = req.header('Authorization');
 
+        if (_.isNil(header)) {
+            res.status(httpCodes.UNAUTHORIZED).send();
+            return;
+        }
+
         /**
          * Since we're using bearer tokens, split the string by the [space] in the value of the Authorization header
          * and then get the last element of the array which should be the token itself.
