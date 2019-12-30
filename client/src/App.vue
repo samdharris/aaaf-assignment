@@ -5,6 +5,7 @@
         <v-content>
             <router-view></router-view>
             <v-snackbar
+                v-on:input="shouldCloseSnackbar"
                 v-model="snackbar.open"
                 top
                 right
@@ -30,7 +31,14 @@ export default {
     methods: {
         ...mapMutations({
             closeSnackbar: `general/${RESET_SNACKBAR}`
-        })
+        }),
+
+        shouldCloseSnackbar(value) {
+            console.log("called");
+            if (!value) {
+                this.closeSnackbar();
+            }
+        }
     }
 };
 </script>
