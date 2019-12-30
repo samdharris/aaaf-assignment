@@ -5,6 +5,7 @@ const _ = require('lodash');
 const securityUtils = require('../securityUtils');
 
 exports.login = async (req, res) => {
+    console.log('Login called!');
     try {
         const validated = await validation.validateAsync(req.body);
 
@@ -13,8 +14,8 @@ exports.login = async (req, res) => {
         });
 
         if (_.isNil(user)) {
-            res.status(httpCodes.NOT_FOUND).json({
-                message: 'Invalid credentials!',
+            res.status(httpCodes.BAD_REQUEST).json({
+                email: ["Email address doesn't match"],
             });
             return;
         }
@@ -26,7 +27,7 @@ exports.login = async (req, res) => {
 
         if (!hashesAreSame) {
             res.status(httpCodes.BAD_REQUEST).json({
-                message: 'Invalid credentials!',
+                password: ['password is invalid'],
             });
             return;
         }
