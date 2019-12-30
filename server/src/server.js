@@ -3,7 +3,7 @@ const dotenv = require('dotenv');
 const bodyParser = require('body-parser');
 const router = require('./routes');
 const database = require('./database');
-
+const cors = require('cors');
 dotenv.config();
 
 const server = express();
@@ -11,6 +11,8 @@ const server = express();
 server.start = async () => {
     try {
         await database.connect();
+
+        server.use(cors());
         server.use(bodyParser.json());
         server.use(
             bodyParser.urlencoded({
