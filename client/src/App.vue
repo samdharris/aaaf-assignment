@@ -77,7 +77,7 @@
             <v-app-bar-nav-icon
                 @click.stop="drawer = !drawer"
             ></v-app-bar-nav-icon>
-            <v-toolbar-title>Foo</v-toolbar-title>
+            <v-toolbar-title>{{ appName }}</v-toolbar-title>
         </v-app-bar>
         <v-content>
             <router-view></router-view>
@@ -110,7 +110,8 @@ export default {
     computed: {
         ...mapState({
             snackbar: state => state.general.snackbar,
-            user: state => state.auth.currentUser
+            user: state => state.auth.currentUser,
+            appName: state => state.general.appName
         }),
         ...mapGetters({
             isAuthenticated: "auth/isAuthenticated"

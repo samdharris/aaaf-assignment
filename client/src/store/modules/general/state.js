@@ -6,5 +6,6 @@ export default {
         text: "",
         color: "",
         open: false
-    }
+    },
+    appName: "TMS"
 };

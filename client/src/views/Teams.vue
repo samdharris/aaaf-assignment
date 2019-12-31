@@ -3,7 +3,7 @@
         <v-row>
             <v-col>
                 <h1>Teams</h1>
-                <p>An overview of all teams within [INSERT COMPANY HERE]</p>
+                <p>An overview of all teams.</p>
             </v-col>
         </v-row>
         <v-row>
