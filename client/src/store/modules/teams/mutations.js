@@ -1,4 +1,10 @@
-import { SET_TEAMS, SET_LOADING } from "./teams-types";
+import {
+    SET_TEAMS,
+    SET_LOADING,
+    SET_SUBMITTING,
+    ADD_TEAM,
+    SET_ERRORS
+} from "./teams-types";
 
 export default {
     [SET_TEAMS](state, teams) {
@@ -6,5 +12,14 @@ export default {
     },
     [SET_LOADING](state, loading) {
         state.loading = loading;
+    },
+    [SET_SUBMITTING](state, submitting) {
+        state.submitting = submitting;
+    },
+    [ADD_TEAM](state, team) {
+        state.teams.push(team);
+    },
+    [SET_ERRORS](state, errors) {
+        state.errors = { ...errors };
     }
 };

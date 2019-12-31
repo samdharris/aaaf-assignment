@@ -6,5 +6,13 @@ export default {
     /**
      * Flag used to indicate when we're loading something from the server.
      */
-    loading: false
+    loading: false,
+    /**
+     * Flag used to indicate when we're submitting the team form.
+     */
+    submitting: false,
+    /**
+     * Stores server side validation error messages.
+     */
+    errors: {}
 };

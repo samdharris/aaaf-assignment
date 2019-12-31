@@ -16,19 +16,20 @@
                     <template v-slot:top>
                         <v-toolbar flat>
                             <v-spacer> </v-spacer>
-                            <v-dialog>
+                            <v-dialog v-model="dialog">
                                 <template v-slot:activator="{ on }">
                                     <v-btn text v-on="on">
                                         <v-icon>add</v-icon>
                                         New Team
                                     </v-btn>
                                 </template>
+                                <new-team-form
+                                    v-on:closeNewTeamForm="dialog = false"
+                                ></new-team-form>
                             </v-dialog>
                         </v-toolbar>
                     </template>
                     <template v-slot:item.action="{ item }">
-                        <v-icon small>edit</v-icon>
-                        <v-icon small>delete</v-icon>
                         <v-icon small>remove_red_eye</v-icon>
                     </template>
                 </v-data-table>
@@ -38,9 +39,12 @@
 </template>
 <script>
 import { mapState, mapActions } from "vuex";
+import NewTeamForm from "../components/NewTeamForm";
 export default {
+    components: { NewTeamForm },
     data() {
         return {
+            dialog: false,
             headers: [
                 {
                     text: "Name",
