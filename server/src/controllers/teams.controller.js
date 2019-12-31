@@ -11,7 +11,7 @@ exports.index = async (req, res) => {
             teams,
         });
     } catch (e) {
-        res.status(httpCodes.INTERNAL_SERVER_ERROR).json({
+        res.status(httpCodes.BAD_REQUEST).json({
             message: 'Something went wrong getting teams',
         });
     }
@@ -31,7 +31,7 @@ exports.show = async (req, res) => {
             team,
         });
     } catch (e) {
-        res.status(httpCodes.INTERNAL_SERVER_ERROR).json({
+        res.status(httpCodes.BAD_REQUEST).json({
             message: `Something went wrong getting team ${req.params.teamId}`,
         });
         console.error(e.message);
@@ -52,7 +52,7 @@ exports.store = async (req, res) => {
             team,
         });
     } catch (error) {
-        res.status(httpCodes.INTERNAL_SERVER_ERROR).json({
+        res.status(httpCodes.BAD_REQUEST).json({
             message: `Something went wrong creating team`,
             error,
         });
@@ -64,7 +64,7 @@ exports.destory = (req, res) => {
         Team.findByIdAndDelete(req.params.teamId).exec();
         res.status(httpCodes.NO_CONTENT).send();
     } catch (e) {
-        res.status(httpCodes.INTERNAL_SERVER_ERROR).json({
+        res.status(httpCodes.BAD_REQUEST).json({
             message: `Something went wrong deleting team ${req.params.teamId}`,
         });
         console.error(e.message);
@@ -84,7 +84,7 @@ exports.update = async (req, res) => {
                 }
 
                 if (!_.isNil(err)) {
-                    res.status(httpCodes.INTERNAL_SERVER_ERROR).json({
+                    res.status(httpCodes.BAD_REQUEST).json({
                         message: 'Something went wrong',
                         err,
                     });
@@ -98,7 +98,7 @@ exports.update = async (req, res) => {
             }
         );
     } catch (error) {
-        res.status(httpCodes.INTERNAL_SERVER_ERROR).json({
+        res.status(httpCodes.BAD_REQUEST).json({
             message: `Something went wrong updating team ${req.params.teamId}`,
             error,
         });
