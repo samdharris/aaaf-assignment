@@ -127,7 +127,6 @@ export default {
         }),
 
         shouldCloseSnackbar(value) {
-            console.log("called");
             if (!value) {
                 this.closeSnackbar();
             }
