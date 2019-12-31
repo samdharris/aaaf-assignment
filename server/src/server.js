@@ -4,6 +4,8 @@ const bodyParser = require('body-parser');
 const router = require('./routes');
 const database = require('./database');
 const cors = require('cors');
+const logger = require('./logger');
+
 dotenv.config();
 
 const server = express();
@@ -23,7 +25,7 @@ server.start = async () => {
         server.use(router);
 
         server.listen(process.env.PORT, _ => {
-            console.log(`Listening on port ${process.env.PORT}`);
+            logger.info(`Server running on port: ${process.env.PORT}`);
         });
     } catch (e) {
         console.error(`Failed to boot: ${e.message}`);

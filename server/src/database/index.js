@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const logger = require('../logger');
 
 exports.connect = async () => {
     await mongoose.connect(
@@ -9,5 +10,5 @@ exports.connect = async () => {
         }
     );
 
-    console.log('connected to mongo!');
+    logger.info('Connected to mongo!');
 };
