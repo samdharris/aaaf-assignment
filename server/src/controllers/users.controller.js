@@ -62,6 +62,8 @@ exports.store = async (req, res) => {
         const user = new User({ ...validated, password: hashedPassword });
 
         await user.save();
+
+        user.password = undefined;
         res.status(httpCodes.CREATED).json({
             message: 'User created',
             user,

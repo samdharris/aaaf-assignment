@@ -33,11 +33,6 @@ const userSchema = new Schema(
     { timestamps: true }
 );
 
-userSchema.post('save', (user, next) => {
-    user.password = undefined;
-    next();
-});
-
 userSchema.post('find', (res, next) => {
     for (user of res) {
         user.password = undefined;
