@@ -10,9 +10,7 @@
                 <v-list>
                     <v-list-item>
                         <v-list-item-avatar center>
-                            <v-img
-                                src="https://randomuser.me/api/portraits/men/85.jpg"
-                            ></v-img>
+                            <v-img :src="user.profilePic"></v-img>
                         </v-list-item-avatar>
                     </v-list-item>
                     <v-list-group>
