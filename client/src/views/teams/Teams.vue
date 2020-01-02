@@ -41,7 +41,7 @@
 </template>
 <script>
 import { mapState, mapActions } from "vuex";
-import NewTeamForm from "../components/NewTeamForm";
+import NewTeamForm from "../../components/teams/NewTeamForm";
 export default {
     components: { NewTeamForm },
     data() {
