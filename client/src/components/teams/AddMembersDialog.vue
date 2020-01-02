@@ -7,12 +7,14 @@
             <v-card-text>
                 <v-form>
                     <v-select
+                        v-model="members"
                         label="Members"
                         multiple
                         item-text="name"
                         item-value="_id"
                         :items="users"
                     ></v-select>
+                    <v-btn @click="onSubmit">Update Members</v-btn>
                 </v-form>
             </v-card-text>
         </v-card>
@@ -22,6 +24,10 @@
 import { mapState } from "vuex";
 export default {
     props: {
+        members: {
+            type: Array,
+            required: true
+        },
         teamName: {
             type: String,
             required: true
@@ -33,6 +39,11 @@ export default {
     },
     computed: mapState({
         users: state => state.users.users
-    })
+    }),
+    methods: {
+        onSubmit() {
+            console.log(this.members);
+        }
+    }
 };
 </script>

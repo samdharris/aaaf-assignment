@@ -35,6 +35,7 @@
             v-if="!loading"
             :should-open="openDialog"
             :team-name="team.name"
+            :members="team.members"
         ></add-members-dialog>
     </v-container>
 </template>
