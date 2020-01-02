@@ -31,9 +31,7 @@ exports.show = async (req, res) => {
             team,
         });
     } catch (e) {
-        res.status(httpCodes.BAD_REQUEST).json({
-            message: `Something went wrong getting team ${req.params.teamId}`,
-        });
+        res.status(httpCodes.NOT_FOUND).send();
         console.error(e.message);
     }
 };
