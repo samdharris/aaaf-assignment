@@ -20,18 +20,19 @@ instance.interceptors.request.use(request => {
 });
 
 instance.interceptors.response.use(
-    response => response,
+    response => {
+        return Promise.resolve(response);
+    },
     error => {
-        switch (error.response.status) {
-            case 404:
-                router.push("/not-found");
-                break;
-            case 401:
-                store.dispatch("auth/logout");
-                break;
-            default:
-                return error;
+        const { status } = error.response;
+        if (status === 404) {
+            router.push("/not-found");
         }
+
+        if (status === 401) {
+            store.dispatch("auth/logout");
+        }
+        return Promise.reject(error);
     }
 );
 
