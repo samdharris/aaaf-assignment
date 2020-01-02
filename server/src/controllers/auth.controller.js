@@ -58,6 +58,7 @@ exports.login = async (req, res) => {
 exports.verify = async (req, res) => {
     try {
         const user = await User.findById(req.userId);
+        user.password = undefined;
         res.json({
             message: 'User verified!',
             user,
