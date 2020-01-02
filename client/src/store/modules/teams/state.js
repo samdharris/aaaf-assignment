@@ -14,5 +14,9 @@ export default {
     /**
      * Stores server side validation error messages.
      */
-    errors: {}
+    errors: {},
+    /**
+     * The current team that's being shown on TeamDetail.vue.
+     */
+    team: {}
 };

@@ -1,4 +1,5 @@
 export const SET_TEAMS = "SET_TEAMS";
+export const SET_TEAM = "SET_TEAM";
 export const SET_LOADING = "SET_LOADING";
 export const SET_SUBMITTING = "SET_SUBMITTING";
 export const ADD_TEAM = "ADD_TEAM";

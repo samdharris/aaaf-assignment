@@ -4,9 +4,11 @@ import {
     SET_TEAMS,
     SET_SUBMITTING,
     ADD_TEAM,
-    SET_ERRORS
+    SET_ERRORS,
+    SET_TEAM
 } from "./teams-types";
 import { SET_SNACKBAR } from "../general/general-types";
+import router from "../../../router";
 export default {
     getTeams: async ctx => {
         try {
@@ -37,6 +39,21 @@ export default {
             ctx.commit(SET_ERRORS, error.response.data);
         } finally {
             ctx.commit(SET_SUBMITTING, false);
+        }
+    },
+    getTeam: async (ctx, teamId) => {
+        try {
+            ctx.commit(SET_LOADING, true);
+            const { data } = await axios.get(`/api/teams/${teamId}`);
+            ctx.commit(SET_TEAM, data.team);
+        } catch (error) {
+            const { response } = error;
+            console.log(response);
+            if (response.status === 404) {
+                router.push("/not-found");
+            }
+        } finally {
+            ctx.commit(SET_LOADING, false);
         }
     }
 };

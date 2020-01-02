@@ -3,7 +3,8 @@ import {
     SET_LOADING,
     SET_SUBMITTING,
     ADD_TEAM,
-    SET_ERRORS
+    SET_ERRORS,
+    SET_TEAM
 } from "./teams-types";
 
 export default {
@@ -21,5 +22,8 @@ export default {
     },
     [SET_ERRORS](state, errors) {
         state.errors = { ...errors };
+    },
+    [SET_TEAM](state, team) {
+        state.team = { ...team };
     }
 };
