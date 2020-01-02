@@ -10,7 +10,7 @@ exports.login = async (req, res) => {
 
         const user = await User.findOne({
             email: validated.email,
-        });
+        }).populate('team');
 
         if (_.isNil(user)) {
             res.status(httpCodes.BAD_REQUEST).json({
