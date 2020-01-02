@@ -36,13 +36,13 @@ async function assignUsersToTeams(createdUsers, createdTeams) {
                 team.members.indexOf(member._id) === -1,
                 `User in team ${team.name}`
             );
-            team.members.push(member._id);
+            team.members.push(member);
         });
 
         await team.save();
 
         for (let y = 0; y < members.length; y++) {
-            members[y].team = team._id;
+            members[y].team = team;
             assert(
                 !_.isNil(members[y].team),
                 `Failed setting team for member ${members[y].name}`
