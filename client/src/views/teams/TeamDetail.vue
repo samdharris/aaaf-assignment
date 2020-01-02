@@ -32,6 +32,7 @@
             </v-col>
         </v-row>
         <add-members-dialog
+            v-if="!loading"
             :should-open="openDialog"
             :team-name="team.name"
         ></add-members-dialog>
