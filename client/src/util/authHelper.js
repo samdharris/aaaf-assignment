@@ -1,15 +1,7 @@
 import _ from "lodash";
 
-import store from "../store";
 export function isAuthenticated() {
-    let authenticated = false;
-    const token = getToken();
-    if (!_.isNil(token)) {
-        store.dispatch("auth/verifyToken");
-        authenticated = true;
-    }
-
-    return authenticated;
+    return !_.isNil(getToken());
 }
 
 export function getToken() {
