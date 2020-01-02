@@ -5,6 +5,7 @@ import TeamDetail from "../views/teams/TeamDetail.vue";
 import NotFound from "../views/NotFound.vue";
 
 import Users from "../views/users/Users.vue";
+import UserDetail from "../views/users/UserDetail.vue";
 
 const routes = [
     {
@@ -50,6 +51,14 @@ const routes = [
     {
         path: "/users",
         component: Users,
+        meta: {
+            requiresAuth: true,
+            visitWithAuth: true
+        }
+    },
+    {
+        path: "/users/me",
+        component: UserDetail,
         meta: {
             requiresAuth: true,
             visitWithAuth: true

@@ -24,7 +24,7 @@
                                 </v-list-item-subtitle>
                             </v-list-item-content>
                         </template>
-                        <v-list-item link>
+                        <v-list-item link to="/users/me">
                             <v-list-item-title>My Account</v-list-item-title>
                             <v-list-item-icon
                                 ><v-icon
