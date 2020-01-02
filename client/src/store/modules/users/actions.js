@@ -1,4 +1,4 @@
-import { SET_USERS } from "./user-types";
+import { SET_USERS, SET_SUBMITTING, ADD_USER, SET_ERRORS } from "./user-types";
 import axios from "../../../util/axios";
 
 export default {
@@ -8,6 +8,20 @@ export default {
             ctx.commit(SET_USERS, data.users);
         } catch (error) {
             throw error;
+        }
+    },
+    createUser: async (ctx, user) => {
+        try {
+            ctx.commit(SET_SUBMITTING, true);
+            const response = await axios.post("/api/users", { ...user });
+            ctx.commit(ADD_USER, response.data.user);
+
+            return true;
+        } catch (error) {
+            ctx.commit(SET_ERRORS, error.response.data);
+            return false;
+        } finally {
+            ctx.commit(SET_SUBMITTING, false);
         }
     }
 };
