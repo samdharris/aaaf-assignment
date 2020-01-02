@@ -44,6 +44,17 @@ exports.store = async (req, res) => {
     try {
         const validated = await validation.validateAsync(req.body);
 
+        const exists = await User.findOne({
+            email: validated.email,
+        });
+
+        if (!_.isNil(exists)) {
+            res.status(httpCodes.BAD_REQUEST).json({
+                email: `${exists.email} already exists!`,
+            });
+            return;
+        }
+
         const hashedPassword = await securityUtils.hashPassword(
             validated.password
         );
