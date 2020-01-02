@@ -120,6 +120,7 @@ export default {
     methods: {
         ...mapActions({
             verifyToken: "auth/verifyToken",
+            getUsers: "users/getUsers",
             logout: "auth/logout"
         }),
         ...mapMutations({
@@ -130,10 +131,14 @@ export default {
             if (!value) {
                 this.closeSnackbar();
             }
+        },
+        async start() {
+            await this.verifyToken();
+            await this.getUsers();
         }
     },
     mounted() {
-        this.verifyToken();
+        this.start();
     }
 };
 </script>
