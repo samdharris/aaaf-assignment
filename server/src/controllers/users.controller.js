@@ -44,7 +44,7 @@ exports.store = async (req, res) => {
     try {
         const validated = await validation.validateAsync(req.body);
 
-        const hashedPassword = await securityUtils.hashedPassword(
+        const hashedPassword = await securityUtils.hashPassword(
             validated.password
         );
 

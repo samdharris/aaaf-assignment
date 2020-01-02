@@ -1,7 +1,11 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-exports.hashPassword = async openPass => await bcrypt.hash(openPass, genSalt());
+exports.hashPassword = async openPass => {
+    const salt = await genSalt();
+    const password = await bcrypt.hash(openPass, salt);
+    return password;
+};
 
 exports.hashesAreSame = async (clear, hash) =>
     await bcrypt.compare(clear, hash);
