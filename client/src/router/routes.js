@@ -1,7 +1,7 @@
 import Home from "../views/Home.vue";
 import Login from "../views/Login.vue";
-import Teams from "../views/Teams.vue";
-import TeamDetail from "../views/TeamDetail.vue";
+import Teams from "../views/teams/Teams.vue";
+import TeamDetail from "../views/teams/TeamDetail.vue";
 import NotFound from "../views/NotFound.vue";
 
 const routes = [
