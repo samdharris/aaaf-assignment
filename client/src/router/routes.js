@@ -2,6 +2,7 @@ import Home from "../views/Home.vue";
 import Login from "../views/Login.vue";
 import Teams from "../views/Teams.vue";
 import TeamDetail from "../views/TeamDetail.vue";
+import NotFound from "../views/NotFound.vue";
 
 const routes = [
     {
@@ -41,6 +42,14 @@ const routes = [
         component: TeamDetail,
         meta: {
             requiresAuth: true,
+            visitWithAuth: true
+        }
+    },
+    {
+        path: "*",
+        component: NotFound,
+        meta: {
+            requiresAuth: false,
             visitWithAuth: true
         }
     }
