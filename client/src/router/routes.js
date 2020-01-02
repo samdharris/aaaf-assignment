@@ -4,6 +4,8 @@ import Teams from "../views/teams/Teams.vue";
 import TeamDetail from "../views/teams/TeamDetail.vue";
 import NotFound from "../views/NotFound.vue";
 
+import Users from "../views/users/Users.vue";
+
 const routes = [
     {
         path: "/",
@@ -40,6 +42,14 @@ const routes = [
     {
         path: "/teams/:teamId",
         component: TeamDetail,
+        meta: {
+            requiresAuth: true,
+            visitWithAuth: true
+        }
+    },
+    {
+        path: "/users",
+        component: Users,
         meta: {
             requiresAuth: true,
             visitWithAuth: true
