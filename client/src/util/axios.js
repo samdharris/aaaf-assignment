@@ -19,17 +19,20 @@ instance.interceptors.request.use(request => {
     return request;
 });
 
-instance.interceptors.response.use(response => {
-    switch (response.status) {
-        case 404:
-            router.push("/not-found");
-            break;
-        case 401:
-            store.dispatch("auth/logout");
-            break;
-        default:
-            return response;
+instance.interceptors.response.use(
+    response => response,
+    error => {
+        switch (error.response.status) {
+            case 404:
+                router.push("/not-found");
+                break;
+            case 401:
+                store.dispatch("auth/logout");
+                break;
+            default:
+                return error;
+        }
     }
-});
+);
 
 export default instance;
