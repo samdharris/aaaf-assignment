@@ -132,7 +132,7 @@ exports.removeUser = async (req, res) => {
         user.team = null;
         await user.save();
         const team = await Team.findById(teamId);
-        team.members = team.members.filter(member => member._id !== memberId);
+        team.members.remove(memberId);
         await team.save();
         res.json({
             message: 'Member removed!',
