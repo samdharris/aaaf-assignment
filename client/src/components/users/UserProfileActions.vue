@@ -8,49 +8,49 @@
             </template>
             <span>Update this user.</span>
         </v-tooltip>
-        <v-tooltip bottom v-if="userId !== authUserId">
+        <v-tooltip bottom v-if="user._id !== authUserId">
             <template v-slot:activator="{ on }">
                 <v-btn
                     icon
                     class="white--text"
-                    :disabled="userEnabled"
+                    :disabled="user.enabled"
                     v-on="on"
-                    @click="enableUser(userId)"
+                    @click="enableUser(user._id)"
                 >
                     <v-icon>done</v-icon>
                 </v-btn>
             </template>
-            <span v-if="userEnabled"
+            <span v-if="user.enabled"
                 >You can't enable this user as they're already enabled.</span
             >
             <span v-else>
                 Enable this user.
             </span>
         </v-tooltip>
-        <v-tooltip bottom v-if="userId !== authUserId">
+        <v-tooltip bottom v-if="user._id !== authUserId">
             <template v-slot:activator="{ on }">
                 <v-btn
                     icon
                     class="white--text"
-                    :disabled="!userEnabled"
+                    :disabled="!user.enabled"
                     v-on="on"
-                    @click="disableUser(userId)"
+                    @click="disableUser(user._id)"
                 >
                     <v-icon>delete</v-icon>
                 </v-btn>
             </template>
-            <span v-if="userEnabled">Disable User</span>
+            <span v-if="user.enabled">Disable User</span>
             <span v-else>
                 This user is already disabled
             </span>
         </v-tooltip>
-        <v-tooltip bottom v-if="userId !== authUserId">
+        <v-tooltip bottom v-if="user._id !== authUserId">
             <template v-slot:activator="{ on }">
                 <v-btn
                     icon
                     class="white--text"
                     v-on="on"
-                    @click="deleteUser(userId)"
+                    @click="deleteUser(user._id)"
                 >
                     <v-icon class="white--text">delete_forever</v-icon>
                 </v-btn>
@@ -63,16 +63,12 @@
 import { mapActions } from "vuex";
 export default {
     props: {
-        userId: {
-            type: String,
+        user: {
+            type: Object,
             required: true
         },
         authUserId: {
             type: String,
-            required: true
-        },
-        userEnabled: {
-            type: Boolean,
             required: true
         }
     },

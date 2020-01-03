@@ -25,13 +25,13 @@
                                 </v-card-subtitle>
                             </v-col>
                         </v-row>
-                        <v-row>
+                        <v-row v-if="!loading">
                             <v-spacer></v-spacer>
                             <v-col>
                                 <user-profile-actions
-                                    :user-id="user._id"
+                                    v-if="user._id && authenticatedUser._id"
+                                    :user="user"
                                     :auth-user-id="authenticatedUser._id"
-                                    :user-enabled="user.enabled"
                                 ></user-profile-actions>
                             </v-col>
                         </v-row>
@@ -76,6 +76,7 @@ export default {
         authenticatedUser: state => state.auth.currentUser
     }),
     mounted() {
+        console.log(this.authenticatedUser);
         this.getUser(this.$route.params.userId);
     },
     beforeRouteUpdate(to) {
