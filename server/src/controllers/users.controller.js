@@ -21,7 +21,7 @@ exports.index = async (req, res) => {
 };
 exports.show = async (req, res) => {
     try {
-        const user = await User.findById(req.params.userId);
+        const user = await User.findById(req.params.userId).populate('team');
         if (_.isNil(user)) {
             res.status(httpCodes.NOT_FOUND).send();
             return;

@@ -14,5 +14,9 @@ export default {
     /**
      * Stores server side validation error messages.
      */
-    errors: {}
+    errors: {},
+    /**
+     * Stores the currently active user.
+     */
+    user: {}
 };

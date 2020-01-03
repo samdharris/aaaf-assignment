@@ -1,4 +1,11 @@
-import { SET_USERS, SET_SUBMITTING, ADD_USER, SET_ERRORS } from "./user-types";
+import {
+    SET_USERS,
+    SET_SUBMITTING,
+    ADD_USER,
+    SET_ERRORS,
+    SET_LOADING,
+    SET_USER
+} from "./user-types";
 import axios from "../../../util/axios";
 
 export default {
@@ -8,6 +15,17 @@ export default {
             ctx.commit(SET_USERS, data.users);
         } catch (error) {
             throw error;
+        }
+    },
+    getUser: async (ctx, userId) => {
+        try {
+            ctx.commit(SET_LOADING, true);
+            const { data } = await axios.get(`/api/users/${userId}`);
+            ctx.commit(SET_USER, data.user);
+        } catch (error) {
+            throw error;
+        } finally {
+            ctx.commit(SET_LOADING, false);
         }
     },
     createUser: async (ctx, user) => {

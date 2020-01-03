@@ -1,4 +1,11 @@
-import { SET_USERS, ADD_USER, SET_SUBMITTING, SET_ERRORS } from "./user-types";
+import {
+    SET_USERS,
+    ADD_USER,
+    SET_SUBMITTING,
+    SET_ERRORS,
+    SET_LOADING,
+    SET_USER
+} from "./user-types";
 
 export default {
     [SET_USERS](state, users) {
@@ -12,5 +19,11 @@ export default {
     },
     [SET_ERRORS](state, errors) {
         state.errors = { ...errors };
+    },
+    [SET_LOADING](state, loading) {
+        state.loading = loading;
+    },
+    [SET_USER](state, user) {
+        state.user = { ...user };
     }
 };
