@@ -4,9 +4,11 @@ import {
     ADD_USER,
     SET_ERRORS,
     SET_LOADING,
-    SET_USER
+    SET_USER,
+    UPDATE_USER
 } from "./user-types";
 import axios from "../../../util/axios";
+import { SET_SNACKBAR } from "../general/general-types";
 
 export default {
     getUsers: async ctx => {
@@ -40,6 +42,23 @@ export default {
             return false;
         } finally {
             ctx.commit(SET_SUBMITTING, false);
+        }
+    },
+    disableUser: async (ctx, user) => {
+        try {
+            const { data } = await axios.put(`/api/users/${user}/disable`);
+            ctx.commit(UPDATE_USER, data.user);
+            ctx.commit(
+                `general/${SET_SNACKBAR}`,
+                {
+                    color: "success",
+                    text: `${data.user.name} disabled!`,
+                    open: true
+                },
+                { root: true }
+            );
+        } catch (error) {
+            throw error;
         }
     }
 };

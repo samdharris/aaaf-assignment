@@ -72,6 +72,7 @@
                                             class="white--text"
                                             :disabled="!user.enabled"
                                             v-on="on"
+                                            @click="disableUser(user._id)"
                                         >
                                             <v-icon>delete</v-icon>
                                         </v-btn>
@@ -136,7 +137,8 @@ export default {
         authenticatedUser: state => state.auth.currentUser
     }),
     methods: mapActions({
-        getUser: "users/getUser"
+        getUser: "users/getUser",
+        disableUser: "users/disableUser"
     }),
     mounted() {
         this.getUser(this.$route.params.userId);

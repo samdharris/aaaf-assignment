@@ -4,7 +4,8 @@ import {
     SET_SUBMITTING,
     SET_ERRORS,
     SET_LOADING,
-    SET_USER
+    SET_USER,
+    UPDATE_USER
 } from "./user-types";
 
 export default {
@@ -25,5 +26,9 @@ export default {
     },
     [SET_USER](state, user) {
         state.user = { ...user };
+    },
+    [UPDATE_USER](state, user) {
+        state.user = { ...user };
+        state.users = [...state.users.filter(u => u._id !== user._id), user];
     }
 };
