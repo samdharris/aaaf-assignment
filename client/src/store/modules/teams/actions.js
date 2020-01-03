@@ -9,7 +9,6 @@ import {
     REMOVE_MEMBER,
     SET_MEMBERS
 } from "./teams-types";
-import { SET_SNACKBAR } from "../general/general-types";
 import router from "../../../router";
 import { showSnackbar } from "../../helpers";
 export default {
@@ -29,15 +28,7 @@ export default {
             ctx.commit(SET_SUBMITTING, true);
             const { data } = await axios.post("/api/teams", { ...team });
             ctx.commit(ADD_TEAM, data.team);
-            ctx.commit(
-                `general/${SET_SNACKBAR}`,
-                {
-                    color: "success",
-                    text: `Team ${data.team.name} added!`,
-                    open: true
-                },
-                { root: true }
-            );
+            showSnackbar(`Team ${data.team.name} added!`, "success");
         } catch (error) {
             ctx.commit(SET_ERRORS, error.response.data);
         } finally {

@@ -9,8 +9,8 @@ import {
     DELETE_USER
 } from "./user-types";
 import axios from "../../../util/axios";
-import { SET_SNACKBAR } from "../general/general-types";
 import router from "../../../router";
+import { showSnackbar } from "../../helpers";
 
 export default {
     getUsers: async ctx => {
@@ -50,15 +50,7 @@ export default {
         try {
             const { data } = await axios.put(`/api/users/${user}/disable`);
             ctx.commit(UPDATE_USER, data.user);
-            ctx.commit(
-                `general/${SET_SNACKBAR}`,
-                {
-                    color: "success",
-                    text: `${data.user.name} disabled!`,
-                    open: true
-                },
-                { root: true }
-            );
+            showSnackbar(`${data.user.name} disabled!`, "success");
         } catch (error) {
             throw error;
         }
@@ -67,15 +59,7 @@ export default {
         try {
             const { data } = await axios.put(`/api/users/${user}/enable`);
             ctx.commit(UPDATE_USER, data.user);
-            ctx.commit(
-                `general/${SET_SNACKBAR}`,
-                {
-                    color: "success",
-                    text: `${data.user.name} enabled!`,
-                    open: true
-                },
-                { root: true }
-            );
+            showSnackbar(`${data.user.name} enabled!`, "success");
         } catch (error) {
             throw error;
         }
@@ -84,16 +68,7 @@ export default {
         try {
             await axios.delete(`/api/users/${user}`);
             ctx.commit(DELETE_USER, user);
-            ctx.commit(
-                `general/${SET_SNACKBAR}`,
-                {
-                    color: "success",
-                    text: `User deleted!`,
-                    open: true
-                },
-                { root: true }
-            );
-
+            showSnackbar("User deleted", "success");
             router.push("/users");
         } catch (error) {
             throw error;
