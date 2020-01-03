@@ -4,7 +4,10 @@ const securityUtil = require('../../securityUtils');
 
 exports.seed = async function seed() {
     const name = faker.name.findName();
-    const email = `${name.toLowerCase().replace(' ', '.')}@tms.com`;
+    const email = `${name
+        .toLowerCase()
+        .split(' ')
+        .join('.')}@tms.com`;
     const password = await securityUtil.hashPassword(
         process.env.DUMMY_PASSWORD
     );
