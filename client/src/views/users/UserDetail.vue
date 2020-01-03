@@ -50,6 +50,7 @@
                                             class="white--text"
                                             :disabled="user.enabled"
                                             v-on="on"
+                                            @click="enableUser(user._id)"
                                         >
                                             <v-icon>done</v-icon>
                                         </v-btn>
@@ -138,7 +139,8 @@ export default {
     }),
     methods: mapActions({
         getUser: "users/getUser",
-        disableUser: "users/disableUser"
+        disableUser: "users/disableUser",
+        enableUser: "users/enableUser"
     }),
     mounted() {
         this.getUser(this.$route.params.userId);

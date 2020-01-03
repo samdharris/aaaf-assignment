@@ -60,5 +60,22 @@ export default {
         } catch (error) {
             throw error;
         }
+    },
+    enableUser: async (ctx, user) => {
+        try {
+            const { data } = await axios.put(`/api/users/${user}/enable`);
+            ctx.commit(UPDATE_USER, data.user);
+            ctx.commit(
+                `general/${SET_SNACKBAR}`,
+                {
+                    color: "success",
+                    text: `${data.user.name} enabled!`,
+                    open: true
+                },
+                { root: true }
+            );
+        } catch (error) {
+            throw error;
+        }
     }
 };
