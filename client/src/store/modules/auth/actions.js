@@ -46,8 +46,11 @@ export default {
                     { root: true }
                 );
             }
+
+            return Promise.resolve();
         } catch (error) {
             removeToken();
+            return Promise.reject();
         }
     },
     logout: async ctx => {

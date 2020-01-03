@@ -1,5 +1,6 @@
 const httpCodes = require('http-status-codes');
 const User = require('../database/models/user.model');
+const Team = require('../database/models/team.model');
 const validation = require('../validation/user.validation');
 const _ = require('lodash');
 const securityUtils = require('../securityUtils');
@@ -76,9 +77,17 @@ exports.store = async (req, res) => {
         console.error(error.message);
     }
 };
-exports.destory = (req, res) => {
+exports.destory = async (req, res) => {
     try {
-        User.findByIdAndDelete(req.params.userId).exec();
+        // Remove user from team
+        const user = await User.findById(req.params.userId);
+
+        const team = await Team.findById(user.team);
+
+        team.members = team.members.filter(member => member !== user._id);
+
+        await team.save();
+        await User.findByIdAndDelete(req.params.userId).exec();
         res.status(httpCodes.NO_CONTENT).send();
     } catch (e) {
         res.status(httpCodes.INTERNAL_SERVER_ERROR).json({
