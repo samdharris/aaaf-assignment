@@ -10,7 +10,7 @@ exports.login = async (req, res) => {
 
         const user = await User.findOne({
             email: validated.email,
-        });
+        }).populate('team');
 
         if (_.isNil(user)) {
             res.status(httpCodes.BAD_REQUEST).json({
@@ -57,7 +57,7 @@ exports.login = async (req, res) => {
 
 exports.verify = async (req, res) => {
     try {
-        const user = await User.findById(req.userId);
+        const user = await User.findById(req.userId).populate('team');
         user.password = undefined;
         res.json({
             message: 'User verified!',

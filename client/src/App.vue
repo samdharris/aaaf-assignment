@@ -20,7 +20,12 @@
                                     {{ authenticatedUser.name }}
                                 </v-list-item-title>
                                 <v-list-item-subtitle>
-                                    {{ authenticatedUser.email }}
+                                    <span v-if="authenticatedUser.team.name">{{
+                                        authenticatedUser.team.name
+                                    }}</span>
+                                    <span v-else>
+                                        {{ authenticatedUser.email }}
+                                    </span>
                                 </v-list-item-subtitle>
                             </v-list-item-content>
                         </template>
