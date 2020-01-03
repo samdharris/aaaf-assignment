@@ -25,6 +25,12 @@ module.exports = async (req, res, next) => {
         const tokenDecoded = securityUtils.validateToken(authToken);
 
         const user = await User.findById(tokenDecoded.id);
+
+        if (_.isNil(user)) {
+            res.status(httpCodes.NOT_FOUND).send();
+            return;
+        }
+
         if (!user.enabled) {
             res.status(httpCodes.UNAUTHORIZED).json({
                 message: 'User is disabled!',
@@ -35,7 +41,6 @@ module.exports = async (req, res, next) => {
         req.userId = user.id;
         next();
     } catch (error) {
-        console.error(error);
         res.status(httpCodes.UNAUTHORIZED).send();
         return;
     }
