@@ -32,7 +32,7 @@
             </v-col>
         </v-row>
         <add-members-dialog
-            v-if="!loading"
+            v-if="!loading && team.members"
             :should-open="openDialog"
             :team-name="team.name"
             :members="team.members"
