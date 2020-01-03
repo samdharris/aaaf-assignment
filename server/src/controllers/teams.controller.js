@@ -1,5 +1,6 @@
 const httpCodes = require('http-status-codes');
 const Team = require('../database/models/team.model');
+const User = require('../database/models/user.model');
 const validation = require('../validation/team.validation');
 const _ = require('lodash');
 
@@ -126,10 +127,12 @@ exports.addUser = async (req, res) => {
 
 exports.removeUser = async (req, res) => {
     try {
-        const { memberId, teamId } = req.params;
+        const { teamId, memberId } = req.params;
+        const user = await User.findById(memberId);
+        user.team = null;
+        await user.save();
         const team = await Team.findById(teamId);
-        const members = _.remove(team.members, member => member === memberId);
-        team.members = members;
+        team.members = team.members.filter(member => member._id !== memberId);
         await team.save();
         res.json({
             message: 'Member removed!',
