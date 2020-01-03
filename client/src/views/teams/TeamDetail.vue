@@ -14,7 +14,7 @@
                     <v-card-title>
                         Members
                         <v-spacer></v-spacer>
-                        <v-btn icon @click.stop="openDialog = true">
+                        <v-btn icon @click="openDialog = true">
                             <v-icon>add</v-icon>
                         </v-btn>
                     </v-card-title>
@@ -31,13 +31,14 @@
                 </v-card>
             </v-col>
         </v-row>
-        <add-members-dialog
-            v-on:closeNewMembersDialog="openDialog = false"
-            v-if="!loading && team.members"
-            :should-open="openDialog"
-            :team-name="team.name"
-            :members="team.members"
-        ></add-members-dialog>
+        <v-dialog v-model="openDialog">
+            <add-members-dialog
+                v-on:closeNewMembersDialog="openDialog = false"
+                v-if="!loading && team.members"
+                :team-name="team.name"
+                :members="team.members"
+            ></add-members-dialog>
+        </v-dialog>
     </v-container>
 </template>
 <script>
