@@ -13,7 +13,9 @@
                     item-value="_id"
                     :items="users"
                 ></v-select>
-                <v-btn @click="onSubmit">Update Members</v-btn>
+                <v-btn @click="onSubmit" :loading="submitting"
+                    >Update Members</v-btn
+                >
             </v-form>
         </v-card-text>
     </v-card>
@@ -37,7 +39,8 @@ export default {
         };
     },
     computed: mapState({
-        users: state => state.users.users
+        users: state => state.users.users,
+        submitting: state => state.teams.submitting
     }),
     methods: {
         async onSubmit() {

@@ -71,6 +71,7 @@ export default {
     },
     addMembers: async (ctx, member) => {
         try {
+            ctx.commit(SET_SUBMITTING, true);
             const { data } = await axios.post(
                 `/api/teams/${ctx.state.team._id}/members`,
                 {
@@ -83,6 +84,8 @@ export default {
             return true;
         } catch (error) {
             throw error;
+        } finally {
+            ctx.commit(SET_SUBMITTING, false);
         }
     }
 };
