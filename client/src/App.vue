@@ -10,21 +10,24 @@
                 <v-list>
                     <v-list-item>
                         <v-list-item-avatar center>
-                            <v-img :src="user.profilePic"></v-img>
+                            <v-img :src="authenticatedUser.profilePic"></v-img>
                         </v-list-item-avatar>
                     </v-list-item>
                     <v-list-group>
                         <template v-slot:activator>
                             <v-list-item-content>
                                 <v-list-item-title class="title">
-                                    {{ user.name }}
+                                    {{ authenticatedUser.name }}
                                 </v-list-item-title>
                                 <v-list-item-subtitle>
-                                    {{ user.email }}
+                                    {{ authenticatedUser.email }}
                                 </v-list-item-subtitle>
                             </v-list-item-content>
                         </template>
-                        <v-list-item link to="/users/me">
+                        <v-list-item
+                            link
+                            :to="`/users/${authenticatedUser._id}`"
+                        >
                             <v-list-item-title>My Account</v-list-item-title>
                             <v-list-item-icon
                                 ><v-icon
@@ -108,7 +111,7 @@ export default {
     computed: {
         ...mapState({
             snackbar: state => state.general.snackbar,
-            user: state => state.auth.currentUser,
+            authenticatedUser: state => state.auth.currentUser,
             appName: state => state.general.appName
         }),
         ...mapGetters({
