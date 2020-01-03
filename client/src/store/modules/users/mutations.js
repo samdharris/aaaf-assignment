@@ -5,7 +5,8 @@ import {
     SET_ERRORS,
     SET_LOADING,
     SET_USER,
-    UPDATE_USER
+    UPDATE_USER,
+    DELETE_USER
 } from "./user-types";
 
 export default {
@@ -30,5 +31,9 @@ export default {
     [UPDATE_USER](state, user) {
         state.user = { ...user };
         state.users = [...state.users.filter(u => u._id !== user._id), user];
+    },
+    [DELETE_USER](state, user) {
+        state.user = {};
+        state.users = [...state.users.filter(u => u._id !== user._id)];
     }
 };

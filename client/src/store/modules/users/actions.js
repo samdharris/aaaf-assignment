@@ -5,10 +5,12 @@ import {
     SET_ERRORS,
     SET_LOADING,
     SET_USER,
-    UPDATE_USER
+    UPDATE_USER,
+    DELETE_USER
 } from "./user-types";
 import axios from "../../../util/axios";
 import { SET_SNACKBAR } from "../general/general-types";
+import router from "../../../router";
 
 export default {
     getUsers: async ctx => {
@@ -74,6 +76,25 @@ export default {
                 },
                 { root: true }
             );
+        } catch (error) {
+            throw error;
+        }
+    },
+    deleteUser: async (ctx, user) => {
+        try {
+            await axios.delete(`/api/users/${user}`);
+            ctx.commit(DELETE_USER, user);
+            ctx.commit(
+                `general/${SET_SNACKBAR}`,
+                {
+                    color: "success",
+                    text: `User deleted!`,
+                    open: true
+                },
+                { root: true }
+            );
+
+            router.push("/users");
         } catch (error) {
             throw error;
         }

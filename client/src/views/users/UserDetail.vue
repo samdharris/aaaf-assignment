@@ -94,6 +94,7 @@
                                             icon
                                             class="white--text"
                                             v-on="on"
+                                            @click="deleteUser(user._id)"
                                         >
                                             <v-icon class="white--text"
                                                 >delete_forever</v-icon
@@ -140,7 +141,8 @@ export default {
     methods: mapActions({
         getUser: "users/getUser",
         disableUser: "users/disableUser",
-        enableUser: "users/enableUser"
+        enableUser: "users/enableUser",
+        deleteUser: "users/deleteUser"
     }),
     mounted() {
         this.getUser(this.$route.params.userId);
