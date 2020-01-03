@@ -5,10 +5,12 @@ import {
     SET_SUBMITTING,
     ADD_TEAM,
     SET_ERRORS,
-    SET_TEAM
+    SET_TEAM,
+    REMOVE_MEMBER
 } from "./teams-types";
 import { SET_SNACKBAR } from "../general/general-types";
 import router from "../../../router";
+import { showSnackbar } from "../../helpers";
 export default {
     getTeams: async ctx => {
         try {
@@ -54,6 +56,16 @@ export default {
             }
         } finally {
             ctx.commit(SET_LOADING, false);
+        }
+    },
+    removeMember: async (ctx, memberId) => {
+        try {
+            const teamId = ctx.state.team._id;
+            await axios.delete(`/api/teams/${teamId}/members/${memberId}`);
+            ctx.commit(REMOVE_MEMBER, memberId);
+            showSnackbar("Member removed!", "success");
+        } catch (error) {
+            throw error;
         }
     }
 };

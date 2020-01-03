@@ -12,19 +12,23 @@
             </v-list-item-subtitle>
         </v-list-item-content>
         <v-list-item-action>
-            <v-btn icon>
+            <v-btn icon @click="removeMember(member._id)">
                 <v-icon>delete</v-icon>
             </v-btn>
         </v-list-item-action>
     </v-list-item>
 </template>
 <script>
+import { mapActions } from "vuex";
 export default {
     props: {
         member: {
             type: Object,
             required: true
         }
-    }
+    },
+    methods: mapActions({
+        removeMember: "teams/removeMember"
+    })
 };
 </script>

@@ -4,7 +4,8 @@ import {
     SET_SUBMITTING,
     ADD_TEAM,
     SET_ERRORS,
-    SET_TEAM
+    SET_TEAM,
+    REMOVE_MEMBER
 } from "./teams-types";
 
 export default {
@@ -25,5 +26,10 @@ export default {
     },
     [SET_TEAM](state, team) {
         state.team = { ...team };
+    },
+    [REMOVE_MEMBER](state, member) {
+        state.team.members = [
+            ...state.team.members.filter(m => m._id !== member)
+        ];
     }
 };
