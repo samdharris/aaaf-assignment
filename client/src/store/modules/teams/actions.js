@@ -6,7 +6,8 @@ import {
     ADD_TEAM,
     SET_ERRORS,
     SET_TEAM,
-    REMOVE_MEMBER
+    REMOVE_MEMBER,
+    SET_MEMBERS
 } from "./teams-types";
 import { SET_SNACKBAR } from "../general/general-types";
 import router from "../../../router";
@@ -64,6 +65,22 @@ export default {
             await axios.delete(`/api/teams/${teamId}/members/${memberId}`);
             ctx.commit(REMOVE_MEMBER, memberId);
             showSnackbar("Member removed!", "success");
+        } catch (error) {
+            throw error;
+        }
+    },
+    addMembers: async (ctx, member) => {
+        try {
+            const { data } = await axios.post(
+                `/api/teams/${ctx.state.team._id}/members`,
+                {
+                    member
+                }
+            );
+            ctx.commit(SET_MEMBERS, data.members);
+            showSnackbar("Members added!", "success");
+
+            return true;
         } catch (error) {
             throw error;
         }

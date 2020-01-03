@@ -7,9 +7,9 @@
             <v-card-text>
                 <v-form>
                     <v-select
-                        v-model="members"
+                        v-model="teamMembers"
                         label="Members"
-                        multiple
+                        hide-selected
                         item-text="name"
                         item-value="_id"
                         :items="users"
@@ -21,7 +21,7 @@
     </v-dialog>
 </template>
 <script>
-import { mapState } from "vuex";
+import { mapState, mapActions } from "vuex";
 export default {
     props: {
         members: {
@@ -37,13 +37,25 @@ export default {
             default: false
         }
     },
+    data() {
+        return {
+            teamMembers: []
+        };
+    },
     computed: mapState({
         users: state => state.users.users
     }),
     methods: {
-        onSubmit() {
-            console.log(this.members);
-        }
+        async onSubmit() {
+            await this.addMembers(this.teamMembers);
+            this.$emit("closeNewMembersDialog", true);
+        },
+        ...mapActions({
+            addMembers: "teams/addMembers"
+        })
+    },
+    mounted() {
+        this.teamMembers = this.members;
     }
 };
 </script>

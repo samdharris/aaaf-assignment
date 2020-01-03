@@ -107,18 +107,33 @@ exports.update = async (req, res) => {
 
 exports.addUser = async (req, res) => {
     try {
-        const newMemberId = req.body.memberId;
-        const team = await Team.findById(req.params.teamId);
-        if (!_.isNil(team.members.indexOf(newMemberId))) {
-            res.status(httpCodes.BAD_REQUEST).json({
-                message: 'User cannot be added twice!',
-            });
-            return;
+        const newMemberId = req.body.member;
+        const teamId = req.params.teamId;
+        const team = await Team.findById(teamId);
+
+        if (team.members.indexOf(newMemberId) === -1) {
+            team.members.push(newMemberId);
+
+            // Check that the user isn't already associated with a team. If they are, remove them from that team
+            // and add them to this team.
+            const user = await User.findById(newMemberId);
+            if (!_.isNil(user.team) && user.team !== teamId) {
+                const usrCurrTeam = await Team.findById(user.team);
+                usrCurrTeam.members.remove(newMemberId);
+                await usrCurrTeam.save();
+            }
+
+            user.team = team;
+            await user.save();
         }
-        team.members.push(newMemberId);
+
         await team.save();
+        const { members } = await Team.findById(req.params.teamId).populate(
+            'members'
+        );
         res.json({
-            message: 'Member added!',
+            message: 'Member(s) added!',
+            members,
         });
     } catch (error) {
         throw error;

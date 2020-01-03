@@ -5,3 +5,4 @@ export const SET_SUBMITTING = "SET_SUBMITTING";
 export const ADD_TEAM = "ADD_TEAM";
 export const SET_ERRORS = "SET_ERRORS";
 export const REMOVE_MEMBER = "REMOVE_MEMBER";
+export const SET_MEMBERS = "SET_MEMBERS";
