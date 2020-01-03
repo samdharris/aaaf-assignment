@@ -28,81 +28,11 @@
                         <v-row>
                             <v-spacer></v-spacer>
                             <v-col>
-                                <v-tooltip bottom>
-                                    <template v-slot:activator="{ on }">
-                                        <v-btn
-                                            icon
-                                            class="white--text"
-                                            v-on="on"
-                                        >
-                                            <v-icon>edit</v-icon>
-                                        </v-btn>
-                                    </template>
-                                    <span>Update this user.</span>
-                                </v-tooltip>
-                                <v-tooltip
-                                    bottom
-                                    v-if="user._id !== authenticatedUser._id"
-                                >
-                                    <template v-slot:activator="{ on }">
-                                        <v-btn
-                                            icon
-                                            class="white--text"
-                                            :disabled="user.enabled"
-                                            v-on="on"
-                                            @click="enableUser(user._id)"
-                                        >
-                                            <v-icon>done</v-icon>
-                                        </v-btn>
-                                    </template>
-                                    <span v-if="user.enabled"
-                                        >You can't enable this user as they're
-                                        already enabled.</span
-                                    >
-                                    <span v-else>
-                                        Enable this user.
-                                    </span>
-                                </v-tooltip>
-                                <v-tooltip
-                                    bottom
-                                    v-if="user._id !== authenticatedUser._id"
-                                >
-                                    <template v-slot:activator="{ on }">
-                                        <v-btn
-                                            icon
-                                            class="white--text"
-                                            :disabled="!user.enabled"
-                                            v-on="on"
-                                            @click="disableUser(user._id)"
-                                        >
-                                            <v-icon>delete</v-icon>
-                                        </v-btn>
-                                    </template>
-                                    <span v-if="user.enabled"
-                                        >Disable User</span
-                                    >
-                                    <span v-else>
-                                        This user is already disabled
-                                    </span>
-                                </v-tooltip>
-                                <v-tooltip
-                                    bottom
-                                    v-if="user._id !== authenticatedUser._id"
-                                >
-                                    <template v-slot:activator="{ on }">
-                                        <v-btn
-                                            icon
-                                            class="white--text"
-                                            v-on="on"
-                                            @click="deleteUser(user._id)"
-                                        >
-                                            <v-icon class="white--text"
-                                                >delete_forever</v-icon
-                                            >
-                                        </v-btn>
-                                    </template>
-                                    <span>Delete this user.</span>
-                                </v-tooltip>
+                                <user-profile-actions
+                                    :user-id="user._id"
+                                    :auth-user-id="authenticatedUser._id"
+                                    :user-enabled="user.enabled"
+                                ></user-profile-actions>
                             </v-col>
                         </v-row>
                     </v-img>
@@ -132,17 +62,18 @@
 </template>
 <script>
 import { mapState, mapActions } from "vuex";
+import UserProfileActions from "../../components/users/UserProfileActions.vue";
 export default {
+    components: {
+        UserProfileActions
+    },
+    methods: mapActions({
+        getUser: "users/getUser"
+    }),
     computed: mapState({
         user: state => state.users.user,
         loading: state => state.users.loading,
         authenticatedUser: state => state.auth.currentUser
-    }),
-    methods: mapActions({
-        getUser: "users/getUser",
-        disableUser: "users/disableUser",
-        enableUser: "users/enableUser",
-        deleteUser: "users/deleteUser"
     }),
     mounted() {
         this.getUser(this.$route.params.userId);
