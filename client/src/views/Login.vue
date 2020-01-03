@@ -4,7 +4,9 @@
             <v-col>
                 <v-card class="elevation-12">
                     <v-toolbar dark color="primary">
-                        <v-toolbar-title>Login</v-toolbar-title>
+                        <v-toolbar-title
+                            >Login to {{ appName }}</v-toolbar-title
+                        >
                     </v-toolbar>
                     <v-card-text>
                         <ValidationObserver
@@ -71,7 +73,8 @@ export default {
     },
     computed: mapState({
         isAuthenticating: state => state.auth.isAuthenticating,
-        errors: state => state.auth.errors
+        errors: state => state.auth.errors,
+        appName: state => state.general.appName
     }),
     methods: {
         ...mapActions({
