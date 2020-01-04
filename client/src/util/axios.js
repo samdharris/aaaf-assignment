@@ -3,6 +3,7 @@ import _ from "lodash";
 import store from "../store";
 import router from "../router";
 import { showSnackbar } from "../store/helpers";
+import httpCodes from "http-status-codes";
 
 const instance = axios.create({
     baseURL: "http://localhost:3001/",
@@ -26,15 +27,18 @@ instance.interceptors.response.use(
     },
     error => {
         const { status, data } = error.response;
-        if (status === 404) {
+        if (status === httpCodes.NOT_FOUND) {
             router.push("/not-found");
         }
 
-        if (status === 400) {
+        if (
+            status === httpCodes.BAD_REQUEST ||
+            httpCodes.INTERNAL_SERVER_ERROR
+        ) {
             showSnackbar(data.message, "error");
         }
 
-        if (status === 401) {
+        if (status === httpCodes.UNAUTHORIZED) {
             store.dispatch("auth/logout");
         }
         return Promise.reject(error);
