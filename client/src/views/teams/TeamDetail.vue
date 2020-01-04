@@ -19,7 +19,7 @@
                 </v-tooltip>
                 <v-tooltip bottom>
                     <template v-slot:activator="{ on }">
-                        <v-btn icon v-on="on">
+                        <v-btn icon v-on="on" @click="deleteTeam">
                             <v-icon>delete</v-icon>
                         </v-btn>
                     </template>
@@ -63,7 +63,8 @@ export default {
     },
     methods: {
         ...mapActions({
-            getTeam: "teams/getTeam"
+            getTeam: "teams/getTeam",
+            deleteTeam: "teams/deleteTeam"
         })
     },
     mounted() {

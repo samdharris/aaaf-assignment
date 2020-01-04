@@ -8,7 +8,8 @@ import {
     SET_TEAM,
     REMOVE_MEMBER,
     SET_MEMBERS,
-    UPDATE_TEAM
+    UPDATE_TEAM,
+    REMOVE_TEAM
 } from "./teams-types";
 import router from "../../../router";
 import { showSnackbar } from "../../helpers";
@@ -51,6 +52,16 @@ export default {
             return false;
         } finally {
             ctx.commit(SET_SUBMITTING, false);
+        }
+    },
+    deleteTeam: async ctx => {
+        try {
+            await axios.delete(`/api/teams/${ctx.state.team._id}`);
+            ctx.commit(REMOVE_TEAM);
+            showSnackbar("Team deleted", "success");
+            router.push("/teams");
+        } catch (error) {
+            return false;
         }
     },
     getTeam: async (ctx, teamId) => {

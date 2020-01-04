@@ -58,15 +58,26 @@ exports.store = async (req, res) => {
         console.error(e.message);
     }
 };
-exports.destory = (req, res) => {
+exports.destory = async (req, res) => {
     try {
-        Team.findByIdAndDelete(req.params.teamId).exec();
+        const teamId = req.params.teamId;
+        const team = await Team.findById(teamId);
+
+        // Unassign members from the team
+        for (let i = 0; i < team.members.length; i++) {
+            const user = await User.findById(team.members[i]);
+            user.team = null;
+            await user.save();
+        }
+
+        Team.findByIdAndDelete(teamId).exec();
         res.status(httpCodes.NO_CONTENT).send();
-    } catch (e) {
-        res.status(httpCodes.BAD_REQUEST).json({
-            message: `Something went wrong deleting team ${req.params.teamId}`,
+    } catch (error) {
+        res.status(httpCodes.INTERNAL_SERVER_ERROR).json({
+            message: `Something went wrong ${error.message}`,
+            error,
         });
-        console.error(e.message);
+        console.error(error.message);
     }
 };
 

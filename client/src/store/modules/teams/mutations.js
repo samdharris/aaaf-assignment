@@ -7,7 +7,8 @@ import {
     SET_TEAM,
     REMOVE_MEMBER,
     SET_MEMBERS,
-    UPDATE_TEAM
+    UPDATE_TEAM,
+    REMOVE_TEAM
 } from "./teams-types";
 
 export default {
@@ -26,6 +27,10 @@ export default {
     [UPDATE_TEAM](state, team) {
         state.teams = [...state.teams.filter(t => t._id !== team._id), team];
         state.team = { ...team };
+    },
+    [REMOVE_TEAM](state) {
+        state.teams = [...state.teams.filter(t => t.id !== state.team._id)];
+        state.team = {};
     },
     [SET_ERRORS](state, errors) {
         state.errors = { ...errors };
