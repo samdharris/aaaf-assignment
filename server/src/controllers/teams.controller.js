@@ -20,7 +20,9 @@ exports.index = async (req, res) => {
 
 exports.show = async (req, res) => {
     try {
-        const team = await Team.findById(req.params.teamId).populate('members');
+        const team = await Team.findById(req.params.teamId)
+            .populate('members')
+            .populate('documents');
 
         if (_.isNil(team)) {
             res.status(httpCodes.NOT_FOUND).send();
