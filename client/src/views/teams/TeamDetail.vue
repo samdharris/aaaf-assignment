@@ -34,7 +34,10 @@
                 ></team-members>
             </v-col>
         </v-row>
-        <team-documents></team-documents>
+        <team-documents
+            :documents="team.documents"
+            :loading="loading"
+        ></team-documents>
         <v-dialog v-model="dialog">
             <new-team-form
                 v-on:closeNewTeamForm="dialog = false"
