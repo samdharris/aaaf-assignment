@@ -25,7 +25,7 @@
                                 </v-card-subtitle>
                             </v-col>
                         </v-row>
-                        <v-row v-if="!loading">
+                        <v-row v-if="!loading && user">
                             <v-spacer></v-spacer>
                             <v-col>
                                 <user-profile-actions
@@ -63,6 +63,7 @@
 <script>
 import { mapState, mapActions } from "vuex";
 import UserProfileActions from "../../components/users/UserProfileActions.vue";
+
 export default {
     components: {
         UserProfileActions
@@ -76,7 +77,6 @@ export default {
         authenticatedUser: state => state.auth.currentUser
     }),
     mounted() {
-        console.log(this.authenticatedUser);
         this.getUser(this.$route.params.userId);
     },
     beforeRouteUpdate(to) {

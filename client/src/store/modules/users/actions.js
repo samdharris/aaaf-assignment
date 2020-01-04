@@ -37,7 +37,25 @@ export default {
             ctx.commit(SET_SUBMITTING, true);
             const response = await axios.post("/api/users", { ...user });
             ctx.commit(ADD_USER, response.data.user);
+            showSnackbar(`${user.name} added!`, "success");
+            return true;
+        } catch (error) {
+            ctx.commit(SET_ERRORS, error.response.data);
+            return false;
+        } finally {
+            ctx.commit(SET_SUBMITTING, false);
+        }
+    },
+    updateUser: async (ctx, user) => {
+        try {
+            ctx.commit(SET_SUBMITTING, true);
+            const { data } = await axios.put(
+                `/api/users/${ctx.state.user._id}`,
+                { ...user }
+            );
+            ctx.commit(UPDATE_USER, data.user);
 
+            showSnackbar(`${user.name} updated!`, "success");
             return true;
         } catch (error) {
             ctx.commit(SET_ERRORS, error.response.data);

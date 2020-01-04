@@ -2,7 +2,12 @@
     <div>
         <v-tooltip bottom>
             <template v-slot:activator="{ on }">
-                <v-btn icon class="white--text" v-on="on">
+                <v-btn
+                    icon
+                    class="white--text"
+                    v-on="on"
+                    @click="openDialog = true"
+                >
                     <v-icon>edit</v-icon>
                 </v-btn>
             </template>
@@ -57,11 +62,23 @@
             </template>
             <span>Delete this user.</span>
         </v-tooltip>
+        <v-dialog v-model="openDialog">
+            <new-user-form
+                v-on:closeNewUserForm="openDialog = false"
+                :edit-mode="true"
+                :user-id="authUserId"
+                :user-to-edit="user"
+            ></new-user-form>
+        </v-dialog>
     </div>
 </template>
 <script>
+import NewUserForm from "./NewUserForm.vue";
 import { mapActions } from "vuex";
 export default {
+    components: {
+        NewUserForm
+    },
     props: {
         user: {
             type: Object,
@@ -71,6 +88,11 @@ export default {
             type: String,
             required: true
         }
+    },
+    data() {
+        return {
+            openDialog: false
+        };
     },
     methods: mapActions({
         getUser: "users/getUser",

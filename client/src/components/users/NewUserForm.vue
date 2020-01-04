@@ -4,8 +4,10 @@
             <v-col>
                 <v-card>
                     <v-toolbar color="primary" light>
-                        <v-toolbar-title>
-                            Add a User
+                        <v-toolbar-title class="white--text">
+                            <span v-if="editMode">Update</span>
+                            <span v-else>Add</span>
+                            User
                         </v-toolbar-title>
                     </v-toolbar>
                     <v-card-text>
@@ -26,7 +28,7 @@
                                 >
                                     <v-text-field
                                         v-bind="$attrs"
-                                        v-model="user.name"
+                                        v-model="formData.name"
                                         :error-messages="errors"
                                         :success="valid"
                                         id="name"
@@ -41,7 +43,7 @@
                                 >
                                     <v-text-field
                                         v-bind="$attrs"
-                                        v-model="user.email"
+                                        v-model="formData.email"
                                         type="email"
                                         :error-messages="errors"
                                         :success="valid"
@@ -52,20 +54,29 @@
                                 </ValidationProvider>
                                 <ValidationProvider
                                     name="password"
-                                    rules="required"
+                                    :rules="{ required: !editMode }"
                                     v-slot="{ errors, valid }"
                                 >
                                     <v-text-field
                                         required
+                                        persistent-hint
+                                        :hint="
+                                            editMode
+                                                ? 'Leave blank to keep your current password'
+                                                : ''
+                                        "
                                         :error-messages="errors"
                                         :success="valid"
-                                        v-model="user.password"
+                                        v-model="formData.password"
                                         label="Password"
                                         type="password"
                                     ></v-text-field>
                                 </ValidationProvider>
                                 <v-switch
-                                    v-model="user.enabled"
+                                    v-show="
+                                        userToEdit && userId !== userToEdit._id
+                                    "
+                                    v-model="formData.enabled"
                                     label="Enable User?"
                                 ></v-switch>
                                 <v-spacer></v-spacer>
@@ -74,8 +85,10 @@
                                     color="success"
                                     :disabled="invalid && validated"
                                     :loading="submitting"
-                                    >Create User</v-btn
                                 >
+                                    <span v-if="editMode">Update User</span>
+                                    <span v-else>Create User</span>
+                                </v-btn>
                             </v-form>
                         </ValidationObserver>
                     </v-card-text>
@@ -87,9 +100,23 @@
 <script>
 import { mapActions, mapState } from "vuex";
 export default {
+    props: {
+        editMode: {
+            type: Boolean,
+            default: false
+        },
+        userToEdit: {
+            type: Object,
+            default: () => {}
+        },
+        userId: {
+            type: String,
+            default: ""
+        }
+    },
     data() {
         return {
-            user: {
+            formData: {
                 name: "",
                 email: "",
                 password: "password123456",
@@ -103,16 +130,23 @@ export default {
     }),
     methods: {
         ...mapActions({
-            createUser: "users/createUser"
+            createUser: "users/createUser",
+            updateUser: "users/updateUser"
         }),
         async onSubmit() {
-            const userCreated = await this.createUser(this.user);
-            if (userCreated) {
-                this.user = {
-                    name: "",
-                    email: "",
-                    password: "password123456",
-                    enabled: false
+            let success = false;
+            if (this.editMode) {
+                success = await this.updateUser(this.formData);
+            } else {
+                success = await this.createUser(this.formData);
+            }
+
+            if (success) {
+                this.formData = {
+                    name: this.editMode ? this.userToEdit.name : "",
+                    email: this.editMode ? this.userToEdit.email : "",
+                    password: this.editMode ? "" : "password123456",
+                    enabled: this.editMode ? this.userToEdit.enabled : false
                 };
                 this.$refs.newUserForm.reset();
                 this.$emit("closeNewUserForm", true);
@@ -124,6 +158,15 @@ export default {
             handler(value) {
                 this.$refs.newUserForm.setErrors(value);
             }
+        }
+    },
+    mounted() {
+        if (this.editMode) {
+            this.formData = {
+                name: this.userToEdit.name,
+                email: this.userToEdit.email,
+                enabled: this.userToEdit.enabled
+            };
         }
     }
 };
