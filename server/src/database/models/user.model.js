@@ -29,6 +29,12 @@ const userSchema = new Schema(
             type: Schema.Types.ObjectId,
             ref: 'Team',
         },
+        checkedOutDocuments: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: 'Document',
+            },
+        ],
     },
     { timestamps: true }
 );

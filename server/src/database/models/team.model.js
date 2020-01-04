@@ -14,6 +14,12 @@ const teamSchema = new Schema(
                 ref: 'User',
             },
         ],
+        documents: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: 'Document',
+            },
+        ],
     },
     { timestamps: true }
 );
