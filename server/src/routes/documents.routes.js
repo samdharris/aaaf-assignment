@@ -1,6 +1,8 @@
 const { Router } = require('express');
 const controller = require('../controllers/documents.controller');
-const router = Router();
+const router = Router({
+    mergeParams: true,
+});
 
 router.get('/', controller.index);
 router.get('/:documentId', controller.show);

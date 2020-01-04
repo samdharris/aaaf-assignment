@@ -5,7 +5,7 @@ const router = require('./routes');
 const database = require('./database');
 const cors = require('cors');
 const logger = require('./logger');
-
+const fileUpload = require('express-fileupload');
 dotenv.config();
 
 const server = express();
@@ -14,6 +14,14 @@ server.start = async () => {
     try {
         await database.connect();
 
+        server.use(
+            fileUpload({
+                safeFileNames: true,
+                preserveExtension: true,
+                debug: process.env.NODE_ENV !== 'production',
+                createParentPath: true,
+            })
+        );
         server.use(cors());
         server.use(bodyParser.json());
         server.use(

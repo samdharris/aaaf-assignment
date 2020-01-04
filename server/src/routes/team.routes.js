@@ -13,6 +13,6 @@ router.put('/:teamId', controller.update);
 router.post('/:teamId/members', controller.addUser);
 router.delete('/:teamId/members/:memberId', controller.removeUser);
 
-router.use('/:teamId/documents', documentRoutes);
+router.use('/:teamId/documents/', documentRoutes);
 
 module.exports = router;
