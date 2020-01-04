@@ -2,6 +2,7 @@ import axios from "axios";
 import _ from "lodash";
 import store from "../store";
 import router from "../router";
+import { showSnackbar } from "../store/helpers";
 
 const instance = axios.create({
     baseURL: "http://localhost:3001/",
@@ -24,9 +25,13 @@ instance.interceptors.response.use(
         return Promise.resolve(response);
     },
     error => {
-        const { status } = error.response;
+        const { status, data } = error.response;
         if (status === 404) {
             router.push("/not-found");
+        }
+
+        if (status === 400) {
+            showSnackbar(data.message, "error");
         }
 
         if (status === 401) {
