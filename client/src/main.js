@@ -6,6 +6,11 @@ import vuetify from "./plugins/vuetify";
 
 import { ValidationObserver, ValidationProvider } from "vee-validate";
 import "./util/vee-validate";
+
+import { converterBase10 } from "byte-converter";
+
+Vue.prototype.$converter = converterBase10;
+
 Vue.component("ValidationObserver", ValidationObserver);
 Vue.component("ValidationProvider", ValidationProvider);
 

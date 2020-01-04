@@ -23,6 +23,11 @@
                                         New Document
                                     </v-btn>
                                 </template>
+                                <upload-document-form
+                                    v-on:closeDocumentForm="
+                                        documentsDialog = false
+                                    "
+                                ></upload-document-form>
                             </v-dialog>
                         </v-toolbar>
                     </template>
@@ -37,7 +42,11 @@
     </div>
 </template>
 <script>
+import UploadDocumentForm from "../documents/UploadDocumentForm";
 export default {
+    components: {
+        UploadDocumentForm
+    },
     props: {
         documents: {
             type: Array,
