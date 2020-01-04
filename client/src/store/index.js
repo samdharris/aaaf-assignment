@@ -7,12 +7,14 @@ import auth from "./modules/auth";
 import general from "./modules/general";
 import teams from "./modules/teams";
 import users from "./modules/users";
+import documents from "./modules/documents";
 
 export default new Vuex.Store({
     modules: {
         auth,
         general,
         teams,
-        users
+        users,
+        documents
     }
 });
