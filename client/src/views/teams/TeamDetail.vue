@@ -27,34 +27,11 @@
                 </v-tooltip>
             </v-col>
             <v-col>
-                <v-card>
-                    <v-card-title>
-                        Members
-                        <v-spacer></v-spacer>
-                        <v-tooltip bottom>
-                            <template v-slot:activator="{ on }">
-                                <v-btn
-                                    icon
-                                    @click="openDialog = true"
-                                    v-on="on"
-                                >
-                                    <v-icon>add</v-icon>
-                                </v-btn>
-                            </template>
-                            <span>Add Members</span>
-                        </v-tooltip>
-                    </v-card-title>
-                    <v-list v-if="team.members && team.members.length">
-                        <team-list-item
-                            v-for="member in team.members"
-                            :key="member._id"
-                            :member="member"
-                        ></team-list-item>
-                    </v-list>
-                    <v-card-subtitle v-else
-                        >No members associated with this team.</v-card-subtitle
-                    >
-                </v-card>
+                <team-members
+                    v-if="!loading && team.name"
+                    :members="team.members"
+                    :team-name="team.name"
+                ></team-members>
             </v-col>
         </v-row>
         <v-dialog v-model="openDialog">
@@ -69,12 +46,10 @@
 </template>
 <script>
 import { mapActions, mapState } from "vuex";
-import TeamListItem from "../../components/teams/TeamListItem";
-import AddMembersDialog from "../../components/teams/AddMembersDialog";
+import TeamMembers from "../../components/teams/TeamMembers";
 export default {
     components: {
-        TeamListItem,
-        AddMembersDialog
+        TeamMembers
     },
     computed: mapState({
         team: state => state.teams.team,
