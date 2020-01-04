@@ -11,7 +11,7 @@
                 <v-spacer></v-spacer>
                 <v-tooltip bottom>
                     <template v-slot:activator="{ on }">
-                        <v-btn icon v-on="on">
+                        <v-btn icon v-on="on" @click="dialog = true">
                             <v-icon>edit</v-icon>
                         </v-btn>
                     </template>
@@ -34,21 +34,22 @@
                 ></team-members>
             </v-col>
         </v-row>
-        <v-dialog v-model="openDialog">
-            <add-members-dialog
-                v-on:closeNewMembersDialog="openDialog = false"
-                v-if="!loading && team.members"
-                :team-name="team.name"
-                :members="team.members"
-            ></add-members-dialog>
+        <v-dialog v-model="dialog">
+            <new-team-form
+                v-on:closeNewTeamForm="dialog = false"
+                :is-edit-mode="true"
+                :team-to-edit="team"
+            ></new-team-form>
         </v-dialog>
     </v-container>
 </template>
 <script>
 import { mapActions, mapState } from "vuex";
+import NewTeamForm from "../../components/teams/NewTeamForm";
 import TeamMembers from "../../components/teams/TeamMembers";
 export default {
     components: {
+        NewTeamForm,
         TeamMembers
     },
     computed: mapState({
@@ -57,7 +58,7 @@ export default {
     }),
     data() {
         return {
-            openDialog: false
+            dialog: false
         };
     },
     methods: {

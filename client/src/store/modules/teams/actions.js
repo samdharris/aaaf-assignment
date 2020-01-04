@@ -7,7 +7,8 @@ import {
     SET_ERRORS,
     SET_TEAM,
     REMOVE_MEMBER,
-    SET_MEMBERS
+    SET_MEMBERS,
+    UPDATE_TEAM
 } from "./teams-types";
 import router from "../../../router";
 import { showSnackbar } from "../../helpers";
@@ -29,8 +30,25 @@ export default {
             const { data } = await axios.post("/api/teams", { ...team });
             ctx.commit(ADD_TEAM, data.team);
             showSnackbar(`Team ${data.team.name} added!`, "success");
+            return true;
         } catch (error) {
             ctx.commit(SET_ERRORS, error.response.data);
+        } finally {
+            ctx.commit(SET_SUBMITTING, false);
+        }
+    },
+    updateTeam: async (ctx, team) => {
+        try {
+            ctx.commit(SET_SUBMITTING, true);
+            const { data } = await axios.put(
+                `/api/teams/${ctx.state.team._id}`,
+                { ...team }
+            );
+            ctx.commit(UPDATE_TEAM, data.team);
+            showSnackbar(`Team ${data.team.name} updated!`, "success");
+            return true;
+        } catch (error) {
+            return false;
         } finally {
             ctx.commit(SET_SUBMITTING, false);
         }

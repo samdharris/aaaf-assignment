@@ -73,35 +73,24 @@ exports.destory = (req, res) => {
 exports.update = async (req, res) => {
     try {
         const validated = await validation.validateAsync(req.body);
-        Team.findByIdAndUpdate(
-            req.params.teamId,
-            { ...validated },
-            (err, team) => {
-                if (_.isNil(team)) {
-                    res.status(httpCodes.NOT_FOUND).send();
-                    return;
-                }
+        const team = await Team.findById(req.params.teamId);
+        if (_.isNil(team)) {
+            res.status(httpCodes.NOT_FOUND).send();
+            return;
+        }
 
-                if (!_.isNil(err)) {
-                    res.status(httpCodes.BAD_REQUEST).json({
-                        message: 'Something went wrong',
-                        err,
-                    });
-                    return;
-                }
+        Object.keys(validated).forEach(k => (team[k] = validated[k]));
 
-                res.status(httpCodes.OK).json({
-                    message: `${team.name} updated!`,
-                    team,
-                });
-            }
-        );
-    } catch (error) {
-        res.status(httpCodes.BAD_REQUEST).json({
-            message: `Something went wrong updating team ${req.params.teamId}`,
-            error,
+        await team.save();
+        res.status(httpCodes.OK).json({
+            message: `${team.name} updated!`,
+            team,
         });
-        console.error(e.message);
+    } catch ({ message }) {
+        res.status(httpCodes.BAD_REQUEST).json({
+            message: `Error updating: ${message}`,
+        });
+        console.error(error.message);
     }
 };
 

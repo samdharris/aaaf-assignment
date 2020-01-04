@@ -4,7 +4,11 @@
             <v-col>
                 <v-card>
                     <v-card-title>
-                        <span class="headline">Add a Team</span>
+                        <span class="headline">
+                            <span v-if="isEditMode">Update</span>
+                            <span v-else>Add</span>
+                            a Team</span
+                        >
                     </v-card-title>
                     <v-card-text>
                         <ValidationObserver
@@ -24,7 +28,7 @@
                                 >
                                     <v-text-field
                                         v-bind="$attrs"
-                                        v-model="team.name"
+                                        v-model="formData.name"
                                         :error-messages="errors"
                                         :success="valid"
                                         id="name"
@@ -38,8 +42,11 @@
                                     color="success"
                                     :disabled="invalid && validated"
                                     :loading="submitting"
-                                    >Create Team</v-btn
                                 >
+                                    <span v-if="isEditMode">Update</span>
+                                    <span v-else>Create</span>
+                                    Team
+                                </v-btn>
                             </v-form>
                         </ValidationObserver>
                     </v-card-text>
@@ -50,10 +57,21 @@
 </template>
 <script>
 import { mapActions, mapState } from "vuex";
+import _ from "lodash";
 export default {
+    props: {
+        teamToEdit: {
+            type: Object,
+            default: () => {}
+        },
+        isEditMode: {
+            type: Boolean,
+            default: false
+        }
+    },
     data() {
         return {
-            team: {
+            formData: {
                 name: ""
             }
         };
@@ -64,13 +82,21 @@ export default {
     }),
     methods: {
         ...mapActions({
-            createTeam: "teams/createTeam"
+            createTeam: "teams/createTeam",
+            updateTeam: "teams/updateTeam"
         }),
-        onSubmit() {
-            this.createTeam(this.team);
-            this.team.name = "";
-            this.$refs.newTeamForm.reset();
-            this.$emit("closeNewTeamForm", true);
+        async onSubmit() {
+            let success = false;
+            if (!this.isEditMode) {
+                success = await this.createTeam(this.formData);
+            } else {
+                success = await this.updateTeam(this.formData);
+            }
+            if (success) {
+                this.formData.name = "";
+                this.$refs.newTeamForm.reset();
+                this.$emit("closeNewTeamForm", true);
+            }
         }
     },
     watch: {
@@ -78,6 +104,22 @@ export default {
             handler(value) {
                 this.$refs.newTeamForm.setErrors(value);
             }
+        }
+    },
+    mounted() {
+        console.log("Called mounted");
+        if (!_.isEmpty(this.teamToEdit)) {
+            this.formData = {
+                name: this.teamToEdit.name
+            };
+        }
+    },
+    updated() {
+        console.log("Called updated");
+        if (!_.isEmpty(this.teamToEdit)) {
+            this.formData = {
+                name: this.teamToEdit.name
+            };
         }
     }
 };
