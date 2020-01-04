@@ -1,5 +1,7 @@
 const { Router } = require('express');
 const controller = require('../controllers/teams.controller');
+const documentRoutes = require('./documents.routes');
+
 const router = Router();
 
 router.get('/', controller.index);
@@ -10,5 +12,7 @@ router.put('/:teamId', controller.update);
 
 router.post('/:teamId/members', controller.addUser);
 router.delete('/:teamId/members/:memberId', controller.removeUser);
+
+router.use('/:teamId/documents', documentRoutes);
 
 module.exports = router;
