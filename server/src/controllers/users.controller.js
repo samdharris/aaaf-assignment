@@ -82,11 +82,12 @@ exports.destory = async (req, res) => {
         // Remove user from team
         const user = await User.findById(req.params.userId);
 
-        const team = await Team.findById(user.team);
+        if (!_.isNil(user.team)) {
+            const team = await Team.findById(user.team);
+            team.members = team.members.filter(member => member !== user._id);
+            await team.save();
+        }
 
-        team.members = team.members.filter(member => member !== user._id);
-
-        await team.save();
         await User.findByIdAndDelete(req.params.userId).exec();
         res.status(httpCodes.NO_CONTENT).send();
     } catch (e) {
