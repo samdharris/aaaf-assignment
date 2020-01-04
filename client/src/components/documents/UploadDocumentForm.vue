@@ -43,6 +43,7 @@
                                 </div>
                                 <v-btn
                                     @click="passes(onSubmit)"
+                                    :loading="submitting"
                                     color="success"
                                     :disabled="invalid && validated"
                                     >Upload Document</v-btn
@@ -56,14 +57,31 @@
     </v-container>
 </template>
 <script>
+import { mapActions, mapState } from "vuex";
 export default {
     data() {
         return {
             document: null
         };
     },
+    computed: mapState({
+        teamId: state => state.teams.team._id,
+        submitting: state => state.documents.submitting
+    }),
     methods: {
-        async onSubmit() {}
+        ...mapActions({
+            uploadDocument: "documents/uploadDocument"
+        }),
+        async onSubmit() {
+            const success = await this.uploadDocument({
+                document: this.document,
+                teamId: this.teamId
+            });
+
+            if (success) {
+                this.$emit("closeDocumentForm", true);
+            }
+        }
     }
 };
 </script>
