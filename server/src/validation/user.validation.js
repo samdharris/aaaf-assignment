@@ -9,6 +9,6 @@ module.exports = Joi.object({
     email: Joi.string()
         .email()
         .required(),
-    password: Joi.string().required(),
+    password: Joi.string().allow('', null),
     enabled: Joi.boolean().default(false),
 });

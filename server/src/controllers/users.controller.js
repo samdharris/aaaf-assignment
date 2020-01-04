@@ -92,43 +92,44 @@ exports.destory = async (req, res) => {
         res.status(httpCodes.NO_CONTENT).send();
     } catch (e) {
         res.status(httpCodes.INTERNAL_SERVER_ERROR).json({
-            message: `Something went wrong deleting user ${req.params.teamId}`,
+            message: `Something went wrong: ${e.message}`,
         });
         console.error(e.message);
     }
 };
 exports.update = async (req, res) => {
     try {
+        const user = await User.findById(req.params.userId);
+        if (_.isNil(user)) {
+            res.status(httpCodes.NOT_FOUND).send();
+            return;
+        }
         const validated = await validation.validateAsync(req.body);
-        User.findByIdAndUpdate(
-            req.params.userId,
-            { ...validated },
-            (err, user) => {
-                if (_.isNil(user)) {
-                    res.status(httpCodes.NOT_FOUND).send();
-                    return;
-                }
 
-                if (!_.isNil(err)) {
-                    res.status(httpCodes.INTERNAL_SERVER_ERROR).json({
-                        message: 'Something went wrong',
-                        err,
-                    });
-                    return;
-                }
-
-                res.status(httpCodes.OK).json({
-                    message: `${user.name} updated!`,
-                    user,
-                });
+        Object.keys(validated).forEach(k => {
+            // We deal with this below.
+            if (k !== 'password') {
+                return (user[k] = validated[k]);
             }
-        );
+        });
+
+        // If it's empty, it means they don't want to update the user's password.
+        if (!_.isEmpty(validated.password)) {
+            user.password = await securityUtils.hashPassword(
+                validated.password
+            );
+        }
+
+        await user.save();
+        res.status(httpCodes.OK).json({
+            message: `${user.name} updated!`,
+            user,
+        });
     } catch (error) {
         res.status(httpCodes.INTERNAL_SERVER_ERROR).json({
-            message: `Something went wrong updating user ${req.params.userId}`,
+            message: `Error updating user: ${error.message}`,
             error,
         });
-        console.error(e.message);
     }
 };
 
