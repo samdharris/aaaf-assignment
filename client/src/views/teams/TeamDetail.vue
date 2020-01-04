@@ -6,17 +6,43 @@
             </v-col>
         </v-row>
         <v-row v-else>
-            <v-col>
+            <v-col class="inherit-display">
                 <h1>{{ team.name }}</h1>
+                <v-spacer></v-spacer>
+                <v-tooltip bottom>
+                    <template v-slot:activator="{ on }">
+                        <v-btn icon v-on="on">
+                            <v-icon>edit</v-icon>
+                        </v-btn>
+                    </template>
+                    <span>Edit</span>
+                </v-tooltip>
+                <v-tooltip bottom>
+                    <template v-slot:activator="{ on }">
+                        <v-btn icon v-on="on">
+                            <v-icon>delete</v-icon>
+                        </v-btn>
+                    </template>
+                    <span>Delete</span>
+                </v-tooltip>
             </v-col>
             <v-col>
                 <v-card>
                     <v-card-title>
                         Members
                         <v-spacer></v-spacer>
-                        <v-btn icon @click="openDialog = true">
-                            <v-icon>add</v-icon>
-                        </v-btn>
+                        <v-tooltip bottom>
+                            <template v-slot:activator="{ on }">
+                                <v-btn
+                                    icon
+                                    @click="openDialog = true"
+                                    v-on="on"
+                                >
+                                    <v-icon>add</v-icon>
+                                </v-btn>
+                            </template>
+                            <span>Add Members</span>
+                        </v-tooltip>
                     </v-card-title>
                     <v-list v-if="team.members && team.members.length">
                         <team-list-item
@@ -69,3 +95,8 @@ export default {
     }
 };
 </script>
+<style scoped>
+.inherit-display {
+    display: inherit;
+}
+</style>

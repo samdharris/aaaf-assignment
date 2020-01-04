@@ -12,9 +12,14 @@
             </v-list-item-subtitle>
         </v-list-item-content>
         <v-list-item-action>
-            <v-btn icon @click="removeMember(member._id)">
-                <v-icon>delete</v-icon>
-            </v-btn>
+            <v-tooltip bottom>
+                <template v-slot:activator="{ on }">
+                    <v-btn icon @click="removeMember(member._id)" v-on="on">
+                        <v-icon>delete</v-icon>
+                    </v-btn>
+                </template>
+                <span>Remove from team</span>
+            </v-tooltip>
         </v-list-item-action>
     </v-list-item>
 </template>
