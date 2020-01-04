@@ -34,6 +34,7 @@
                 ></team-members>
             </v-col>
         </v-row>
+        <team-documents></team-documents>
         <v-dialog v-model="dialog">
             <new-team-form
                 v-on:closeNewTeamForm="dialog = false"
@@ -47,10 +48,12 @@
 import { mapActions, mapState } from "vuex";
 import NewTeamForm from "../../components/teams/NewTeamForm";
 import TeamMembers from "../../components/teams/TeamMembers";
+import TeamDocuments from "../../components/teams/TeamDocuments";
 export default {
     components: {
         NewTeamForm,
-        TeamMembers
+        TeamMembers,
+        TeamDocuments
     },
     computed: mapState({
         team: state => state.teams.team,
