@@ -10,7 +10,7 @@
                     </v-toolbar>
                     <v-card-text>
                         <ValidationObserver
-                            ref="newDocumentForm"
+                            ref="uploadDocumentForm"
                             v-slot="{ invalid, validated, passes, validate }"
                         >
                             <v-form>
@@ -19,6 +19,8 @@
                                     v-slot="{ validate, errors }"
                                 >
                                     <v-file-input
+                                        name="document"
+                                        id="document"
                                         v-model="document"
                                         @change="validate"
                                         :error-messages="errors"
@@ -66,7 +68,8 @@ export default {
     },
     computed: mapState({
         teamId: state => state.teams.team._id,
-        submitting: state => state.documents.submitting
+        submitting: state => state.documents.submitting,
+        errors: state => state.documents.errors
     }),
     methods: {
         ...mapActions({
@@ -81,6 +84,14 @@ export default {
             if (success) {
                 this.document = null;
                 this.$emit("closeDocumentForm", true);
+            }
+        }
+    },
+    watch: {
+        errors: {
+            handler(value) {
+                console.log(value);
+                this.$refs.uploadDocumentForm.setErrors(value);
             }
         }
     }

@@ -4,7 +4,8 @@ import {
     REMOVE_DOCUMENT,
     UPDATE_DOCUMENT,
     SET_LOADING,
-    SET_DOCUMENTS
+    SET_DOCUMENTS,
+    SET_ERRORS
 } from "./document-types";
 
 export default {
@@ -16,6 +17,9 @@ export default {
     },
     [SET_DOCUMENTS](state, documents) {
         state.documents = [...documents];
+    },
+    [SET_ERRORS](state, errors) {
+        state.errors = { ...errors };
     },
     [ADD_DOCUMENT](state, document) {
         state.documents.push(document);

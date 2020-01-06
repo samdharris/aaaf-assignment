@@ -2,7 +2,8 @@ import {
     SET_SUBMITTING,
     ADD_DOCUMENT,
     SET_LOADING,
-    SET_DOCUMENTS
+    SET_DOCUMENTS,
+    SET_ERRORS
 } from "./document-types";
 import axios from "../../../util/axios";
 import { showSnackbar } from "../../helpers";
@@ -43,6 +44,7 @@ export default {
             showSnackbar("Document added!", "success");
             return true;
         } catch (error) {
+            ctx.commit(SET_ERRORS, error.response.data);
             return false;
         } finally {
             ctx.commit(SET_SUBMITTING, false);

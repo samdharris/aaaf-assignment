@@ -3,7 +3,7 @@ const Team = require('../database/models/team.model');
 const path = require('path');
 const _ = require('lodash');
 const httpCodes = require('http-status-codes');
-
+const validation = require('../validation/document.validation');
 exports.index = async (req, res) => {
     try {
         const documents = await Document.find({
@@ -24,6 +24,11 @@ exports.store = async (req, res) => {
     try {
         const document = req.files.document;
         const teamId = req.params.teamId;
+        const validated = await validation.validateAsync({
+            name: document.name,
+            size: document.size,
+            mimetype: document.mimetype,
+        });
 
         const team = await Team.findById(teamId);
 
@@ -40,10 +45,10 @@ exports.store = async (req, res) => {
         );
 
         let mongoDoc = new Document({
-            name: document.name,
-            path: `team-${teamId}/${document.name}`,
-            size: document.size,
-            type: document.mimetype,
+            name: validated.name,
+            path: `team-${teamId}/${validated.name}`,
+            size: validated.size,
+            type: validated.mimetype,
             teamId: teamId,
         });
 
@@ -56,8 +61,9 @@ exports.store = async (req, res) => {
             document: mongoDoc,
         });
     } catch (error) {
-        res.status(httpCodes.INTERNAL_SERVER_ERROR).json({
+        res.status(httpCodes.BAD_REQUEST).json({
             message: `Something went wrong: ${error.message}`,
+            document: error.message,
         });
     }
 };
