@@ -14,7 +14,7 @@ Vue.prototype.$converter = converterBase10;
 Vue.component("ValidationObserver", ValidationObserver);
 Vue.component("ValidationProvider", ValidationProvider);
 
-Vue.config.productionTip = false;
+Vue.config.productionTip = process.env.NODE_ENV !== "production";
 
 new Vue({
     router,
