@@ -42,6 +42,8 @@ exports.store = async (req, res) => {
         let mongoDoc = new Document({
             name: document.name,
             path: `team-${teamId}/${document.name}`,
+            size: document.size,
+            type: document.mimetype,
             teamId: teamId,
         });
 

@@ -61,6 +61,16 @@ export default {
                     text: "Name",
                     sortable: true,
                     value: "name"
+                },
+                {
+                    text: "Size (bytes)",
+                    sortable: false,
+                    value: "size"
+                },
+                {
+                    text: "mime",
+                    sortable: true,
+                    value: "type"
                 }
             ]
         };

@@ -16,6 +16,14 @@ const documentSchema = new Schema(
             type: Schema.Types.ObjectId,
             ref: 'Team',
         },
+        size: {
+            type: Number,
+            required: true,
+        },
+        type: {
+            type: String,
+            required: true,
+        },
         checkedOutBy: {
             type: Schema.Types.ObjectId,
             ref: 'User',
