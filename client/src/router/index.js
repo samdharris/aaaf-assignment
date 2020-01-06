@@ -20,7 +20,11 @@ router.beforeEach((to, from, next) => {
         record => record.meta.visitWithAuth
     );
 
-    if (routeRequiresAuth && userAuthenticated === false) {
+    if (
+        routeRequiresAuth &&
+        userAuthenticated === false &&
+        from.path !== "/login"
+    ) {
         next({
             path: "/login"
         });
