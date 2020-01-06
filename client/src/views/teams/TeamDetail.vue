@@ -34,10 +34,7 @@
                 ></team-members>
             </v-col>
         </v-row>
-        <team-documents
-            :documents="team.documents"
-            :loading="loading"
-        ></team-documents>
+        <team-documents :team-id="team._id"></team-documents>
         <v-dialog v-model="dialog">
             <new-team-form
                 v-on:closeNewTeamForm="dialog = false"
@@ -71,10 +68,13 @@ export default {
         ...mapActions({
             getTeam: "teams/getTeam",
             deleteTeam: "teams/deleteTeam"
-        })
+        }),
+        async initComponent() {
+            await this.getTeam(this.$route.params.teamId);
+        }
     },
     mounted() {
-        this.getTeam(this.$route.params.teamId);
+        this.initComponent();
     }
 };
 </script>

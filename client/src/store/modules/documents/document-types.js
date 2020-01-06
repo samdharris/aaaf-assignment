@@ -1,3 +1,4 @@
 export const SET_SUBMITTING = "SET_SUBMITTING";
 export const SET_DOCUMENTS = "SET_DOCUMENTS";
 export const ADD_DOCUMENT = "ADD_DOCUMENT";
+export const SET_LOADING = "SET_LOADING";

@@ -43,18 +43,14 @@
 </template>
 <script>
 import UploadDocumentForm from "../documents/UploadDocumentForm";
+import { mapActions, mapState } from "vuex";
 export default {
     components: {
         UploadDocumentForm
     },
     props: {
-        documents: {
-            type: Array,
-            default: () => []
-        },
-        loading: {
-            type: Boolean,
-            default: false
+        teamId: {
+            type: String
         }
     },
     data() {
@@ -68,6 +64,22 @@ export default {
                 }
             ]
         };
-    }
+    },
+    watch: {
+        teamId: {
+            handler(value) {
+                if (value) {
+                    this.getDocuments(value);
+                }
+            }
+        }
+    },
+    computed: mapState({
+        documents: state => state.documents.documents,
+        loading: state => state.documents.loading
+    }),
+    methods: mapActions({
+        getDocuments: "documents/getDocuments"
+    })
 };
 </script>

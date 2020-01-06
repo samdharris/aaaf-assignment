@@ -3,8 +3,23 @@ const Team = require('../database/models/team.model');
 const User = require('../database/models/user.model');
 const path = require('path');
 const _ = require('lodash');
+const httpCodes = require('http-status-codes');
 
-exports.index = (req, res) => {};
+exports.index = async (req, res) => {
+    try {
+        const documents = await Document.find({
+            teamId: req.params.teamId,
+        }).exec();
+        res.json({
+            message: 'Documents found!',
+            documents,
+        });
+    } catch (error) {
+        res.status(httpCodes.INTERNAL_SERVER_ERROR).json({
+            message: `Something went wrong: ${error.message}`,
+        });
+    }
+};
 exports.show = (req, res) => {};
 exports.store = async (req, res) => {
     const document = req.files.document;
