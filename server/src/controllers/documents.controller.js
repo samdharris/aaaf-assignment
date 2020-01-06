@@ -1,6 +1,5 @@
 const Document = require('../database/models/document.model');
 const Team = require('../database/models/team.model');
-const User = require('../database/models/user.model');
 const path = require('path');
 const _ = require('lodash');
 const httpCodes = require('http-status-codes');
@@ -22,22 +21,43 @@ exports.index = async (req, res) => {
 };
 exports.show = (req, res) => {};
 exports.store = async (req, res) => {
-    const document = req.files.document;
-    const teamId = req.params.teamId;
-    const userId = req.userId;
+    try {
+        const document = req.files.document;
+        const teamId = req.params.teamId;
 
-    const team = await Team.findById(teamId);
-    const user = await User.findById(userId);
+        const team = await Team.findById(teamId);
 
-    if (_.isNil(team) || _.isNil(user)) {
-        res.status(404).send();
-        return;
+        if (_.isNil(team) || _.isNil(user)) {
+            res.status(404).send();
+            return;
+        }
+
+        await document.mv(
+            path.join(
+                __dirname,
+                `../../storage/team-${teamId}/${document.name}`
+            )
+        );
+
+        let mongoDoc = new Document({
+            name: document.name,
+            path: `team-${teamId}/${document.name}`,
+            teamId: teamId,
+        });
+
+        mongoDoc = await mongoDoc.save();
+
+        team.documents.push(mongoDoc);
+        await team.save();
+        res.status(httpCodes.CREATED).json({
+            message: 'Document uploaded!',
+            document: mongoDoc,
+        });
+    } catch (error) {
+        res.status(httpCodes.INTERNAL_SERVER_ERROR).json({
+            message: `Something went wrong: ${error.message}`,
+        });
     }
-
-    console.log(document);
-    await document.mv(
-        path.join(__dirname, `../../storage/team-${teamId}/${document.name}`)
-    );
 };
 exports.update = (req, res) => {};
 exports.destory = (req, res) => {};

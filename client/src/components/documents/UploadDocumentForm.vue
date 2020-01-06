@@ -79,6 +79,7 @@ export default {
             });
 
             if (success) {
+                this.document = null;
                 this.$emit("closeDocumentForm", true);
             }
         }
