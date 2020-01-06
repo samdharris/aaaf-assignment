@@ -27,7 +27,7 @@ exports.store = async (req, res) => {
 
         const team = await Team.findById(teamId);
 
-        if (_.isNil(team) || _.isNil(user)) {
+        if (_.isNil(team)) {
             res.status(404).send();
             return;
         }
