@@ -4,6 +4,8 @@ const path = require('path');
 const _ = require('lodash');
 const httpCodes = require('http-status-codes');
 const validation = require('../validation/document.validation');
+const fs = require('fs');
+
 exports.index = async (req, res) => {
     try {
         const documents = await Document.find({
@@ -19,7 +21,21 @@ exports.index = async (req, res) => {
         });
     }
 };
-exports.show = (req, res) => {};
+exports.show = async (req, res) => {
+    try {
+        const document = await Document.findById(req.params.documentId);
+
+        if (_.isNil(document)) {
+            res.status(httpCodes.NOT_FOUND).send();
+        }
+
+        res.json({
+            message: 'Document found!',
+            document,
+        });
+    } catch (error) {}
+};
+
 exports.store = async (req, res) => {
     try {
         const document = req.files.document;
@@ -68,4 +84,17 @@ exports.store = async (req, res) => {
     }
 };
 exports.update = (req, res) => {};
-exports.destory = (req, res) => {};
+exports.destory = async (req, res) => {
+    try {
+        const document = await Document.findById(req.params.documentId);
+
+        fs.unlinkSync(
+            path.join(
+                __dirname,
+                path.join(__dirname, `../../storage/${document.path}`)
+            )
+        );
+
+        await document.remove();
+    } catch (error) {}
+};
