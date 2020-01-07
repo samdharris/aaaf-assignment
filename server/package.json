@@ -26,6 +26,7 @@
     },
     "scripts": {
         "start": "nodemon src",
-        "test": "jest"
+        "test": "jest",
+        "start:debug": "node --inspect ./src/index.js"
     }
 }
