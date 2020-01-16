@@ -1,5 +1,5 @@
 const httpCodes = require('http-status-codes');
-const User = require('../database/models/user.model');
+const userRepository = require('../database/respositories/user.respsitory');
 const Team = require('../database/models/team.model');
 const validation = require('../validation/user.validation');
 const _ = require('lodash');
@@ -99,29 +99,20 @@ exports.destory = async (req, res) => {
 };
 exports.update = async (req, res) => {
     try {
-        const user = await User.findById(req.params.userId);
+        const id = req.params.userId;
+        let user = await userRepository.findById(id);
+
         if (_.isNil(user)) {
             res.status(httpCodes.NOT_FOUND).send();
             return;
         }
+
         const validated = await validation.validateAsync(req.body);
 
-        Object.keys(validated).forEach(k => {
-            // We deal with this below.
-            if (k !== 'password') {
-                return (user[k] = validated[k]);
-            }
-        });
+        user = await userRepository.update(id, validated);
 
-        // If it's empty, it means they don't want to update the user's password.
-        if (!_.isEmpty(validated.password)) {
-            user.password = await securityUtils.hashPassword(
-                validated.password
-            );
-        }
-
-        await user.save();
-        res.status(httpCodes.OK).json({
+        user.password = undefined;
+        await res.status(httpCodes.OK).json({
             message: `${user.name} updated!`,
             user,
         });
@@ -135,7 +126,7 @@ exports.update = async (req, res) => {
 
 exports.enableUser = async (req, res) => {
     try {
-        const user = await User.findById(req.params.userId);
+        const user = await userRepository.findById(req.params.userId);
         user.enabled = true;
         if (_.isNil(user)) {
             res.status(httpCodes.NOT_FOUND).send();
