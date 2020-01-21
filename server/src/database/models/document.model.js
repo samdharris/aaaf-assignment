@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-
+const DocumentVersion = require('./documentVersion.model');
 const Schema = mongoose.Schema;
 
 const documentSchema = new Schema(
@@ -12,22 +12,16 @@ const documentSchema = new Schema(
             type: String,
             required: true,
         },
-        teamId: {
+        team: {
             type: Schema.Types.ObjectId,
             ref: 'Team',
         },
-        size: {
-            type: Number,
-            required: true,
-        },
-        type: {
-            type: String,
-            required: true,
-        },
-        checkedOutBy: {
-            type: Schema.Types.ObjectId,
-            ref: 'User',
-        },
+        versions: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: 'DocumentVersion',
+            },
+        ],
     },
     { timestamps: true }
 );

@@ -1,5 +1,6 @@
 const Document = require('../database/models/document.model');
 const Team = require('../database/models/team.model');
+const DocumentVersion = require('../database/models/documentVersion.model');
 const path = require('path');
 const _ = require('lodash');
 const httpCodes = require('http-status-codes');
@@ -49,7 +50,7 @@ exports.store = async (req, res) => {
         const team = await Team.findById(teamId);
 
         if (_.isNil(team)) {
-            res.status(404).send();
+            res.status(httpCodes.NOT_FOUND).send();
             return;
         }
 
@@ -63,12 +64,19 @@ exports.store = async (req, res) => {
         let mongoDoc = new Document({
             name: validated.name,
             path: `team-${teamId}/${validated.name}`,
-            size: validated.size,
-            type: validated.mimetype,
-            teamId: teamId,
+            team: teamId,
         });
 
+        const version = new DocumentVersion({
+            size: validated.size,
+            type: validated.mimetype,
+        });
+
+        mongoDoc.versions.push(version);
         mongoDoc = await mongoDoc.save();
+
+        version.document = mongoDoc;
+        await version.save();
 
         team.documents.push(mongoDoc);
         await team.save();
