@@ -7,7 +7,7 @@ const securityUtils = require('../securityUtils');
 
 exports.index = async (req, res) => {
     try {
-        const users = await User.find();
+        const users = await userRepository.all();
         res.json({
             message: 'Got users',
             users,
@@ -22,7 +22,10 @@ exports.index = async (req, res) => {
 };
 exports.show = async (req, res) => {
     try {
-        const user = await User.findById(req.params.userId).populate('team');
+        const user = await userRepository.findById(req.params.userId, {
+            populate: 'team',
+        });
+
         if (_.isNil(user)) {
             res.status(httpCodes.NOT_FOUND).send();
             return;
@@ -45,9 +48,7 @@ exports.store = async (req, res) => {
     try {
         const validated = await validation.validateAsync(req.body);
 
-        const exists = await User.findOne({
-            email: validated.email,
-        });
+        const exists = await userRepository.findByEmail(validated.email);
 
         if (!_.isNil(exists)) {
             res.status(httpCodes.BAD_REQUEST).json({
@@ -60,9 +61,10 @@ exports.store = async (req, res) => {
             validated.password
         );
 
-        const user = new User({ ...validated, password: hashedPassword });
-
-        await user.save();
+        const user = await userRepository.create({
+            ...validated,
+            password: hashedPassword,
+        });
 
         user.password = undefined;
         res.status(httpCodes.CREATED).json({
@@ -80,7 +82,7 @@ exports.store = async (req, res) => {
 exports.destory = async (req, res) => {
     try {
         // Remove user from team
-        const user = await User.findById(req.params.userId);
+        const user = await userRepository.findById(req.params.userId);
 
         if (!_.isNil(user.team)) {
             const team = await Team.findById(user.team);
@@ -88,7 +90,7 @@ exports.destory = async (req, res) => {
             await team.save();
         }
 
-        await User.findByIdAndDelete(req.params.userId).exec();
+        await userRepository.delete(req.params.userId);
         res.status(httpCodes.NO_CONTENT).send();
     } catch (e) {
         res.status(httpCodes.INTERNAL_SERVER_ERROR).json({
@@ -126,14 +128,12 @@ exports.update = async (req, res) => {
 
 exports.enableUser = async (req, res) => {
     try {
-        const user = await userRepository.findById(req.params.userId);
-        user.enabled = true;
+        const user = await userRepository.enableUser(req.params.userId);
         if (_.isNil(user)) {
             res.status(httpCodes.NOT_FOUND).send();
             return;
         }
 
-        await user.save();
         user.password = undefined;
 
         res.status(httpCodes.OK).json({
@@ -147,14 +147,12 @@ exports.enableUser = async (req, res) => {
 
 exports.disableUser = async (req, res) => {
     try {
-        const user = await User.findById(req.params.userId);
-        user.enabled = false;
+        const user = await userRepository.disableUser(req.params.userId);
         if (_.isNil(user)) {
             res.status(httpCodes.NOT_FOUND).send();
             return;
         }
 
-        await user.save();
         user.password = undefined;
 
         res.status(httpCodes.OK).json({

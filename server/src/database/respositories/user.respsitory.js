@@ -1,6 +1,18 @@
 const User = require('../models/user.model');
 const securityUtils = require('../../securityUtils');
-exports.findById = async id => await User.findById(id);
+const _ = require('lodash');
+
+exports.findById = async (id, options) => {
+    let query = User.findById(id);
+    if (!_.isNil(options)) {
+        Object.keys(options).forEach(k => {
+            if (typeof query[k] != 'undefined') {
+                query[k](options[k]);
+            }
+        });
+    }
+    return await query;
+};
 
 exports.findByEmail = async email => await User.findOne({ email });
 
@@ -11,7 +23,13 @@ exports.delete = async id => await User.findByIdAndDelete(id).exec();
 exports.create = async data => {
     const user = new User({ ...data });
     await user.save();
+
+    return await this.findByEmail(data.email);
 };
+
+exports.enableUser = async id => await this.update(id, { enabled: true });
+
+exports.disableUser = async id => await this.update(id, { enabled: false });
 
 exports.update = async (id, data) => {
     const user = await this.findById(id);
