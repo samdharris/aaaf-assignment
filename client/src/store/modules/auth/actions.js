@@ -40,7 +40,11 @@ export default {
     logout: async ctx => {
         removeToken();
         ctx.commit(SET_CURRENT_USER, {});
-        showSnackbar("You are now logged in!", "success");
-        router.push("/login");
+        showSnackbar("You have been logged out!", "success");
+
+        // Prevent duplicate navigation.
+        if (router.currentRoute.path !== "/login") {
+            router.push("/login");
+        }
     }
 };
