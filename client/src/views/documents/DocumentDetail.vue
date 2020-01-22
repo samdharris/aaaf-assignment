@@ -28,7 +28,11 @@
                 </v-tooltip>
                 <v-tooltip bottom>
                     <template v-slot:activator="{ on }">
-                        <v-btn icon v-on="on">
+                        <v-btn
+                            icon
+                            v-on="on"
+                            @click="deleteDocument(document._id)"
+                        >
                             <v-icon>delete</v-icon>
                         </v-btn>
                     </template>
@@ -64,7 +68,8 @@ export default {
         })
     },
     methods: mapActions({
-        getDocument: "documents/getDocument"
+        getDocument: "documents/getDocument",
+        deleteDocument: "documents/deleteDocument"
     }),
     mounted() {
         this.getDocument(this.$route.params.documentId);

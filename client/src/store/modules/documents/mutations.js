@@ -38,5 +38,11 @@ export default {
             ...state.documents.filter(document => document._id !== doc._id),
             doc
         ];
+    },
+    [REMOVE_DOCUMENT](state, doc) {
+        state.documents = [
+            ...state.document.filter(document => document._id !== doc._id)
+        ];
+        state.document = {};
     }
 };

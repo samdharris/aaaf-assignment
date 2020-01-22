@@ -96,15 +96,25 @@ exports.store = async (req, res) => {
 exports.update = (req, res) => {};
 exports.destory = async (req, res) => {
     try {
-        const document = await Document.findById(req.params.documentId);
+        const { documentId, teamId } = req.params;
+        const document = await Document.findById(documentId);
+        const team = await Team.findById(teamId);
 
-        fs.unlinkSync(
-            path.join(
-                __dirname,
-                path.join(__dirname, `../../storage/${document.path}`)
-            )
-        );
+        // Remove document from team
+        team.documents = team.documents.filter(doc => doc !== documentId);
+        await team.save();
+
+        // Delete all versions of the document
+        await DocumentVersion.find({
+            document: documentId,
+        }).remove();
+
+        // finally remove the document from the system and mongo.
+        fs.unlinkSync(path.join(__dirname, `../../storage/${document.path}`));
 
         await document.remove();
-    } catch (error) {}
+        res.status(httpCodes.NO_CONTENT).send();
+    } catch (error) {
+        throw error;
+    }
 };

@@ -8,6 +8,7 @@ import {
 } from "./document-types";
 import axios from "../../../util/axios";
 import { showSnackbar } from "../../helpers";
+import router from "../../../router";
 export default {
     getDocuments: async (ctx, teamId) => {
         localStorage.setItem("team", teamId);
@@ -66,6 +67,19 @@ export default {
             return false;
         } finally {
             ctx.commit(SET_SUBMITTING, false);
+        }
+    },
+    deleteDocument: async (ctx, documentId) => {
+        try {
+            await axios.delete(
+                `/api/teams/${localStorage.getItem(
+                    "team"
+                )}/documents/${documentId}`
+            );
+            router.push("/");
+            showSnackbar("Document removed!", "success");
+        } catch (error) {
+            throw error;
         }
     }
 };
