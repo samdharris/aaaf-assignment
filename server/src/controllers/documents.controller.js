@@ -10,7 +10,7 @@ const fs = require('fs');
 exports.index = async (req, res) => {
     try {
         const documents = await Document.find({
-            teamId: req.params.teamId,
+            team: req.params.teamId,
         }).exec();
         res.json({
             message: 'Documents found!',
