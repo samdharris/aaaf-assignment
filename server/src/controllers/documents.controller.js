@@ -24,7 +24,9 @@ exports.index = async (req, res) => {
 };
 exports.show = async (req, res) => {
     try {
-        const document = await Document.findById(req.params.documentId);
+        const document = await await Document.findById(
+            req.params.documentId
+        ).populate('versions');
 
         if (_.isNil(document)) {
             res.status(httpCodes.NOT_FOUND).send();

@@ -5,7 +5,8 @@ import {
     UPDATE_DOCUMENT,
     SET_LOADING,
     SET_DOCUMENTS,
-    SET_ERRORS
+    SET_ERRORS,
+    SET_DOCUMENT
 } from "./document-types";
 
 export default {
@@ -17,6 +18,9 @@ export default {
     },
     [SET_DOCUMENTS](state, documents) {
         state.documents = [...documents];
+    },
+    [SET_DOCUMENT](state, document) {
+        state.document = { ...document };
     },
     [SET_ERRORS](state, errors) {
         state.errors = { ...errors };

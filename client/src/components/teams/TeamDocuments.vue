@@ -31,8 +31,11 @@
                             </v-dialog>
                         </v-toolbar>
                     </template>
+                    <template v-slot:item.version="{ item }">
+                        {{ item.versions.length }}
+                    </template>
                     <template v-slot:item.action="{ item }">
-                        <v-btn text icon>
+                        <v-btn text icon :to="`/documents/${item._id}`">
                             <v-icon small>remove_red_eye</v-icon>
                         </v-btn>
                     </template>
@@ -61,6 +64,16 @@ export default {
                     text: "Name",
                     sortable: true,
                     value: "name"
+                },
+                {
+                    text: "Version",
+                    sortable: false,
+                    value: "version"
+                },
+                {
+                    text: "Actions",
+                    sortable: false,
+                    value: "action"
                 }
             ]
         };

@@ -7,6 +7,8 @@ import NotFound from "../views/NotFound.vue";
 import Users from "../views/users/Users.vue";
 import UserDetail from "../views/users/UserDetail.vue";
 
+import DocumentDetail from "../views/documents/DocumentDetail.vue";
+
 const routes = [
     {
         path: "/",
@@ -59,6 +61,14 @@ const routes = [
     {
         path: "/users/:userId",
         component: UserDetail,
+        meta: {
+            requiresAuth: true,
+            visitWithAuth: true
+        }
+    },
+    {
+        path: "/documents/:documentId",
+        component: DocumentDetail,
         meta: {
             requiresAuth: true,
             visitWithAuth: true

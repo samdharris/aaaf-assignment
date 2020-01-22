@@ -8,6 +8,10 @@ export default {
      */
     documents: [],
     /**
+     * The currently viewed document.
+     */
+    document: {},
+    /**
      * Flag used to indicate when we're loading something from the server.
      */
     loading: false,

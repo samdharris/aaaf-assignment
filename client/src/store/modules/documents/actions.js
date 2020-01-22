@@ -3,18 +3,36 @@ import {
     ADD_DOCUMENT,
     SET_LOADING,
     SET_DOCUMENTS,
-    SET_ERRORS
+    SET_ERRORS,
+    SET_DOCUMENT
 } from "./document-types";
 import axios from "../../../util/axios";
 import { showSnackbar } from "../../helpers";
 export default {
     getDocuments: async (ctx, teamId) => {
+        localStorage.setItem("team", teamId);
         console.log(teamId);
         try {
             ctx.commit(SET_LOADING, true);
             const { data } = await axios.get(`/api/teams/${teamId}/documents`);
             console.log(data);
             ctx.commit(SET_DOCUMENTS, data.documents);
+        } catch (error) {
+            throw error;
+        } finally {
+            ctx.commit(SET_LOADING, false);
+        }
+    },
+    getDocument: async (ctx, documentId) => {
+        try {
+            ctx.commit(SET_LOADING, true);
+            console.log(ctx.state);
+            const { data } = await axios.get(
+                `/api/teams/${localStorage.getItem(
+                    "team"
+                )}/documents/${documentId}`
+            );
+            ctx.commit(SET_DOCUMENT, data.document);
         } catch (error) {
             throw error;
         } finally {
