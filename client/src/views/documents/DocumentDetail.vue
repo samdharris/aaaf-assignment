@@ -5,44 +5,17 @@
                 <v-progress-circular indeterminate></v-progress-circular>
             </v-col>
         </v-row>
-        <v-row v-else>
+        <v-row v-if="!loading && document">
             <v-col class="inherit-display">
                 <h1>{{ document.name }}</h1>
                 <v-spacer></v-spacer>
-                <v-tooltip bottom>
-                    <template v-slot:activator="{ on }">
-                        <v-btn
-                            icon
-                            v-on="on"
-                            :disabled="checkedOut"
-                            @click="checkoutDocument(document._id)"
-                        >
-                            <v-icon>check_circle</v-icon>
-                        </v-btn>
-                    </template>
-                    <span v-if="checkedOut">Document checked out!</span>
-                    <span v-else>Checkout document</span>
-                </v-tooltip>
-                <v-tooltip bottom>
-                    <template v-slot:activator="{ on }">
-                        <v-btn icon v-on="on">
-                            <v-icon>edit</v-icon>
-                        </v-btn>
-                    </template>
-                    <span>Edit</span>
-                </v-tooltip>
-                <v-tooltip bottom>
-                    <template v-slot:activator="{ on }">
-                        <v-btn
-                            icon
-                            v-on="on"
-                            @click="deleteDocument(document._id)"
-                        >
-                            <v-icon>delete</v-icon>
-                        </v-btn>
-                    </template>
-                    <span>Delete</span>
-                </v-tooltip>
+                <v-subheader v-if="latestVersion && checkedOut">
+                    Document checked out by: {{ latestVersion.checkedOutBy }}
+                </v-subheader>
+                <document-actions-toolbar
+                    :document="document"
+                    v-if="!loading && canEditDocument"
+                ></document-actions-toolbar>
             </v-col>
         </v-row>
         <v-row v-if="!loading">
@@ -58,10 +31,11 @@
 <script>
 import { mapState, mapActions, mapGetters } from "vuex";
 import DocumentVersions from "../../components/documents/DocumentVersions.vue";
-
+import DocumentActionsToolbar from "../../components/documents/DocumentDetailActionsToolbar.vue";
 export default {
     components: {
-        DocumentVersions
+        DocumentVersions,
+        DocumentActionsToolbar
     },
     computed: {
         ...mapState({
@@ -69,13 +43,13 @@ export default {
             loading: state => state.documents.loading
         }),
         ...mapGetters({
-            checkedOut: "documents/documentIsCheckedOut"
+            checkedOut: "documents/documentIsCheckedOut",
+            latestVersion: "documents/latestVersion",
+            canEditDocument: "documents/canEditDocument"
         })
     },
     methods: mapActions({
-        getDocument: "documents/getDocument",
-        deleteDocument: "documents/deleteDocument",
-        checkoutDocument: "documents/checkoutDocument"
+        getDocument: "documents/getDocument"
     }),
     mounted() {
         this.getDocument(this.$route.params.documentId);
