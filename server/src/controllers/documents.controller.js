@@ -157,7 +157,7 @@ exports.checkinDocument = async (req, res) => {
         version.checkedOutBy = null;
         await version.save();
 
-        await userRepository.checkinDocument(req.userId, document);
+        await userRepository.checkinDocument(req.userId, req.params.documentId);
 
         res.json({
             message: 'Document checked in!',

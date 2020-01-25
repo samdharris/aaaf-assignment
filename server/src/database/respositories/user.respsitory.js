@@ -59,8 +59,6 @@ exports.checkoutDocument = async (id, document) => {
 
 exports.checkinDocument = async (id, document) => {
     const user = await this.findById(id);
-    user.checkedOutDocuments = user.checkedOutDocuments.filter(
-        d => d._id !== document._id
-    );
+    user.checkedOutDocuments.remove(document);
     await user.save();
 };
