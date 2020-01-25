@@ -1,5 +1,5 @@
 const validation = require('../validation/auth.validation');
-const User = require('../database/models/user.model');
+const userRepository = require('../database/respositories/user.respsitory');
 const httpCodes = require('http-status-codes');
 const _ = require('lodash');
 const securityUtils = require('../securityUtils');
@@ -8,9 +8,9 @@ exports.login = async (req, res) => {
     try {
         const validated = await validation.validateAsync(req.body);
 
-        const user = await User.findOne({
-            email: validated.email,
-        }).populate('team');
+        const user = await userRepository.findByEmail(validated.email, {
+            populate: 'team',
+        });
 
         if (_.isNil(user)) {
             res.status(httpCodes.BAD_REQUEST).json({
@@ -57,7 +57,10 @@ exports.login = async (req, res) => {
 
 exports.verify = async (req, res) => {
     try {
-        const user = await User.findById(req.userId).populate('team');
+        const user = await userRepository.findById(req.userId, {
+            populate: 'team',
+        });
+
         user.password = undefined;
         res.json({
             message: 'User verified!',
