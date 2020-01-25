@@ -50,3 +50,9 @@ exports.update = async (id, data) => {
 
     return await this.findById(id);
 };
+
+exports.checkoutDocument = async (id, document) => {
+    const user = await this.findById(id);
+    user.checkedOutDocuments.push(document);
+    await user.save();
+};

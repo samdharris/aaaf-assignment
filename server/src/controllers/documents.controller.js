@@ -1,5 +1,6 @@
 const Document = require('../database/models/document.model');
 const Team = require('../database/models/team.model');
+const userRepository = require('../database/respositories/user.respsitory');
 const DocumentVersion = require('../database/models/documentVersion.model');
 const path = require('path');
 const _ = require('lodash');
@@ -116,5 +117,31 @@ exports.destory = async (req, res) => {
         res.status(httpCodes.NO_CONTENT).send();
     } catch (error) {
         throw error;
+    }
+};
+
+exports.checkoutDocument = async (req, res) => {
+    try {
+        const document = await Document.findById(req.params.documentId);
+
+        const version = await DocumentVersion.findById(
+            document.versions[document.versions.length - 1]
+        );
+
+        version.checkedOutBy = req.userId;
+        await version.save();
+
+        await userRepository.checkoutDocument(req.userId, document);
+
+        res.json({
+            message: 'Document checked out!',
+            version,
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(httpCodes.INTERNAL_SERVER_ERROR).json({
+            message: 'Something went wrong checking out document',
+            error,
+        });
     }
 };
