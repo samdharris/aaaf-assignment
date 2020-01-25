@@ -56,3 +56,11 @@ exports.checkoutDocument = async (id, document) => {
     user.checkedOutDocuments.push(document);
     await user.save();
 };
+
+exports.checkinDocument = async (id, document) => {
+    const user = await this.findById(id);
+    user.checkedOutDocuments = user.checkedOutDocuments.filter(
+        d => d._id !== document._id
+    );
+    await user.save();
+};

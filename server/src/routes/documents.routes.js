@@ -17,4 +17,6 @@ router.put(
     ensureDocumentNotCheckedOut,
     controller.checkoutDocument
 );
+router.put('/:documentId/checkin', controller.checkinDocument);
+
 module.exports = router;

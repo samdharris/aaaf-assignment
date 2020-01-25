@@ -145,3 +145,29 @@ exports.checkoutDocument = async (req, res) => {
         });
     }
 };
+
+exports.checkinDocument = async (req, res) => {
+    try {
+        const document = await Document.findById(req.params.documentId);
+
+        const version = await DocumentVersion.findById(
+            document.versions[document.versions.length - 1]
+        );
+
+        version.checkedOutBy = null;
+        await version.save();
+
+        await userRepository.checkinDocument(req.userId, document);
+
+        res.json({
+            message: 'Document checked in!',
+            version,
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(httpCodes.INTERNAL_SERVER_ERROR).json({
+            message: 'Something went wrong checking out document',
+            error,
+        });
+    }
+};

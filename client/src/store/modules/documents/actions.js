@@ -6,6 +6,7 @@ import {
     SET_ERRORS,
     SET_DOCUMENT,
     CHECKOUT_DOCUMENT,
+    CHECKIN_DOCUMENT
 } from "./document-types";
 import axios from "../../../util/axios";
 import { showSnackbar } from "../../helpers";
@@ -96,5 +97,17 @@ export default {
             throw error;
         }
     },
+    checkinDocument: async (ctx, documentId) => {
+        try {
+            const { data } = await axios.put(
+                `/api/teams/${localStorage.getItem(
+                    "team"
+                )}/documents/${documentId}/checkin`
+            );
+            ctx.commit(CHECKIN_DOCUMENT, data.version);
+            showSnackbar("Document checked in!", "success");
+        } catch (error) {
+            throw error;
+        }
     }
 };

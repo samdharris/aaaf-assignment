@@ -14,7 +14,7 @@
                 </v-subheader>
                 <document-actions-toolbar
                     :document="document"
-                    v-if="!loading && canEditDocument"
+                    v-if="!loading"
                 ></document-actions-toolbar>
             </v-col>
         </v-row>

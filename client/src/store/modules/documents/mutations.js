@@ -8,6 +8,7 @@ import {
     SET_ERRORS,
     SET_DOCUMENT,
     CHECKOUT_DOCUMENT,
+    CHECKIN_DOCUMENT
 } from "./document-types";
 
 export default {
@@ -52,5 +53,10 @@ export default {
             version
         ];
     },
+    [CHECKIN_DOCUMENT](state, version) {
+        state.document.versions = [
+            ...state.document.versions.filter(v => v._id !== version._id),
+            version
+        ];
     }
 };

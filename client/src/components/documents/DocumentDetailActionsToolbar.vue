@@ -1,7 +1,7 @@
 <template>
     <div>
         <v-tooltip bottom>
-            <template v-slot:activator="{ on }">
+            <template v-slot:activator="{ on }" v-if="!checkedOut">
                 <v-btn
                     icon
                     v-on="on"
@@ -16,21 +16,21 @@
         </v-tooltip>
         <v-tooltip bottom v-if="checkedOut && canEditDocument">
             <template v-slot:activator="{ on }">
-                <v-btn icon v-on="on">
+                <v-btn icon v-on="on" @click="checkinDocument(document._id)">
                     <v-icon>check_circle_outline</v-icon>
                 </v-btn>
             </template>
             Check In document
         </v-tooltip>
-        <v-tooltip bottom>
+        <v-tooltip bottom v-if="checkedOut && canEditDocument">
             <template v-slot:activator="{ on }">
-                <v-btn icon v-on="on" :disabled="!canEditDocument">
+                <v-btn icon v-on="on">
                     <v-icon>edit</v-icon>
                 </v-btn>
             </template>
             <span>Edit</span>
         </v-tooltip>
-        <v-tooltip bottom>
+        <v-tooltip bottom v-if="checkedOut && canEditDocument">
             <template v-slot:activator="{ on }">
                 <v-btn icon v-on="on" @click="deleteDocument(document._id)">
                     <v-icon>delete</v-icon>
@@ -51,7 +51,8 @@ export default {
     },
     methods: mapActions({
         deleteDocument: "documents/deleteDocument",
-        checkoutDocument: "documents/checkoutDocument"
+        checkoutDocument: "documents/checkoutDocument",
+        checkinDocument: "documents/checkinDocument"
     }),
     computed: mapGetters({
         checkedOut: "documents/documentIsCheckedOut",
