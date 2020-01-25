@@ -14,5 +14,5 @@ export default {
     /**
      * Shows if we're connected to the chat server.
      */
-    connected: false
+    connected: true
 };
