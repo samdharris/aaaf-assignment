@@ -1,7 +1,7 @@
 <template>
     <div>
-        <v-tooltip bottom>
-            <template v-slot:activator="{ on }" v-if="!checkedOut">
+        <v-tooltip bottom v-if="!checkedOut">
+            <template v-slot:activator="{ on }">
                 <v-btn
                     icon
                     v-on="on"
