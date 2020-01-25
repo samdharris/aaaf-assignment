@@ -1,7 +1,12 @@
 import { SET_AUTHENTICATING, SET_ERRORS, SET_CURRENT_USER } from "./auth-types";
 import axios from "../../../util/axios";
 import router from "../../../router";
-import { setToken, removeToken } from "../../../util/authHelper";
+import {
+    setToken,
+    removeToken,
+    setUserId,
+    removeUserId
+} from "../../../util/authHelper";
 import _ from "lodash";
 import { showSnackbar } from "../../helpers";
 
@@ -14,6 +19,7 @@ export default {
             });
 
             setToken(data.token);
+            setUserId(data.user._id);
             ctx.commit(SET_CURRENT_USER, data.user);
             router.push("/");
             showSnackbar("You are now logged in!", "success");
@@ -27,6 +33,7 @@ export default {
         try {
             const { data } = await axios.post("/verify");
             if (_.isEmpty(ctx.state.currentUser)) {
+                setUserId(data.user._id);
                 ctx.commit(SET_CURRENT_USER, data.user);
                 showSnackbar("You are now logged in!", "success");
             }
@@ -39,6 +46,7 @@ export default {
     },
     logout: async ctx => {
         removeToken();
+        removeUserId();
         ctx.commit(SET_CURRENT_USER, {});
         showSnackbar("You have been logged out!", "success");
 
