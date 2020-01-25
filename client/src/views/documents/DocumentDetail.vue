@@ -11,7 +11,12 @@
                 <v-spacer></v-spacer>
                 <v-tooltip bottom>
                     <template v-slot:activator="{ on }">
-                        <v-btn icon v-on="on" :disabled="checkedOut">
+                        <v-btn
+                            icon
+                            v-on="on"
+                            :disabled="checkedOut"
+                            @click="checkoutDocument(document._id)"
+                        >
                             <v-icon>check_circle</v-icon>
                         </v-btn>
                     </template>
@@ -69,7 +74,8 @@ export default {
     },
     methods: mapActions({
         getDocument: "documents/getDocument",
-        deleteDocument: "documents/deleteDocument"
+        deleteDocument: "documents/deleteDocument",
+        checkoutDocument: "documents/checkoutDocument"
     }),
     mounted() {
         this.getDocument(this.$route.params.documentId);

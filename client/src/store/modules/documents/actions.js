@@ -4,7 +4,8 @@ import {
     SET_LOADING,
     SET_DOCUMENTS,
     SET_ERRORS,
-    SET_DOCUMENT
+    SET_DOCUMENT,
+    CHECKOUT_DOCUMENT,
 } from "./document-types";
 import axios from "../../../util/axios";
 import { showSnackbar } from "../../helpers";
@@ -81,5 +82,19 @@ export default {
         } catch (error) {
             throw error;
         }
+    },
+    checkoutDocument: async (ctx, documentId) => {
+        try {
+            const { data } = await axios.put(
+                `/api/teams/${localStorage.getItem(
+                    "team"
+                )}/documents/${documentId}/checkout`
+            );
+            ctx.commit(CHECKOUT_DOCUMENT, data.version);
+            showSnackbar("Document checked out!", "success");
+        } catch (error) {
+            throw error;
+        }
+    },
     }
 };

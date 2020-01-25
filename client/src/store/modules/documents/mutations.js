@@ -6,7 +6,8 @@ import {
     SET_LOADING,
     SET_DOCUMENTS,
     SET_ERRORS,
-    SET_DOCUMENT
+    SET_DOCUMENT,
+    CHECKOUT_DOCUMENT,
 } from "./document-types";
 
 export default {
@@ -44,5 +45,12 @@ export default {
             ...state.document.filter(document => document._id !== doc._id)
         ];
         state.document = {};
+    },
+    [CHECKOUT_DOCUMENT](state, version) {
+        state.document.versions = [
+            ...state.document.versions.filter(v => v._id !== version._id),
+            version
+        ];
+    },
     }
 };
