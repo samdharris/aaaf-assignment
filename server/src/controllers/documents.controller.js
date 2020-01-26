@@ -1,5 +1,6 @@
 const Document = require('../database/models/document.model');
 const Team = require('../database/models/team.model');
+const User = require('../database/models/user.model');
 const userRepository = require('../database/respositories/user.respsitory');
 const DocumentVersion = require('../database/models/documentVersion.model');
 const path = require('path');
@@ -27,7 +28,13 @@ exports.show = async (req, res) => {
     try {
         const document = await await Document.findById(
             req.params.documentId
-        ).populate('versions');
+        ).populate({
+            path: 'versions',
+            populate: {
+                path: 'checkedOutBy',
+                model: User,
+            },
+        });
 
         if (_.isNil(document)) {
             res.status(httpCodes.NOT_FOUND).send();

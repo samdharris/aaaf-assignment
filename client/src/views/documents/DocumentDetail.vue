@@ -10,7 +10,8 @@
                 <h1>{{ document.name }}</h1>
                 <v-spacer></v-spacer>
                 <v-subheader v-if="latestVersion && checkedOut">
-                    Document checked out by: {{ latestVersion.checkedOutBy }}
+                    Document checked out by:
+                    {{ latestVersion.checkedOutBy.name }}
                 </v-subheader>
                 <document-actions-toolbar
                     :document="document"
@@ -45,7 +46,8 @@ export default {
         ...mapGetters({
             checkedOut: "documents/documentIsCheckedOut",
             latestVersion: "documents/latestVersion",
-            canEditDocument: "documents/canEditDocument"
+            canEditDocument: "documents/canEditDocument",
+            checkedOutByCurrUser: "documents/checkedOutByCurrUser"
         })
     },
     methods: mapActions({
