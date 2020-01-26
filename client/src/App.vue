@@ -91,7 +91,7 @@
         </v-app-bar>
         <v-content>
             <router-view></router-view>
-            <team-chat></team-chat>
+            <!-- <team-chat></team-chat> -->
             <v-snackbar
                 v-on:input="shouldCloseSnackbar"
                 v-model="snackbar.open"
@@ -113,12 +113,12 @@
 </template>
 
 <script>
-import TeamChat from "./components/chat/Chat";
+// import TeamChat from "./components/chat/Chat";
 import { mapState, mapMutations, mapGetters, mapActions } from "vuex";
 import { RESET_SNACKBAR } from "./store/modules/general/general-types";
 export default {
     name: "App",
-    components: { TeamChat },
+    // components: { TeamChat },
     data() {
         return {
             drawer: true
