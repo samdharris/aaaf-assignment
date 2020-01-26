@@ -20,7 +20,9 @@ export default {
             const { data } = await axios.get("/api/teams");
             ctx.commit(SET_TEAMS, data.teams);
         } catch (error) {
-            throw error;
+            showSnackbar(
+                `Something went wrong getting teams: ${error.response.data.message}`
+            );
         } finally {
             ctx.commit(SET_LOADING, false);
         }
@@ -61,6 +63,10 @@ export default {
             showSnackbar("Team deleted", "success");
             router.push("/teams");
         } catch (error) {
+            showSnackbar(
+                `Something went wrong deleting team: ${error.response.data.message}`,
+                "error"
+            );
             return false;
         }
     },
@@ -70,11 +76,10 @@ export default {
             const { data } = await axios.get(`/api/teams/${teamId}`);
             ctx.commit(SET_TEAM, data.team);
         } catch (error) {
-            const { response } = error;
-            console.log(response);
-            if (response.status === 404) {
-                router.push("/not-found");
-            }
+            showSnackbar(
+                `Something went wrong getting requested team ${error.response.data.message}`,
+                "error"
+            );
         } finally {
             ctx.commit(SET_LOADING, false);
         }
@@ -86,7 +91,10 @@ export default {
             ctx.commit(REMOVE_MEMBER, memberId);
             showSnackbar("Member removed!", "success");
         } catch (error) {
-            throw error;
+            showSnackbar(
+                `Something went wrong removing member from team ${error.response.data.message}`,
+                "error"
+            );
         }
     },
     addMembers: async (ctx, member) => {
@@ -103,7 +111,7 @@ export default {
 
             return true;
         } catch (error) {
-            throw error;
+            showSnackbar("Something went wrong adding member to team", "error");
         } finally {
             ctx.commit(SET_SUBMITTING, false);
         }

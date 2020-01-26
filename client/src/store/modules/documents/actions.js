@@ -21,7 +21,10 @@ export default {
             console.log(data);
             ctx.commit(SET_DOCUMENTS, data.documents);
         } catch (error) {
-            throw error;
+            showSnackbar(
+                `Something went wrong getting documents: ${error.response.data.message}`,
+                "error"
+            );
         } finally {
             ctx.commit(SET_LOADING, false);
         }
@@ -37,7 +40,10 @@ export default {
             );
             ctx.commit(SET_DOCUMENT, data.document);
         } catch (error) {
-            throw error;
+            showSnackbar(
+                `Something went wrong getting document details: ${error.response.data.message}`,
+                "error"
+            );
         } finally {
             ctx.commit(SET_LOADING, false);
         }
@@ -81,7 +87,10 @@ export default {
             router.push("/");
             showSnackbar("Document removed!", "success");
         } catch (error) {
-            throw error;
+            showSnackbar(
+                `Something went wrong deleting the document: ${error.response.data.message}`,
+                "error"
+            );
         }
     },
     checkoutDocument: async (ctx, documentId) => {
@@ -94,7 +103,10 @@ export default {
             ctx.commit(CHECKOUT_DOCUMENT, data.version);
             showSnackbar("Document checked out!", "success");
         } catch (error) {
-            throw error;
+            showSnackbar(
+                `Something went wrong checking out ${error.response.data.message}`,
+                "error"
+            );
         }
     },
     checkinDocument: async (ctx, documentId) => {
@@ -107,7 +119,10 @@ export default {
             ctx.commit(CHECKIN_DOCUMENT, data.version);
             showSnackbar("Document checked in!", "success");
         } catch (error) {
-            throw error;
+            showSnackbar(
+                `Something went wrong checking in ${error.response.data.message}`,
+                "error"
+            );
         }
     }
 };

@@ -18,7 +18,7 @@ export default {
             const { data } = await axios.get("/api/users");
             ctx.commit(SET_USERS, data.users);
         } catch (error) {
-            throw error;
+            showSnackbar("Something went wrong getting users", "error");
         }
     },
     getUser: async (ctx, userId) => {
@@ -27,7 +27,7 @@ export default {
             const { data } = await axios.get(`/api/users/${userId}`);
             ctx.commit(SET_USER, data.user);
         } catch (error) {
-            throw error;
+            showSnackbar("Something went wrong retrieving user", "error");
         } finally {
             ctx.commit(SET_LOADING, false);
         }
@@ -70,7 +70,7 @@ export default {
             ctx.commit(UPDATE_USER, data.user);
             showSnackbar(`${data.user.name} disabled!`, "success");
         } catch (error) {
-            throw error;
+            showSnackbar("Something went wrong disabling user", "error");
         }
     },
     enableUser: async (ctx, user) => {
@@ -79,7 +79,7 @@ export default {
             ctx.commit(UPDATE_USER, data.user);
             showSnackbar(`${data.user.name} enabled!`, "success");
         } catch (error) {
-            throw error;
+            showSnackbar("Something went wrong enabling user", "error");
         }
     },
     deleteUser: async (ctx, user) => {
@@ -89,7 +89,7 @@ export default {
             showSnackbar("User deleted", "success");
             router.push("/users");
         } catch (error) {
-            throw error;
+            showSnackbar("Something went wrong deleting user", "error");
         }
     }
 };
