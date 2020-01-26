@@ -40,6 +40,7 @@ instance.interceptors.response.use(
 
         if (status === httpCodes.UNAUTHORIZED) {
             store.dispatch("auth/logout");
+            return;
         }
         return Promise.reject(error);
     }
