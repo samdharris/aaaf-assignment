@@ -21,6 +21,6 @@ export default {
         return state.document.versions[numVersions - 1];
     },
     canEditDocument: (state, getters) => {
-        return getters.latestVersion.checkedOutBy === getUserId();
+        return getters.latestVersion.checkedOutBy._id === getUserId();
     }
 };
