@@ -57,6 +57,8 @@ async function assignUsersToTeams(createdUsers, createdTeams) {
  * @param {number} numToCreate Number of users to create
  */
 async function generateUsers(numToCreate) {
+    await userSeeder.seedAdmin();
+    console.log('Admin seeded!');
     const createdUsers = [];
     for (let ii = 0; ii < numToCreate; ii++) {
         const user = await userSeeder.seed();

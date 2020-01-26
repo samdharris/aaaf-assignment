@@ -24,3 +24,15 @@ exports.seed = async function seed() {
     console.log(`UserSeeder: ${name} seeded!`);
     return Promise.resolve(user);
 };
+
+exports.seedAdmin = async function seedAdmin() {
+    const adminUser = new User({
+        name: 'TMS Admin',
+        email: 'admin@tms.com',
+        password: await securityUtil.hashPassword(process.env.ADMIN_PASSWORD),
+        isAdmin: true,
+        enabled: true,
+    });
+
+    await adminUser.save();
+};
