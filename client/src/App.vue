@@ -65,6 +65,14 @@
                         <v-list-item-title>Dashboard</v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
+                <v-list-item link :to="`/teams/${authenticatedUser.team._id}`">
+                    <v-list-item-icon>
+                        <v-icon>people</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                        <v-list-item-title>Your Team</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
                 <v-list-item link to="/teams">
                     <v-list-item-icon>
                         <v-icon>people</v-icon>
