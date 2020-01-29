@@ -4,9 +4,11 @@
     "main": "index.js",
     "license": "MIT",
     "devDependencies": {
-        "jest": "^24.9.0",
+        "jest": "^25.1.0",
+        "mockgoose": "^8.0.4",
         "nodemon": "^2.0.2",
-        "prettier": "^1.19.1"
+        "prettier": "^1.19.1",
+        "supertest": "^4.0.2"
     },
     "dependencies": {
         "@hapi/joi": "^16.1.8",
@@ -26,7 +28,9 @@
     },
     "scripts": {
         "start": "nodemon src",
-        "test": "jest",
+        "test": "jest --runInBand",
+        "test:coverage": "jest --runInBand --coverage",
+        "test:debug": "node --inspect-brk node_modules/.bin/jest --runInBand",
         "start:debug": "node --inspect ./src/index.js"
     }
 }

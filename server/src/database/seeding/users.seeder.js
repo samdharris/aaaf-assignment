@@ -2,7 +2,7 @@ const faker = require('faker');
 const User = require('../models/user.model');
 const securityUtil = require('../../securityUtils');
 
-exports.seed = async function seed() {
+exports.seed = async function seed(options = {}) {
     const name = faker.name.findName();
     const email = `${name
         .toLowerCase()
@@ -13,13 +13,16 @@ exports.seed = async function seed() {
         process.env.DUMMY_PASSWORD
     );
 
-    const user = new User({
+    const details = {
         name,
         email,
         password,
         profilePic: faker.image.avatar(),
         enabled: true,
-    });
+        ...options,
+    };
+
+    const user = new User(details);
 
     await user.save();
     console.log(`UserSeeder: ${name} seeded!`);
