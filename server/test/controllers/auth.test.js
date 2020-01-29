@@ -1,9 +1,8 @@
-const server = require('../src/server');
+const server = require('../../src/server');
 const supertest = require('supertest')(server);
-const userSeeder = require('../src/database/seeding/users.seeder');
+const userSeeder = require('../../src/database/seeding/users.seeder');
 const mongoose = require('mongoose');
-const securityUtils = require('../src/securityUtils');
-const User = require('../src/database/models/user.model');
+const securityUtils = require('../../src/securityUtils');
 require('dotenv').config();
 
 beforeAll(() => {
