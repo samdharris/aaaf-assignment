@@ -6,6 +6,7 @@ exports.seed = async function seed() {
     const name = faker.name.findName();
     const email = `${name
         .toLowerCase()
+        .trim()
         .split(' ')
         .join('.')}@tms.com`;
     const password = await securityUtil.hashPassword(
