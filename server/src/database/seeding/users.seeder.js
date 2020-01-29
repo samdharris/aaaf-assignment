@@ -7,8 +7,9 @@ exports.seed = async function seed(options = {}) {
     const email = `${name
         .toLowerCase()
         .trim()
+        .replace(/[^a-z0-9 ]/gi, '')
         .split(' ')
-        .join('.')}@tms.com`;
+        .join('')}@tms.com`;
     const password = await securityUtil.hashPassword(
         process.env.DUMMY_PASSWORD
     );
@@ -23,10 +24,14 @@ exports.seed = async function seed(options = {}) {
     };
 
     const user = new User(details);
-
-    await user.save();
-    console.log(`UserSeeder: ${name} seeded!`);
-    return Promise.resolve(user);
+    return new Promise(async (resolve, reject) => {
+        try {
+            await user.save();
+            resolve(user);
+        } catch (err) {
+            reject(err);
+        }
+    });
 };
 
 exports.seedAdmin = async function seedAdmin() {
