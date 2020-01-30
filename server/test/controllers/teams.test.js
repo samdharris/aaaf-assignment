@@ -93,3 +93,68 @@ describe('GET - /api/teams/{:id}', () => {
         expect(_id.toString()).toBe(team._id.toString());
     });
 });
+
+describe('POST - /api/teams', () => {
+    const token = {};
+    beforeAll(done => {
+        userSeeder.seed().then(user => {
+            supertest
+                .post('/login')
+                .send({
+                    email: user.email,
+                    password: process.env.DUMMY_PASSWORD,
+                })
+                .expect(200)
+                .end((err, { body }) => {
+                    token.value = body.token;
+                    done(err);
+                });
+        });
+    });
+
+    it('should successfully create a team', async () => {
+        const teamName = 'Team A';
+        const response = await supertest
+            .post('/api/teams')
+            .send({
+                name: teamName,
+            })
+            .set('Authorization', `bearer ${token.value}`);
+
+        expect(response.status).toBe(201);
+        expect(response.body.team.name).toBe(teamName);
+    });
+});
+
+describe('PUT - /api/teams/{teamId}', () => {
+    const token = {};
+    beforeAll(done => {
+        userSeeder.seed().then(user => {
+            supertest
+                .post('/login')
+                .send({
+                    email: user.email,
+                    password: process.env.DUMMY_PASSWORD,
+                })
+                .expect(200)
+                .end((err, { body }) => {
+                    token.value = body.token;
+                    done(err);
+                });
+        });
+    });
+
+    it('should update the request user', async () => {
+        const team = await teamSeeder.seed('Team A');
+        const updatedName = 'Team AA';
+
+        const response = await supertest
+            .put(`/api/teams/${team._id}`)
+            .send({
+                name: updatedName,
+            })
+            .set('Authorization', `bearer ${token.value}`);
+
+        expect(response.body.team.name).toBe(updatedName);
+    });
+});
