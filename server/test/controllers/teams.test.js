@@ -15,6 +15,10 @@ beforeAll(() => {
     );
 });
 
+afterEach(() => {
+    return mongoose.connection.dropCollection('teams');
+});
+
 afterAll(() => {
     return mongoose.disconnect();
 });
@@ -37,10 +41,6 @@ describe('GET - /api/teams', () => {
         });
     });
 
-    afterEach(() => {
-        return mongoose.connection.dropCollection('teams');
-    });
-
     it('should return all teams.', async () => {
         await teamSeeder.seed('Team A');
 
@@ -50,5 +50,46 @@ describe('GET - /api/teams', () => {
 
         expect(response.status).toBe(200);
         expect(response.body.teams).toHaveLength(1);
+    });
+});
+
+describe('GET - /api/teams/{:id}', () => {
+    let token = {};
+    beforeAll(done => {
+        userSeeder.seed().then(user => {
+            supertest
+                .post('/login')
+                .send({
+                    email: user.email,
+                    password: process.env.DUMMY_PASSWORD,
+                })
+                .expect(200)
+                .end((err, { body }) => {
+                    token.value = body.token;
+                    done(err);
+                });
+        });
+    });
+
+    it('should throw a 404 if it cannot find the requested team', async () => {
+        const team = await teamSeeder.seed('Team A');
+
+        const response = await supertest
+            .get(`/api/teams/${team._id}22`)
+            .set('Authorization', `bearer ${token.value}`);
+
+        expect(response.status).toBe(404);
+    });
+
+    it('should return the requested team', async () => {
+        const team = await teamSeeder.seed('Team A');
+
+        const response = await supertest
+            .get(`/api/teams/${team._id}`)
+            .set('Authorization', `bearer ${token.value}`);
+
+        expect(response.body).toHaveProperty('team');
+        const { _id } = response.body.team;
+        expect(_id.toString()).toBe(team._id.toString());
     });
 });
