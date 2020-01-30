@@ -86,12 +86,7 @@ exports.destory = async (req, res) => {
 exports.update = async (req, res) => {
     try {
         const validated = await validation.validateAsync(req.body);
-        const team = await Team.findById(req.params.teamId);
-        if (_.isNil(team)) {
-            res.status(httpCodes.NOT_FOUND).send();
-            return;
-        }
-
+        const team = req.team;
         Object.keys(validated).forEach(k => (team[k] = validated[k]));
 
         await team.save();
