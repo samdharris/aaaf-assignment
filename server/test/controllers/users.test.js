@@ -92,3 +92,40 @@ describe('GET - /api/users/{id}', () => {
         expect(response.status).toBe(404);
     });
 });
+
+describe('POST - /api/users', () => {
+    let token = {};
+    beforeEach(done => {
+        userSeeder.seed().then(user => {
+            token.user = user;
+            supertest
+                .post('/login')
+                .send({
+                    email: user.email,
+                    password: process.env.DUMMY_PASSWORD,
+                })
+                .expect(200)
+                .end((err, { body }) => {
+                    token.value = body.token;
+                    done(err);
+                });
+        });
+    });
+
+    it('should create a user', async () => {
+        const user = {
+            name: 'Bob Fred',
+            email: 'bobfred@tms.com',
+            password: process.env.DUMMY_PASSWORD,
+        };
+
+        const response = await supertest
+            .post('/api/users')
+            .send(user)
+            .set('Authorization', `bearer ${token.value}`);
+
+        expect(response.status).toBe(201);
+        delete user.password;
+        expect(response.body.user).toEqual(expect.objectContaining(user));
+    });
+});
