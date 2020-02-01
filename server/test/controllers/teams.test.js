@@ -74,8 +74,9 @@ describe('GET - /api/teams/{:id}', () => {
     it('should throw a 404 if it cannot find the requested team', async () => {
         const team = await teamSeeder.seed('Team A');
 
+        const wrongId = '5e3017f16302c04392cbec7b';
         const response = await supertest
-            .get(`/api/teams/${team._id}22`)
+            .get(`/api/teams/${wrongId}`)
             .set('Authorization', `bearer ${token.value}`);
 
         expect(response.status).toBe(404);
@@ -156,5 +157,125 @@ describe('PUT - /api/teams/{teamId}', () => {
             .set('Authorization', `bearer ${token.value}`);
 
         expect(response.body.team.name).toBe(updatedName);
+    });
+});
+
+describe('POST /api/teams/{:id}/members', () => {
+    const data = {};
+    beforeAll(done => {
+        userSeeder.seed().then(user => {
+            supertest
+                .post('/login')
+                .send({
+                    email: user.email,
+                    password: process.env.DUMMY_PASSWORD,
+                })
+                .expect(200)
+                .end((err, { body }) => {
+                    data.token = body.token;
+                    data.user = body.user;
+                    done(err);
+                });
+        });
+    });
+
+    it('should add a given user to the team', async () => {
+        const team = await teamSeeder.seed('Team A');
+        const expected = [
+            {
+                ...data.user,
+                team: team._id.toString(),
+            },
+        ];
+        const response = await supertest
+            .post(`/api/teams/${team._id}/members`)
+            .send({
+                member: data.user._id,
+            })
+            .set('Authorization', `bearer ${data.token}`);
+
+        expect(response.status).toBe(200);
+        expect(response.body.members).toHaveLength(1);
+    });
+
+    it('should not contain duplicates of a given user', async () => {
+        const unExpected = [data.user._id.toString(), data.user._id.toString()];
+        const team = await teamSeeder.seed('Team A');
+        console.log(JSON.stringify(team));
+        const response = await supertest
+            .post(`/api/teams/${team._id}/members`)
+            .send({
+                member: data.user._id,
+            })
+            .set('Authorization', `bearer ${data.token}`);
+
+        expect(response.status).toBe(200);
+        expect(response.body.members).not.toEqual(
+            expect.arrayContaining(unExpected)
+        );
+    });
+});
+
+describe('DELETE - /api/teams/{:id}/members', () => {
+    const data = {};
+    beforeAll(done => {
+        userSeeder.seed().then(user => {
+            supertest
+                .post('/login')
+                .send({
+                    email: user.email,
+                    password: process.env.DUMMY_PASSWORD,
+                })
+                .expect(200)
+                .end((err, { body }) => {
+                    data.token = body.token;
+                    data.user = body.user;
+                    done(err);
+                });
+        });
+    });
+
+    it('should remove the given user from the team', async () => {
+        const team = await teamSeeder.seed('Team A');
+        await supertest
+            .post(`/api/teams/${team._id}/members`)
+            .send({
+                member: data.user._id,
+            })
+            .set('Authorization', `bearer ${data.token}`);
+
+        const response = await supertest
+            .delete(`/api/teams/${team._id}/members/${data.user._id}`)
+            .set('Authorization', `bearer ${data.token}`);
+
+        expect(response.status).toBe(200);
+    });
+});
+
+describe('DELETE - /api/teams/{:id}', () => {
+    const data = {};
+    beforeAll(done => {
+        userSeeder.seed().then(user => {
+            supertest
+                .post('/login')
+                .send({
+                    email: user.email,
+                    password: process.env.DUMMY_PASSWORD,
+                })
+                .expect(200)
+                .end((err, { body }) => {
+                    data.token = body.token;
+                    data.user = body.user;
+                    done(err);
+                });
+        });
+    });
+    it('should delete a given team', async () => {
+        const team = await teamSeeder.seed('Team A');
+        const response = await supertest
+            .delete(`/api/teams/${team._id}`)
+            .set('Authorization', `bearer ${data.token}`);
+
+        expect(response.status).toBe(204);
     });
 });
