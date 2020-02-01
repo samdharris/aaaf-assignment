@@ -5,10 +5,9 @@ const Team = require('../database/models/team.model');
 const validation = require('../validation/user.validation');
 const _ = require('lodash');
 const securityUtils = require('../securityUtils');
-const { ForbiddenError } = require('@casl/ability');
 exports.index = async (req, res) => {
     try {
-        const users = await User.accessibleBy(req.ability).find();
+        const users = await User.find();
         res.json({
             message: 'Got users',
             users,
@@ -32,7 +31,6 @@ exports.show = async (req, res) => {
             return;
         }
 
-        ForbiddenError.from(req.ability).throwUnlessCan('read', user, '_id');
         user.password = undefined;
 
         res.status(httpCodes.OK).json({

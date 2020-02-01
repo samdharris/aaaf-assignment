@@ -3,7 +3,6 @@ const userRepository = require('../database/respositories/user.respsitory');
 const httpCodes = require('http-status-codes');
 const _ = require('lodash');
 const securityUtils = require('../securityUtils');
-const { defineRulesFor } = require('../casl');
 exports.login = async (req, res) => {
     try {
         const validated = await validation.validateAsync(req.body);
@@ -42,7 +41,6 @@ exports.login = async (req, res) => {
         res.json({
             message: 'Login successful!',
             user,
-            rules: defineRulesFor(user),
             token: securityUtils.generateToken({
                 id: user.id,
             }),
@@ -66,7 +64,6 @@ exports.verify = async (req, res) => {
         res.json({
             message: 'User verified!',
             user,
-            rules: defineRulesFor(user),
         });
     } catch (error) {
         res.status(httpCodes.UNAUTHORIZED).send();

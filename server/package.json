@@ -11,8 +11,6 @@
         "supertest": "^4.0.2"
     },
     "dependencies": {
-        "@casl/ability": "^3.4.0",
-        "@casl/mongoose": "^2.3.2",
         "@hapi/joi": "^16.1.8",
         "bcryptjs": "^2.4.3",
         "body-parser": "^1.19.0",

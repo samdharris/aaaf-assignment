@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 const _ = require('lodash');
 const Schema = mongoose.Schema;
-const { accessibleRecordsPlugin } = require('@casl/mongoose');
 const userSchema = new Schema(
     {
         name: {
@@ -49,5 +48,4 @@ userSchema.post('find', (res, next) => {
     }
     next();
 });
-userSchema.plugin(accessibleRecordsPlugin);
 module.exports = mongoose.model('User', userSchema);

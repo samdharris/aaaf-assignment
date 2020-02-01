@@ -3,7 +3,6 @@ const httpCodes = require('http-status-codes');
 const _ = require('lodash');
 const User = require('../database/models/user.model');
 
-const { defineAbilitiesFor } = require('../casl');
 module.exports = async (req, res, next) => {
     try {
         const header = req.header('Authorization');
@@ -40,7 +39,6 @@ module.exports = async (req, res, next) => {
         }
 
         req.userId = user.id;
-        req.ability = defineAbilitiesFor(user);
 
         next();
     } catch (error) {
