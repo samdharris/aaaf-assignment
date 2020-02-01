@@ -9,7 +9,7 @@
             <v-col class="inherit-display">
                 <h1>{{ team.name }}</h1>
                 <v-spacer></v-spacer>
-                <v-tooltip bottom>
+                <v-tooltip bottom v-if="currentUser.isAdmin">
                     <template v-slot:activator="{ on }">
                         <v-btn icon v-on="on" @click="dialog = true">
                             <v-icon>edit</v-icon>
@@ -17,7 +17,7 @@
                     </template>
                     <span>Edit</span>
                 </v-tooltip>
-                <v-tooltip bottom>
+                <v-tooltip bottom v-if="currentUser.isAdmin">
                     <template v-slot:activator="{ on }">
                         <v-btn icon v-on="on" @click="deleteTeam">
                             <v-icon>delete</v-icon>
@@ -57,7 +57,8 @@ export default {
     },
     computed: mapState({
         team: state => state.teams.team,
-        loading: state => state.teams.loading
+        loading: state => state.teams.loading,
+        currentUser: state => state.auth.currentUser
     }),
     data() {
         return {

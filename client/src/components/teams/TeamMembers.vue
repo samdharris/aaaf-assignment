@@ -3,7 +3,7 @@
         <v-card-title>
             Members
             <v-spacer></v-spacer>
-            <v-tooltip bottom>
+            <v-tooltip bottom v-if="currentUser.isAdmin">
                 <template v-slot:activator="{ on }">
                     <v-btn icon @click="openDialog = true" v-on="on">
                         <v-icon>add</v-icon>
@@ -35,11 +35,15 @@
 <script>
 import TeamListItem from "./TeamListItem";
 import AddMembersDialog from "./AddMembersDialog";
+import { mapState } from "vuex";
 export default {
     components: {
         TeamListItem,
         AddMembersDialog
     },
+    computed: mapState({
+        currentUser: state => state.auth.currentUser
+    }),
     data() {
         return {
             openDialog: false

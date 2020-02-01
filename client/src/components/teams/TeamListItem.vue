@@ -11,7 +11,7 @@
                 {{ member.email }}
             </v-list-item-subtitle>
         </v-list-item-content>
-        <v-list-item-action>
+        <v-list-item-action v-if="currentUser.isAdmin">
             <v-tooltip bottom>
                 <template v-slot:activator="{ on }">
                     <v-btn icon @click="removeMember(member._id)" v-on="on">
@@ -24,7 +24,7 @@
     </v-list-item>
 </template>
 <script>
-import { mapActions } from "vuex";
+import { mapActions, mapState } from "vuex";
 export default {
     props: {
         member: {
@@ -32,6 +32,9 @@ export default {
             required: true
         }
     },
+    computed: mapState({
+        currentUser: state => state.auth.currentUser
+    }),
     methods: mapActions({
         removeMember: "teams/removeMember"
     })
