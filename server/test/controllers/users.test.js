@@ -25,20 +25,24 @@ afterEach(() => {
 describe('GET - /api/users', () => {
     let token = {};
     beforeAll(done => {
-        userSeeder.seed().then(user => {
-            supertest
-                .post('/login')
-                .send({
-                    email: user.email,
-                    password: process.env.DUMMY_PASSWORD,
-                })
-                .expect(200)
-                .end((err, { body }) => {
-                    token.value = body.token;
-                    token.user = user;
-                    done(err);
-                });
-        });
+        userSeeder
+            .seed({
+                isAdmin: true,
+            })
+            .then(user => {
+                supertest
+                    .post('/login')
+                    .send({
+                        email: user.email,
+                        password: process.env.DUMMY_PASSWORD,
+                    })
+                    .expect(200)
+                    .end((err, { body }) => {
+                        token.value = body.token;
+                        token.user = user;
+                        done(err);
+                    });
+            });
     });
 
     it('should return a collection of all users', async () => {
@@ -60,20 +64,24 @@ describe('GET - /api/users', () => {
 describe('GET - /api/users/{id}', () => {
     let token = {};
     beforeEach(done => {
-        userSeeder.seed().then(user => {
-            token.user = user;
-            supertest
-                .post('/login')
-                .send({
-                    email: user.email,
-                    password: process.env.DUMMY_PASSWORD,
-                })
-                .expect(200)
-                .end((err, { body }) => {
-                    token.value = body.token;
-                    done(err);
-                });
-        });
+        userSeeder
+            .seed({
+                isAdmin: true,
+            })
+            .then(user => {
+                token.user = user;
+                supertest
+                    .post('/login')
+                    .send({
+                        email: user.email,
+                        password: process.env.DUMMY_PASSWORD,
+                    })
+                    .expect(200)
+                    .end((err, { body }) => {
+                        token.value = body.token;
+                        done(err);
+                    });
+            });
     });
 
     it('should return the requested user', async () => {
@@ -96,20 +104,24 @@ describe('GET - /api/users/{id}', () => {
 describe('POST - /api/users', () => {
     let token = {};
     beforeEach(done => {
-        userSeeder.seed().then(user => {
-            token.user = user;
-            supertest
-                .post('/login')
-                .send({
-                    email: user.email,
-                    password: process.env.DUMMY_PASSWORD,
-                })
-                .expect(200)
-                .end((err, { body }) => {
-                    token.value = body.token;
-                    done(err);
-                });
-        });
+        userSeeder
+            .seed({
+                isAdmin: true,
+            })
+            .then(user => {
+                token.user = user;
+                supertest
+                    .post('/login')
+                    .send({
+                        email: user.email,
+                        password: process.env.DUMMY_PASSWORD,
+                    })
+                    .expect(200)
+                    .end((err, { body }) => {
+                        token.value = body.token;
+                        done(err);
+                    });
+            });
     });
 
     it('should create a user', async () => {
@@ -133,20 +145,24 @@ describe('POST - /api/users', () => {
 describe('PUT - /api/users/{id}', () => {
     let token = {};
     beforeEach(done => {
-        userSeeder.seed().then(user => {
-            token.user = user;
-            supertest
-                .post('/login')
-                .send({
-                    email: user.email,
-                    password: process.env.DUMMY_PASSWORD,
-                })
-                .expect(200)
-                .end((err, { body }) => {
-                    token.value = body.token;
-                    done(err);
-                });
-        });
+        userSeeder
+            .seed({
+                isAdmin: true,
+            })
+            .then(user => {
+                token.user = user;
+                supertest
+                    .post('/login')
+                    .send({
+                        email: user.email,
+                        password: process.env.DUMMY_PASSWORD,
+                    })
+                    .expect(200)
+                    .end((err, { body }) => {
+                        token.value = body.token;
+                        done(err);
+                    });
+            });
     });
 
     it('should update a user', async () => {
@@ -163,20 +179,24 @@ describe('PUT - /api/users/{id}', () => {
 describe('PUT - /api/users/{id}/enable', () => {
     let token = {};
     beforeEach(done => {
-        userSeeder.seed().then(user => {
-            token.user = user;
-            supertest
-                .post('/login')
-                .send({
-                    email: user.email,
-                    password: process.env.DUMMY_PASSWORD,
-                })
-                .expect(200)
-                .end((err, { body }) => {
-                    token.value = body.token;
-                    done(err);
-                });
-        });
+        userSeeder
+            .seed({
+                isAdmin: true,
+            })
+            .then(user => {
+                token.user = user;
+                supertest
+                    .post('/login')
+                    .send({
+                        email: user.email,
+                        password: process.env.DUMMY_PASSWORD,
+                    })
+                    .expect(200)
+                    .end((err, { body }) => {
+                        token.value = body.token;
+                        done(err);
+                    });
+            });
     });
 
     it('should enable a user', async () => {
@@ -194,20 +214,24 @@ describe('PUT - /api/users/{id}/enable', () => {
 describe('PUT - /api/users/{id}/disable', () => {
     let token = {};
     beforeEach(done => {
-        userSeeder.seed().then(user => {
-            token.user = user;
-            supertest
-                .post('/login')
-                .send({
-                    email: user.email,
-                    password: process.env.DUMMY_PASSWORD,
-                })
-                .expect(200)
-                .end((err, { body }) => {
-                    token.value = body.token;
-                    done(err);
-                });
-        });
+        userSeeder
+            .seed({
+                isAdmin: true,
+            })
+            .then(user => {
+                token.user = user;
+                supertest
+                    .post('/login')
+                    .send({
+                        email: user.email,
+                        password: process.env.DUMMY_PASSWORD,
+                    })
+                    .expect(200)
+                    .end((err, { body }) => {
+                        token.value = body.token;
+                        done(err);
+                    });
+            });
     });
 
     it('should disable a user', async () => {
@@ -228,20 +252,24 @@ describe('PUT - /api/users/{id}/disable', () => {
 describe('DELETE - /api/users/{id}', () => {
     let token = {};
     beforeEach(done => {
-        userSeeder.seed().then(user => {
-            token.user = user;
-            supertest
-                .post('/login')
-                .send({
-                    email: user.email,
-                    password: process.env.DUMMY_PASSWORD,
-                })
-                .expect(200)
-                .end((err, { body }) => {
-                    token.value = body.token;
-                    done(err);
-                });
-        });
+        userSeeder
+            .seed({
+                isAdmin: true,
+            })
+            .then(user => {
+                token.user = user;
+                supertest
+                    .post('/login')
+                    .send({
+                        email: user.email,
+                        password: process.env.DUMMY_PASSWORD,
+                    })
+                    .expect(200)
+                    .end((err, { body }) => {
+                        token.value = body.token;
+                        done(err);
+                    });
+            });
     });
 
     it('should delete a given user', async () => {
