@@ -271,6 +271,11 @@
   dependencies:
     sift "^9.0.4"
 
+"@casl/mongoose@^2.3.2":
+  version "2.3.2"
+  resolved "https://registry.yarnpkg.com/@casl/mongoose/-/mongoose-2.3.2.tgz#b54b99be53fa59b9da563df62c3ab7270109a64b"
+  integrity sha512-bEqx+IjNTDp1CevM11wcY7v01Mk4i5odcreHXJS/yQ9Cj0XbDyNON3CwZ3wOGxfMU+0Nu4XY6x2o4peneBXHkQ==
+
 "@cnakazawa/watch@^1.0.3":
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/@cnakazawa/watch/-/watch-1.0.3.tgz#099139eaec7ebf07a27c1786a3ff64f39464d2ef"

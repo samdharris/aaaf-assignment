@@ -1,5 +1,6 @@
 const httpCodes = require('http-status-codes');
 const userRepository = require('../database/respositories/user.respsitory');
+const User = require('../database/models/user.model');
 const Team = require('../database/models/team.model');
 const validation = require('../validation/user.validation');
 const _ = require('lodash');
@@ -7,7 +8,7 @@ const securityUtils = require('../securityUtils');
 
 exports.index = async (req, res) => {
     try {
-        const users = await userRepository.all();
+        const users = await User.accessibleBy(req.ability).find();
         res.json({
             message: 'Got users',
             users,
