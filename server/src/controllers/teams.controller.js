@@ -24,11 +24,6 @@ exports.show = async (req, res) => {
             .populate('members')
             .populate('documents');
 
-        if (_.isNil(team)) {
-            res.status(httpCodes.NOT_FOUND).send();
-            return;
-        }
-
         res.status(httpCodes.OK).json({
             message: 'Team found!',
             team,
@@ -63,7 +58,7 @@ exports.store = async (req, res) => {
 exports.destory = async (req, res) => {
     try {
         const teamId = req.params.teamId;
-        const team = await Team.findById(teamId);
+        const team = req.team;
 
         // Unassign members from the team
         for (let i = 0; i < team.members.length; i++) {
@@ -106,14 +101,14 @@ exports.addUser = async (req, res) => {
     try {
         const newMemberId = req.body.member;
         const teamId = req.params.teamId;
-        const team = await Team.findById(teamId);
+        const team = req.team;
 
         if (team.members.indexOf(newMemberId) === -1) {
             team.members.push(newMemberId);
 
             // Check that the user isn't already associated with a team. If they are, remove them from that team
             // and add them to this team.
-            const user = await User.findById(newMemberId);
+            const user = await User.findById(newMemberId).populate('team');
             if (!_.isNil(user.team) && user.team !== teamId) {
                 const usrCurrTeam = await Team.findById(user.team);
                 usrCurrTeam.members.remove(newMemberId);
@@ -143,7 +138,7 @@ exports.removeUser = async (req, res) => {
         const user = await User.findById(memberId);
         user.team = null;
         await user.save();
-        const team = await Team.findById(teamId);
+        const team = req.team;
         team.members.remove(memberId);
         await team.save();
         res.json({
