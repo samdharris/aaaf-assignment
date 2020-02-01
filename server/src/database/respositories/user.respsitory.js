@@ -16,11 +16,13 @@ exports.findById = async (id, options) => {
 
 exports.findByEmail = async (email, options) => {
     let query = User.findOne({ email });
-    Object.keys(options).forEach(k => {
-        if (typeof query[k] != 'undefined') {
-            query[k](options[k]);
-        }
-    });
+    if (!_.isNil(options)) {
+        Object.keys(options).forEach(k => {
+            if (typeof query[k] != 'undefined') {
+                query[k](options[k]);
+            }
+        });
+    }
     return await query;
 };
 
