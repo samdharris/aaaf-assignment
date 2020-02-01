@@ -57,6 +57,7 @@ describe('GET - /api/teams/{:id}', () => {
     let token = {};
     beforeAll(done => {
         userSeeder.seed().then(user => {
+            token.user = user;
             supertest
                 .post('/login')
                 .send({
@@ -82,8 +83,25 @@ describe('GET - /api/teams/{:id}', () => {
         expect(response.status).toBe(404);
     });
 
+    it("should not allow you to view a given team if the current user isn't a member", async () => {
+        const team = await teamSeeder.seed('Team A');
+
+        const response = await supertest
+            .get(`/api/teams/${team._id}`)
+            .set('Authorization', `bearer ${token.value}`);
+
+        expect(response.status).toBe(403);
+    });
+
     it('should return the requested team', async () => {
         const team = await teamSeeder.seed('Team A');
+
+        await supertest
+            .post(`/api/teams/${team._id}/members`)
+            .send({
+                member: token.user._id,
+            })
+            .set('Authorization', `bearer ${token.value}`);
 
         const response = await supertest
             .get(`/api/teams/${team._id}`)
