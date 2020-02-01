@@ -159,3 +159,68 @@ describe('PUT - /api/users/{id}', () => {
         expect(response.body.user).toEqual(expect.objectContaining(updated));
     });
 });
+
+describe('PUT - /api/users/{id}/enable', () => {
+    let token = {};
+    beforeEach(done => {
+        userSeeder.seed().then(user => {
+            token.user = user;
+            supertest
+                .post('/login')
+                .send({
+                    email: user.email,
+                    password: process.env.DUMMY_PASSWORD,
+                })
+                .expect(200)
+                .end((err, { body }) => {
+                    token.value = body.token;
+                    done(err);
+                });
+        });
+    });
+
+    it('should enable a user', async () => {
+        await supertest
+            .put(`/api/users/${token.user._id}/enable`)
+            .set('Authorization', `bearer ${token.value}`);
+        const response = await supertest
+            .get(`/api/users/${token.user._id}`)
+            .set('Authorization', `bearer ${token.value}`);
+        expect(response.status).toBe(200);
+        expect(response.body.user.enabled).toBeTruthy();
+    });
+});
+
+describe('PUT - /api/users/{id}/disable', () => {
+    let token = {};
+    beforeEach(done => {
+        userSeeder.seed().then(user => {
+            token.user = user;
+            supertest
+                .post('/login')
+                .send({
+                    email: user.email,
+                    password: process.env.DUMMY_PASSWORD,
+                })
+                .expect(200)
+                .end((err, { body }) => {
+                    token.value = body.token;
+                    done(err);
+                });
+        });
+    });
+
+    it('should disable a user', async () => {
+        await supertest
+            .put(`/api/users/${token.user._id}/disable`)
+            .set('Authorization', `bearer ${token.value}`);
+        const response = await supertest
+            .get(`/api/users/${token.user._id}`)
+            .set('Authorization', `bearer ${token.value}`);
+
+        /**
+         * you cannot view a given user if they're disabled
+         */
+        expect(response.status).toBe(401);
+    });
+});
