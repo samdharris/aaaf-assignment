@@ -137,7 +137,7 @@ exports.enableUser = async (req, res) => {
         user.password = undefined;
 
         res.status(httpCodes.OK).json({
-            message: `${user.name} disabled!`,
+            message: `${user.name} enabled!`,
             user,
         });
     } catch (error) {
