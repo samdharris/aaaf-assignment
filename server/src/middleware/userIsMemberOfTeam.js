@@ -1,6 +1,8 @@
 const httpCodes = require('http-status-codes');
 const Team = require('../database/models/team.model');
+const User = require('../database/models/user.model');
 const _ = require('lodash');
+
 module.exports = async (req, res, next) => {
     const userId = req.userId;
     if (_.isNil(userId)) {
@@ -17,7 +19,8 @@ module.exports = async (req, res, next) => {
 
     const team = await Team.findById(req.params.teamId);
 
-    if (team.members.indexOf(userId) === -1) {
+    const user = await User.findById(userId);
+    if (team.members.indexOf(userId) === -1 && !user.isAdmin) {
         res.status(httpCodes.FORBIDDEN).send();
         return;
     }
