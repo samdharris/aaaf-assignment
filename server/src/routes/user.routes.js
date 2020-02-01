@@ -2,13 +2,15 @@ const { Router } = require('express');
 const controller = require('../controllers/users.controller');
 const router = Router();
 
-router.get('/', controller.index);
-router.get('/:userId', controller.show);
-router.post('/', controller.store);
-router.delete('/:userId', controller.destory);
-router.put('/:userId', controller.update);
+const userIsAdmin = require('../middleware/ensureUserIsAdmin');
 
-router.put('/:userId/enable', controller.enableUser);
-router.put('/:userId/disable', controller.disableUser);
+router.get('/', userIsAdmin, controller.index);
+router.get('/:userId', controller.show);
+router.post('/', userIsAdmin, controller.store);
+router.delete('/:userId', userIsAdmin, controller.destory);
+router.put('/:userId', userIsAdmin, controller.update);
+
+router.put('/:userId/enable', userIsAdmin, controller.enableUser);
+router.put('/:userId/disable', userIsAdmin, controller.disableUser);
 
 module.exports = router;
