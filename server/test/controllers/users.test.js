@@ -35,6 +35,7 @@ describe('GET - /api/users', () => {
                 .expect(200)
                 .end((err, { body }) => {
                     token.value = body.token;
+                    token.user = user;
                     done(err);
                 });
         });
@@ -53,5 +54,41 @@ describe('GET - /api/users', () => {
 
         expect(response.status).toBe(200);
         expect(response.body.users).toHaveLength(11);
+    });
+});
+
+describe('GET - /api/users/{id}', () => {
+    let token = {};
+    beforeEach(done => {
+        userSeeder.seed().then(user => {
+            token.user = user;
+            supertest
+                .post('/login')
+                .send({
+                    email: user.email,
+                    password: process.env.DUMMY_PASSWORD,
+                })
+                .expect(200)
+                .end((err, { body }) => {
+                    token.value = body.token;
+                    done(err);
+                });
+        });
+    });
+
+    it('should return the requested user', async () => {
+        const response = await supertest
+            .get(`/api/users/${token.user._id}`)
+            .set('Authorization', `bearer ${token.value}`);
+        expect(response.body.user._id).toBe(token.user._id.toString());
+    });
+
+    it('should return a 404 if it cannot find the requested user', async () => {
+        const invalid = '5e3017f16302c04392cbec7b';
+        const response = await supertest
+            .get(`/api/users/${invalid}`)
+            .set('Authorization', `bearer ${token.value}`);
+
+        expect(response.status).toBe(404);
     });
 });
