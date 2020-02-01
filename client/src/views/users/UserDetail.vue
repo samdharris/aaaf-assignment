@@ -10,7 +10,7 @@
                     >
                         <v-row>
                             <v-col>
-                                <v-avatar profile>
+                                <v-avatar profile v-if="user.profilePic">
                                     <img
                                         :src="user.profilePic"
                                         :alt="`${user.name}'s profile photo`"
