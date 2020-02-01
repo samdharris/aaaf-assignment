@@ -31,7 +31,8 @@ const routes = [
         component: Login,
         meta: {
             requiresAuth: false,
-            visitWithAuth: false
+            visitWithAuth: false,
+            requiresAdminRights: false
         }
     },
     {
@@ -39,7 +40,8 @@ const routes = [
         component: Teams,
         meta: {
             requiresAuth: true,
-            visitWithAuth: true
+            visitWithAuth: true,
+            requiresAdminRights: true
         }
     },
     {
@@ -47,7 +49,8 @@ const routes = [
         component: TeamDetail,
         meta: {
             requiresAuth: true,
-            visitWithAuth: true
+            visitWithAuth: true,
+            requiresAdminRights: false
         }
     },
     {
@@ -55,7 +58,8 @@ const routes = [
         component: Users,
         meta: {
             requiresAuth: true,
-            visitWithAuth: true
+            visitWithAuth: true,
+            requiresAdminRights: true
         }
     },
     {
@@ -63,7 +67,8 @@ const routes = [
         component: UserDetail,
         meta: {
             requiresAuth: true,
-            visitWithAuth: true
+            visitWithAuth: true,
+            requiresAdminRights: false
         }
     },
     {
@@ -71,7 +76,8 @@ const routes = [
         component: DocumentDetail,
         meta: {
             requiresAuth: true,
-            visitWithAuth: true
+            visitWithAuth: true,
+            requiresAdminRights: false
         }
     },
     {
@@ -79,7 +85,8 @@ const routes = [
         component: NotFound,
         meta: {
             requiresAuth: false,
-            visitWithAuth: true
+            visitWithAuth: true,
+            requiresAdminRights: false
         }
     }
 ];

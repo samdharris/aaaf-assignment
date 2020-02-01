@@ -27,7 +27,7 @@ instance.interceptors.response.use(
     },
     error => {
         const { status, data } = error.response;
-        if (status === httpCodes.NOT_FOUND) {
+        if (status === httpCodes.NOT_FOUND || status === httpCodes.FORBIDDEN) {
             router.push("/not-found");
         }
 

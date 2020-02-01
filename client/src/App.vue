@@ -77,7 +77,7 @@
                         <v-list-item-title>Your Team</v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
-                <v-list-item link to="/teams">
+                <v-list-item link to="/teams" v-if="authenticatedUser.isAdmin">
                     <v-list-item-icon>
                         <v-icon>people</v-icon>
                     </v-list-item-icon>
@@ -85,7 +85,7 @@
                         <v-list-item-title>Teams</v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
-                <v-list-item link to="/users">
+                <v-list-item link to="/users" v-if="authenticatedUser.isAdmin">
                     <v-list-item-icon>
                         <v-icon>supervisor_account</v-icon>
                     </v-list-item-icon>
