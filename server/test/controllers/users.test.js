@@ -224,3 +224,31 @@ describe('PUT - /api/users/{id}/disable', () => {
         expect(response.status).toBe(401);
     });
 });
+
+describe('DELETE - /api/users/{id}', () => {
+    let token = {};
+    beforeEach(done => {
+        userSeeder.seed().then(user => {
+            token.user = user;
+            supertest
+                .post('/login')
+                .send({
+                    email: user.email,
+                    password: process.env.DUMMY_PASSWORD,
+                })
+                .expect(200)
+                .end((err, { body }) => {
+                    token.value = body.token;
+                    done(err);
+                });
+        });
+    });
+
+    it('should delete a given user', async () => {
+        const response = await supertest
+            .delete(`/api/users/${token.user._id}`)
+            .set('Authorization', `bearer ${token.value}`);
+
+        expect(response.status).toBe(204);
+    });
+});
