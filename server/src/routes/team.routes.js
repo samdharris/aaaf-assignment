@@ -3,10 +3,12 @@ const controller = require('../controllers/teams.controller');
 const documentRoutes = require('./documents.routes');
 
 const ensureTeamExists = require('../middleware/ensureTeamExists');
+const userIsMemberOfTeam = require('../middleware/userIsMemberOfTeam');
+
 const router = Router();
 
 router.get('/', controller.index);
-router.get('/:teamId', ensureTeamExists, controller.show);
+router.get('/:teamId', ensureTeamExists, userIsMemberOfTeam, controller.show);
 router.post('/', controller.store);
 router.delete('/:teamId', ensureTeamExists, controller.destory);
 router.put('/:teamId', ensureTeamExists, controller.update);
