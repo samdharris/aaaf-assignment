@@ -129,3 +129,33 @@ describe('POST - /api/users', () => {
         expect(response.body.user).toEqual(expect.objectContaining(user));
     });
 });
+
+describe('PUT - /api/users/{id}', () => {
+    let token = {};
+    beforeEach(done => {
+        userSeeder.seed().then(user => {
+            token.user = user;
+            supertest
+                .post('/login')
+                .send({
+                    email: user.email,
+                    password: process.env.DUMMY_PASSWORD,
+                })
+                .expect(200)
+                .end((err, { body }) => {
+                    token.value = body.token;
+                    done(err);
+                });
+        });
+    });
+
+    it('should update a user', async () => {
+        const updated = { name: 'Bob Fred', email: 'bobfred@tms.com' };
+
+        const response = await supertest
+            .put(`/api/users/${token.user._id}`)
+            .send(updated)
+            .set('Authorization', `bearer ${token.value}`);
+        expect(response.body.user).toEqual(expect.objectContaining(updated));
+    });
+});
