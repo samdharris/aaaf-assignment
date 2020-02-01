@@ -39,7 +39,7 @@ module.exports = async (req, res, next) => {
         }
 
         req.userId = user.id;
-
+        req.adminRequest = user.isAdmin;
         next();
     } catch (error) {
         res.status(httpCodes.UNAUTHORIZED).send();
