@@ -46,8 +46,7 @@ export default {
         ...mapGetters({
             checkedOut: "documents/documentIsCheckedOut",
             latestVersion: "documents/latestVersion",
-            canEditDocument: "documents/canEditDocument",
-            checkedOutByCurrUser: "documents/checkedOutByCurrUser"
+            canEditDocument: "documents/canEditDocument"
         })
     },
     methods: mapActions({
