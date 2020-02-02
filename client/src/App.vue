@@ -163,7 +163,6 @@ export default {
         },
         async start() {
             await this.verifyToken();
-            await this.getUsers();
         }
     },
     mounted() {
