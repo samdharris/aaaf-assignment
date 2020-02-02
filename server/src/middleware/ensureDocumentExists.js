@@ -4,7 +4,7 @@ const _ = require('lodash');
 
 module.exports = async (req, res, next) => {
     try {
-        const document = Document.findById(req.params.documentId);
+        const document = await Document.findById(req.params.documentId);
 
         if (_.isNil(document)) {
             res.status(httpCodes.NOT_FOUND).send();

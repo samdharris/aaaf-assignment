@@ -5,7 +5,8 @@
                 <v-card>
                     <v-toolbar color="primary" light>
                         <v-toolbar-title class="white--text">
-                            Upload a Document
+                            <span v-if="!documentId">Upload a Document</span>
+                            <span v-else>Update Document</span>
                         </v-toolbar-title>
                     </v-toolbar>
                     <v-card-text>
@@ -48,8 +49,12 @@
                                     :loading="submitting"
                                     color="success"
                                     :disabled="invalid && validated"
-                                    >Upload Document</v-btn
                                 >
+                                    <span v-if="!documentId"
+                                        >Upload Document</span
+                                    >
+                                    <span v-else>Update</span>
+                                </v-btn>
                             </v-form>
                         </ValidationObserver>
                     </v-card-text>
@@ -66,6 +71,12 @@ export default {
             document: null
         };
     },
+    props: {
+        documentId: {
+            type: String,
+            default: ""
+        }
+    },
     computed: mapState({
         teamId: state => state.teams.team._id,
         submitting: state => state.documents.submitting,
@@ -73,13 +84,22 @@ export default {
     }),
     methods: {
         ...mapActions({
-            uploadDocument: "documents/uploadDocument"
+            uploadDocument: "documents/uploadDocument",
+            updateDocument: "documents/editDocument"
         }),
         async onSubmit() {
-            const success = await this.uploadDocument({
-                document: this.document,
-                teamId: this.teamId
-            });
+            let success = null;
+            if (!this.documentId) {
+                success = await this.uploadDocument({
+                    document: this.document,
+                    teamId: this.teamId
+                });
+            } else {
+                success = await this.updateDocument({
+                    documentId: this.documentId,
+                    document: this.document
+                });
+            }
 
             if (success) {
                 this.document = null;

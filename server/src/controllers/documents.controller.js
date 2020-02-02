@@ -108,7 +108,9 @@ exports.store = async (req, res) => {
 exports.update = async (req, res) => {
     try {
         const team = req.team;
-        const mongoDoc = req.document;
+        let mongoDoc = await Document.findById(req.params.documentId).populate(
+            'versions'
+        );
 
         const document = req.files.document;
         const validated = await validation.validateAsync({
@@ -125,7 +127,6 @@ exports.update = async (req, res) => {
 
         await document.mv(filePath);
 
-        mongoDoc.path = `team-${team._id}/${newVersion}-${validated.name}`;
         let width = 0;
         let height = 0;
 
@@ -143,8 +144,12 @@ exports.update = async (req, res) => {
             type: validated.mimetype,
             width,
             height,
+            checkedOutBy: req.userId,
         });
 
+        await version.save();
+
+        mongoDoc.path = `team-${team._id}/${newVersion}-${validated.name}`;
         mongoDoc.versions.push(version);
         mongoDoc = await mongoDoc.save();
 

@@ -7,7 +7,8 @@ import {
     SET_DOCUMENT,
     CHECKOUT_DOCUMENT,
     CHECKIN_DOCUMENT,
-    REMOVE_DOCUMENT
+    REMOVE_DOCUMENT,
+    UPDATE_DOCUMENT
 } from "./document-types";
 import axios from "../../../util/axios";
 import { showSnackbar } from "../../helpers";
@@ -123,6 +124,38 @@ export default {
                 `Something went wrong checking in ${error.response.data.message}`,
                 "error"
             );
+        }
+    },
+    editDocument: async (ctx, { documentId, document }) => {
+        try {
+            ctx.commit(SET_SUBMITTING, true);
+            const formData = new FormData();
+            formData.append("document", document);
+
+            const { data } = await axios.put(
+                `/api/teams/${localStorage.getItem(
+                    "team"
+                )}/documents/${documentId}`,
+                formData,
+                {
+                    headers: {
+                        "Content-Type": "multipart/form-data"
+                    }
+                }
+            );
+
+            ctx.commit(UPDATE_DOCUMENT, data.document);
+            showSnackbar("Document updated!", "success");
+            return true;
+        } catch (error) {
+            console.error(error);
+            showSnackbar(
+                `something went wrong editing document: ${error.message}`,
+                "error"
+            );
+            return false;
+        } finally {
+            ctx.commit(SET_SUBMITTING, false);
         }
     }
 };

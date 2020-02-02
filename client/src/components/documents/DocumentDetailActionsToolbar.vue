@@ -24,7 +24,7 @@
         </v-tooltip>
         <v-tooltip bottom v-if="checkedOut && canEditDocument">
             <template v-slot:activator="{ on }">
-                <v-btn icon v-on="on">
+                <v-btn icon v-on="on" @click="documentsDialog = true">
                     <v-icon>edit</v-icon>
                 </v-btn>
             </template>
@@ -38,16 +38,31 @@
             </template>
             <span>Delete</span>
         </v-tooltip>
+        <v-dialog v-model="documentsDialog">
+            <upload-document-form
+                :document-id="document._id"
+                v-on:closeDocumentForm="documentsDialog = false"
+            ></upload-document-form>
+        </v-dialog>
     </div>
 </template>
 <script>
 import { mapActions, mapGetters } from "vuex";
+import UploadDocumentForm from "./UploadDocumentForm.vue";
 export default {
     props: {
         document: {
             type: Object,
             required: true
         }
+    },
+    components: {
+        UploadDocumentForm
+    },
+    data() {
+        return {
+            documentsDialog: false
+        };
     },
     methods: mapActions({
         deleteDocument: "documents/deleteDocument",
