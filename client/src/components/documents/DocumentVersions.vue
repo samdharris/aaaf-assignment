@@ -23,6 +23,16 @@ export default {
                     value: "type"
                 },
                 {
+                    text: "Width",
+                    sortable: false,
+                    value: "width"
+                },
+                {
+                    text: "Height",
+                    sortable: false,
+                    value: "height"
+                },
+                {
                     text: "Uploaded At",
                     sortable: false,
                     value: "createdAt"

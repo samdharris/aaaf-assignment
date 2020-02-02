@@ -9,6 +9,8 @@ const httpCodes = require('http-status-codes');
 const validation = require('../validation/document.validation');
 const fs = require('fs');
 
+const sizeOf = require('image-size');
+
 exports.index = async (req, res) => {
     try {
         const documents = await Document.find({
@@ -64,12 +66,11 @@ exports.store = async (req, res) => {
             return;
         }
 
-        await document.mv(
-            path.join(
-                __dirname,
-                `../../storage/team-${teamId}/${document.name}`
-            )
+        const filePath = path.join(
+            __dirname,
+            `../../storage/team-${teamId}/${document.name}`
         );
+        await document.mv(filePath);
 
         let mongoDoc = new Document({
             name: validated.name,
@@ -77,9 +78,23 @@ exports.store = async (req, res) => {
             team: teamId,
         });
 
+        let width = 0;
+        let height = 0;
+
+        /**
+         * Get the image's dimensions but only if we're uploading an image file.
+         */
+        if (validated.mimetype.indexOf('image') > -1) {
+            const dimensions = sizeOf(filePath);
+            width = dimensions.width;
+            height = dimensions.height;
+        }
+
         const version = new DocumentVersion({
             size: validated.size,
             type: validated.mimetype,
+            width,
+            height,
         });
 
         mongoDoc.versions.push(version);

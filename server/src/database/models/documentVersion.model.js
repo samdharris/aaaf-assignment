@@ -15,6 +15,12 @@ const documentVersionSchema = new Schema(
             type: String,
             required: true,
         },
+        width: {
+            type: Number,
+        },
+        height: {
+            type: Number,
+        },
         checkedOutBy: {
             type: Schema.Types.ObjectId,
             ref: 'User',
