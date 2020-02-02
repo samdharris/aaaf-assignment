@@ -41,12 +41,6 @@ export default {
             doc
         ];
     },
-    [REMOVE_DOCUMENT](state, doc) {
-        state.documents = [
-            ...state.document.filter(document => document._id !== doc._id)
-        ];
-        state.document = {};
-    },
     [CHECKOUT_DOCUMENT](state, version) {
         state.document.versions = [
             ...state.document.versions.filter(v => v._id !== version._id),

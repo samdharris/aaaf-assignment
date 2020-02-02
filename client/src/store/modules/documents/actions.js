@@ -6,7 +6,8 @@ import {
     SET_ERRORS,
     SET_DOCUMENT,
     CHECKOUT_DOCUMENT,
-    CHECKIN_DOCUMENT
+    CHECKIN_DOCUMENT,
+    REMOVE_DOCUMENT
 } from "./document-types";
 import axios from "../../../util/axios";
 import { showSnackbar } from "../../helpers";
@@ -79,14 +80,13 @@ export default {
     },
     deleteDocument: async (ctx, documentId) => {
         try {
-            await axios.delete(
-                `/api/teams/${localStorage.getItem(
-                    "team"
-                )}/documents/${documentId}`
-            );
-            router.push("/");
+            const team = localStorage.getItem("team");
+            await axios.delete(`/api/teams/${team}/documents/${documentId}`);
+            ctx.commit(REMOVE_DOCUMENT, documentId);
+            router.push(`/teams/${team}`);
             showSnackbar("Document removed!", "success");
         } catch (error) {
+            console.error(error);
             showSnackbar(
                 `Something went wrong deleting the document: ${error.response.data.message}`,
                 "error"
