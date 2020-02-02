@@ -5,12 +5,13 @@ const router = Router({
 });
 
 const ensureDocumentNotCheckedOut = require('../middleware/ensureDocumentNotCheckedOut');
+const ensureDocumentExists = require('../middleware/ensureDocumentExists');
 
 router.get('/', controller.index);
-router.get('/:documentId', controller.show);
+router.get('/:documentId', ensureDocumentExists, controller.show);
 router.post('/', controller.store);
 router.delete('/:documentId', controller.destory);
-router.put('/:documentId', controller.update);
+router.put('/:documentId', ensureDocumentExists, controller.update);
 
 router.put(
     '/:documentId/checkout',

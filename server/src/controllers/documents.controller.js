@@ -38,10 +38,6 @@ exports.show = async (req, res) => {
             },
         });
 
-        if (_.isNil(document)) {
-            res.status(httpCodes.NOT_FOUND).send();
-        }
-
         res.json({
             message: 'Document found!',
             document,
@@ -52,30 +48,23 @@ exports.show = async (req, res) => {
 exports.store = async (req, res) => {
     try {
         const document = req.files.document;
-        const teamId = req.params.teamId;
         const validated = await validation.validateAsync({
             name: document.name,
             size: document.size,
             mimetype: document.mimetype,
         });
 
-        const team = await Team.findById(teamId);
-
-        if (_.isNil(team)) {
-            res.status(httpCodes.NOT_FOUND).send();
-            return;
-        }
-
+        const team = req.team;
         const filePath = path.join(
             __dirname,
-            `../../storage/team-${teamId}/${document.name}`
+            `../../storage/team-${team._id}/1-${document.name}`
         );
         await document.mv(filePath);
 
         let mongoDoc = new Document({
             name: validated.name,
-            path: `team-${teamId}/${validated.name}`,
-            team: teamId,
+            path: `team-${team._id}/1-${validated.name}`,
+            team: team._id,
         });
 
         let width = 0;
@@ -116,12 +105,63 @@ exports.store = async (req, res) => {
         });
     }
 };
-exports.update = (req, res) => {};
+exports.update = async (req, res) => {
+    try {
+        const team = req.team;
+        const mongoDoc = req.document;
+
+        const document = req.files.document;
+        const validated = await validation.validateAsync({
+            name: document.name,
+            size: document.size,
+            mimetype: document.mimetype,
+        });
+
+        const newVersion = mongoDoc.versions.length + 1;
+        const filePath = path.join(
+            __dirname,
+            `../../storage/team-${team._id}/${newVersion}-${document.name}`
+        );
+
+        await document.mv(filePath);
+
+        mongoDoc.path = `team-${team._id}/${newVersion}-${validated.name}`;
+        let width = 0;
+        let height = 0;
+
+        /**
+         * Get the image's dimensions but only if we're uploading an image file.
+         */
+        if (validated.mimetype.indexOf('image') > -1) {
+            const dimensions = sizeOf(filePath);
+            width = dimensions.width;
+            height = dimensions.height;
+        }
+
+        const version = new DocumentVersion({
+            size: validated.size,
+            type: validated.mimetype,
+            width,
+            height,
+        });
+
+        mongoDoc.versions.push(version);
+        mongoDoc = await mongoDoc.save();
+
+        res.json({
+            message: 'Document updated',
+            document: mongoDoc,
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(httpCodes.BAD_REQUEST).json({ error });
+    }
+};
 exports.destory = async (req, res) => {
     try {
-        const { documentId, teamId } = req.params;
+        const { documentId } = req.params;
         const document = await Document.findById(documentId);
-        const team = await Team.findById(teamId);
+        const team = req.team;
 
         // Remove document from team
         team.documents = team.documents.filter(doc => doc !== documentId);
