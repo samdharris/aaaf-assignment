@@ -8,7 +8,7 @@
         >
             <template v-slot:prepend>
                 <v-list>
-                    <v-list-item>
+                    <v-list-item v-if="authenticatedUser.profilePic">
                         <v-list-item-avatar center>
                             <v-img :src="authenticatedUser.profilePic"></v-img>
                         </v-list-item-avatar>
