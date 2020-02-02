@@ -135,7 +135,8 @@ exports.checkoutDocument = async (req, res) => {
             document.versions[document.versions.length - 1]
         );
 
-        version.checkedOutBy = req.userId;
+        const user = await User.findById(req.userId);
+        version.checkedOutBy = user;
         await version.save();
 
         await userRepository.checkoutDocument(req.userId, document);
