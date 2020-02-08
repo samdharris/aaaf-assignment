@@ -117,7 +117,10 @@
             </v-snackbar>
             <v-btn
                 @click="showChat = true"
-                v-if="isAuthenticated"
+                v-if="
+                    isAuthenticated &&
+                        authenticatedUser.team && authenticatedUser.team._id
+                "
                 text
                 fab
                 bottom
@@ -127,7 +130,11 @@
             >
                 <v-icon>chat</v-icon>
             </v-btn>
-            <v-dialog persistent v-model="showChat">
+            <v-dialog
+                persistent
+                v-model="showChat"
+                v-if="authenticatedUser.team && authenticatedUser.team._id"
+            >
                 <team-chat v-on:closeChatWindow="showChat = false"></team-chat>
             </v-dialog>
         </v-content>
@@ -155,7 +162,8 @@ export default {
         ...mapState({
             snackbar: state => state.general.snackbar,
             authenticatedUser: state => state.auth.currentUser,
-            appName: state => state.general.appName
+            appName: state => state.general.appName,
+            chatMessages: state => state.chat.messages
         }),
         ...mapGetters({
             isAuthenticated: "auth/isAuthenticated"

@@ -22,7 +22,10 @@ export default {
             setToken(data.token);
             setUserId(data.user._id);
             ctx.commit(SET_CURRENT_USER, data.user);
-            SocketInstance.connect();
+            // Don't attempt to connect to ws if the user isn't associated to a team.
+            if (!_.isNil(data.user.team)) {
+                SocketInstance.connect();
+            }
             router.push("/");
             showSnackbar("You are now logged in!", "success");
         } catch (error) {

@@ -23,6 +23,9 @@ io.use(async (socket, next) => {
         throw new Error('Auth error');
     }
 }).on('connection', socket => {
+    if (socket.user.isAdmin) {
+        return;
+    }
     console.log('connected');
     const roomId = `team-${socket.user.team}`;
     socket.join(roomId, () => {
