@@ -11,12 +11,16 @@ import {
 import axios from "../../../util/axios";
 import router from "../../../router";
 import { showSnackbar } from "../../helpers";
+import { format } from "../../../util";
 
 export default {
     getUsers: async ctx => {
         try {
             const { data } = await axios.get("/api/users");
-            ctx.commit(SET_USERS, data.users);
+            ctx.commit(
+                SET_USERS,
+                data.users.map(user => format(user))
+            );
         } catch (error) {
             showSnackbar("Something went wrong getting users", "error");
         }
