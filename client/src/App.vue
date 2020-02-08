@@ -119,7 +119,8 @@
                 @click="showChat = true"
                 v-if="
                     isAuthenticated &&
-                        authenticatedUser.team && authenticatedUser.team._id
+                        authenticatedUser.team &&
+                        authenticatedUser.team._id
                 "
                 text
                 fab
