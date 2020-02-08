@@ -53,6 +53,7 @@ export default {
     logout: async ctx => {
         SocketInstance.disconnect();
         removeToken();
+        localStorage.removeItem("team");
         removeUserId();
         ctx.commit(SET_CURRENT_USER, {});
         showSnackbar("You have been logged out!", "success");
