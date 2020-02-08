@@ -13,12 +13,16 @@ import {
 } from "./teams-types";
 import router from "../../../router";
 import { showSnackbar } from "../../helpers";
+import { format } from "../../../util";
 export default {
     getTeams: async ctx => {
         try {
             ctx.commit(SET_LOADING, true);
             const { data } = await axios.get("/api/teams");
-            ctx.commit(SET_TEAMS, data.teams);
+            ctx.commit(
+                SET_TEAMS,
+                data.teams.map(team => format(team))
+            );
         } catch (error) {
             showSnackbar(
                 `Something went wrong getting teams: ${error.response.data.message}`
