@@ -1,10 +1,13 @@
 <template>
     <v-list-item>
-        <v-list-item-avatar>
+        <v-list-item-avatar v-if="message.author">
             <v-img :src="message.author.profilePic"></v-img>
         </v-list-item-avatar>
         <v-list-item-content class="break-word">
-            <v-list-item-title>{{ message.author.name }}</v-list-item-title>
+            <v-list-item-title>
+                <span v-if="message.author">{{ message.author.name }}</span>
+                <span v-else>System</span>
+            </v-list-item-title>
             {{ message.text }}
         </v-list-item-content>
     </v-list-item>

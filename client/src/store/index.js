@@ -18,5 +18,21 @@ export default new Vuex.Store({
         users,
         documents,
         chat
+    },
+    actions: {
+        "SOCKET_user-connected"(ctx, data) {
+            ctx.commit("chat/SEND_MESSAGE", {
+                text: data
+            });
+        },
+        "SOCKET_message-sent"(ctx, data) {
+            console.log("hello world");
+            ctx.commit("chat/SEND_MESSAGE", data);
+        },
+        "SOCKET_user-disconnected"(ctx, data) {
+            ctx.commit("chat/SEND_MESSAGE", {
+                text: data
+            });
+        }
     }
 });

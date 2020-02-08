@@ -1,51 +1,38 @@
 <template>
-    <v-container>
-        <v-row>
+    <v-card>
+        <v-toolbar primary dark class="align-center">
+            <v-toolbar-title>
+                Team Chat
+            </v-toolbar-title>
             <v-spacer></v-spacer>
-            <v-col>
-                <v-card height="100%" max-width="500" class="flex-grow">
-                    <v-toolbar primary dark class="align-center">
-                        <v-toolbar-title>
-                            Team Chat
-                        </v-toolbar-title>
-                        <v-spacer></v-spacer>
-                        <v-btn icon>
-                            <v-icon>minimize</v-icon>
-                        </v-btn>
-                    </v-toolbar>
-                    <v-card-text>
-                        <v-alert type="warning" v-if="connecting"
-                            >Connecting.</v-alert
-                        >
-                        <v-alert type="success" v-if="!connecting && connected"
-                            >Connected.</v-alert
-                        >
-                        <v-list max-height="500" class="overflow-y">
-                            <chat-message
-                                v-for="m in messages"
-                                :key="m.author._id"
-                                :message="m"
-                            ></chat-message>
-                        </v-list>
-                        <v-divider></v-divider>
-                        <v-textarea
-                            v-model="messageInput"
-                            label="Your message"
-                            flat
-                            no-resize
-                            auto-grow
-                        >
-                            <template v-slot:append>
-                                <v-btn icon @click="onSubmit">
-                                    <v-icon>send</v-icon>
-                                </v-btn>
-                            </template>
-                        </v-textarea>
-                    </v-card-text>
-                </v-card>
-            </v-col>
-        </v-row>
-    </v-container>
+            <v-btn icon @click="closeChat">
+                <v-icon>close</v-icon>
+            </v-btn>
+        </v-toolbar>
+        <v-card-text>
+            <v-list class="overflow-y">
+                <chat-message
+                    v-for="(m, i) in messages"
+                    :key="i"
+                    :message="m"
+                ></chat-message>
+            </v-list>
+            <v-divider></v-divider>
+            <v-textarea
+                v-model="messageInput"
+                label="Your message"
+                flat
+                no-resize
+                auto-grow
+            >
+                <template v-slot:append>
+                    <v-btn icon @click="onSubmit">
+                        <v-icon>send</v-icon>
+                    </v-btn>
+                </template>
+            </v-textarea>
+        </v-card-text>
+    </v-card>
 </template>
 <script>
 import ChatMessage from "./ChatMessage";
@@ -68,6 +55,9 @@ export default {
         ...mapActions({
             send: "chat/send"
         }),
+        closeChat() {
+            this.$emit("closeChatWindow", true);
+        },
         async onSubmit() {
             await this.send(this.messageInput);
             this.messageInput = "";

@@ -9,6 +9,7 @@ import {
 } from "../../../util/authHelper";
 import _ from "lodash";
 import { showSnackbar } from "../../helpers";
+import { SocketInstance } from "../../../main";
 
 export default {
     login: async (ctx, credentials) => {
@@ -21,6 +22,7 @@ export default {
             setToken(data.token);
             setUserId(data.user._id);
             ctx.commit(SET_CURRENT_USER, data.user);
+            SocketInstance.connect();
             router.push("/");
             showSnackbar("You are now logged in!", "success");
         } catch (error) {
@@ -34,6 +36,7 @@ export default {
             const { data } = await axios.post("/verify");
             if (_.isEmpty(ctx.state.currentUser)) {
                 setUserId(data.user._id);
+                SocketInstance.connect();
                 ctx.commit(SET_CURRENT_USER, data.user);
                 showSnackbar("You are now logged in!", "success");
             }
@@ -45,6 +48,7 @@ export default {
         }
     },
     logout: async ctx => {
+        SocketInstance.disconnect();
         removeToken();
         removeUserId();
         ctx.commit(SET_CURRENT_USER, {});

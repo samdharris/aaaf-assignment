@@ -24,6 +24,7 @@
         "jsonwebtoken": "^8.5.1",
         "lodash": "^4.17.15",
         "mongoose": "^5.8.1",
+        "socket.io": "^2.3.0",
         "winston": "^3.2.1",
         "yargs": "^15.1.0"
     },

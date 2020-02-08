@@ -103,7 +103,6 @@
         </v-app-bar>
         <v-content>
             <router-view></router-view>
-            <!-- <team-chat></team-chat> -->
             <v-snackbar
                 v-on:input="shouldCloseSnackbar"
                 v-model="snackbar.open"
@@ -116,6 +115,21 @@
                     <v-icon>close</v-icon>
                 </v-btn>
             </v-snackbar>
+            <v-btn
+                @click="showChat = true"
+                v-if="isAuthenticated"
+                text
+                fab
+                bottom
+                right
+                absolute
+                class="primary"
+            >
+                <v-icon>chat</v-icon>
+            </v-btn>
+            <v-dialog persistent v-model="showChat">
+                <team-chat v-on:closeChatWindow="showChat = false"></team-chat>
+            </v-dialog>
         </v-content>
         <v-footer app>
             <v-spacer></v-spacer>
@@ -125,14 +139,15 @@
 </template>
 
 <script>
-// import TeamChat from "./components/chat/Chat";
+import TeamChat from "./components/chat/Chat";
 import { mapState, mapMutations, mapGetters, mapActions } from "vuex";
 import { RESET_SNACKBAR } from "./store/modules/general/general-types";
 export default {
     name: "App",
-    // components: { TeamChat },
+    components: { TeamChat },
     data() {
         return {
+            showChat: false,
             drawer: true
         };
     },

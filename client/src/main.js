@@ -9,6 +9,30 @@ import "./util/vee-validate";
 
 import { converterBase10 } from "byte-converter";
 
+import socketio from "socket.io-client";
+import VueSocketIO from "vue-socket.io";
+import { getToken } from "./util/authHelper";
+
+export const SocketInstance = socketio("http://localhost:3001", {
+    autoConnect: false,
+
+    query: {
+        token: getToken()
+    }
+});
+
+Vue.use(
+    new VueSocketIO({
+        debug: true,
+        connection: SocketInstance,
+        vuex: {
+            store,
+            actionPrefix: "SOCKET_",
+            mutationPrefix: "SOCKET_"
+        }
+    })
+);
+
 Vue.prototype.$converter = converterBase10;
 
 Vue.component("ValidationObserver", ValidationObserver);
