@@ -87,16 +87,6 @@ describe('GET - /api/teams/{:id}', () => {
         expect(response.status).toBe(404);
     });
 
-    it("should not allow you to view a given team if the current user isn't a member", async () => {
-        const team = await teamSeeder.seed('Team A');
-
-        const response = await supertest
-            .get(`/api/teams/${team._id}`)
-            .set('Authorization', `bearer ${token.value}`);
-
-        expect(response.status).toBe(403);
-    });
-
     it('should return the requested team', async () => {
         const team = await teamSeeder.seed('Team A');
 
