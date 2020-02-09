@@ -26,7 +26,7 @@ afterAll(() => {
 describe('GET - /api/teams', () => {
     let token = {};
     beforeAll(done => {
-        userSeeder.seed().then(user => {
+        userSeeder.seed({ isAdmin: true }).then(user => {
             supertest
                 .post('/login')
                 .send({
@@ -56,20 +56,24 @@ describe('GET - /api/teams', () => {
 describe('GET - /api/teams/{:id}', () => {
     let token = {};
     beforeAll(done => {
-        userSeeder.seed().then(user => {
-            token.user = user;
-            supertest
-                .post('/login')
-                .send({
-                    email: user.email,
-                    password: process.env.DUMMY_PASSWORD,
-                })
-                .expect(200)
-                .end((err, { body }) => {
-                    token.value = body.token;
-                    done(err);
-                });
-        });
+        userSeeder
+            .seed({
+                isAdmin: true,
+            })
+            .then(user => {
+                token.user = user;
+                supertest
+                    .post('/login')
+                    .send({
+                        email: user.email,
+                        password: process.env.DUMMY_PASSWORD,
+                    })
+                    .expect(200)
+                    .end((err, { body }) => {
+                        token.value = body.token;
+                        done(err);
+                    });
+            });
     });
 
     it('should throw a 404 if it cannot find the requested team', async () => {
@@ -107,6 +111,7 @@ describe('GET - /api/teams/{:id}', () => {
             .get(`/api/teams/${team._id}`)
             .set('Authorization', `bearer ${token.value}`);
 
+        expect(response.status).toBe(200);
         expect(response.body).toHaveProperty('team');
         const { _id } = response.body.team;
         expect(_id.toString()).toBe(team._id.toString());
@@ -116,19 +121,23 @@ describe('GET - /api/teams/{:id}', () => {
 describe('POST - /api/teams', () => {
     const token = {};
     beforeAll(done => {
-        userSeeder.seed().then(user => {
-            supertest
-                .post('/login')
-                .send({
-                    email: user.email,
-                    password: process.env.DUMMY_PASSWORD,
-                })
-                .expect(200)
-                .end((err, { body }) => {
-                    token.value = body.token;
-                    done(err);
-                });
-        });
+        userSeeder
+            .seed({
+                isAdmin: true,
+            })
+            .then(user => {
+                supertest
+                    .post('/login')
+                    .send({
+                        email: user.email,
+                        password: process.env.DUMMY_PASSWORD,
+                    })
+                    .expect(200)
+                    .end((err, { body }) => {
+                        token.value = body.token;
+                        done(err);
+                    });
+            });
     });
 
     it('should successfully create a team', async () => {
@@ -148,19 +157,23 @@ describe('POST - /api/teams', () => {
 describe('PUT - /api/teams/{teamId}', () => {
     const token = {};
     beforeAll(done => {
-        userSeeder.seed().then(user => {
-            supertest
-                .post('/login')
-                .send({
-                    email: user.email,
-                    password: process.env.DUMMY_PASSWORD,
-                })
-                .expect(200)
-                .end((err, { body }) => {
-                    token.value = body.token;
-                    done(err);
-                });
-        });
+        userSeeder
+            .seed({
+                isAdmin: true,
+            })
+            .then(user => {
+                supertest
+                    .post('/login')
+                    .send({
+                        email: user.email,
+                        password: process.env.DUMMY_PASSWORD,
+                    })
+                    .expect(200)
+                    .end((err, { body }) => {
+                        token.value = body.token;
+                        done(err);
+                    });
+            });
     });
 
     it('should update the request user', async () => {
@@ -181,20 +194,24 @@ describe('PUT - /api/teams/{teamId}', () => {
 describe('POST /api/teams/{:id}/members', () => {
     const data = {};
     beforeAll(done => {
-        userSeeder.seed().then(user => {
-            supertest
-                .post('/login')
-                .send({
-                    email: user.email,
-                    password: process.env.DUMMY_PASSWORD,
-                })
-                .expect(200)
-                .end((err, { body }) => {
-                    data.token = body.token;
-                    data.user = body.user;
-                    done(err);
-                });
-        });
+        userSeeder
+            .seed({
+                isAdmin: true,
+            })
+            .then(user => {
+                supertest
+                    .post('/login')
+                    .send({
+                        email: user.email,
+                        password: process.env.DUMMY_PASSWORD,
+                    })
+                    .expect(200)
+                    .end((err, { body }) => {
+                        data.token = body.token;
+                        data.user = body.user;
+                        done(err);
+                    });
+            });
     });
 
     it('should add a given user to the team', async () => {
@@ -237,7 +254,7 @@ describe('POST /api/teams/{:id}/members', () => {
 describe('DELETE - /api/teams/{:id}/members', () => {
     const data = {};
     beforeAll(done => {
-        userSeeder.seed().then(user => {
+        userSeeder.seed({ isAdmin: true }).then(user => {
             supertest
                 .post('/login')
                 .send({
@@ -273,7 +290,7 @@ describe('DELETE - /api/teams/{:id}/members', () => {
 describe('DELETE - /api/teams/{:id}', () => {
     const data = {};
     beforeAll(done => {
-        userSeeder.seed().then(user => {
+        userSeeder.seed({ isAdmin: true }).then(user => {
             supertest
                 .post('/login')
                 .send({
