@@ -12,6 +12,12 @@ import { showSnackbar } from "../../helpers";
 import { SocketInstance } from "../../../main";
 
 export default {
+    /**
+     * Called when the login button is clicked on the login screen. Performs the login request to the server and logs
+     * the user into the application upon successful login.
+     * @param {object} ctx
+     * @param {object} credentials
+     */
     login: async (ctx, credentials) => {
         try {
             ctx.commit(SET_AUTHENTICATING, true);
@@ -34,6 +40,10 @@ export default {
             ctx.commit(SET_AUTHENTICATING, false);
         }
     },
+    /**
+     * Called when the application is first loaded. Performs validation on the token stored in localStorage.
+     * @param {object} ctx
+     */
     verifyToken: async ctx => {
         try {
             const { data } = await axios.post("/verify");
@@ -50,6 +60,10 @@ export default {
             return Promise.reject();
         }
     },
+    /**
+     * Logs the user out of the application
+     * @param {object} ctx
+     */
     logout: async ctx => {
         SocketInstance.disconnect();
         removeToken();
