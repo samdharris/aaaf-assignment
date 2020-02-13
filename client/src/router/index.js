@@ -13,6 +13,11 @@ const router = new VueRouter({
     routes
 });
 
+/**
+ * On each route, checks to see if you need to be logged in to view the given route and handles any required redirects
+ * accordingly.
+ * @see https://router.vuejs.org/guide/advanced/navigation-guards.html
+ */
 router.beforeEach((to, from, next) => {
     const userAuthenticated = isAuthenticated();
     const routeRequiresAuth = to.matched.some(

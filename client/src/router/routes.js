@@ -9,6 +9,9 @@ import UserDetail from "../views/users/UserDetail.vue";
 
 import DocumentDetail from "../views/documents/DocumentDetail.vue";
 
+/**
+ * Vue routes
+ */
 const routes = [
     {
         path: "/",
@@ -17,14 +20,6 @@ const routes = [
             requiresAuth: true,
             visitWithAuth: true
         }
-    },
-    {
-        path: "/about",
-        // route level code-splitting
-        // this generates a separate chunk (about.[hash].js) for this route
-        // which is lazy-loaded when the route is visited.
-        component: () =>
-            import(/* webpackChunkName: "about" */ "../views/About.vue")
     },
     {
         path: "/login",
