@@ -29,7 +29,7 @@ export default {
         try {
             ctx.commit(SET_LOADING, true);
             const { data } = await axios.get(`/api/users/${userId}`);
-            ctx.commit(SET_USER, data.user);
+            ctx.commit(SET_USER, format(data.user));
         } catch (error) {
             showSnackbar("Something went wrong retrieving user", "error");
         } finally {
@@ -40,7 +40,7 @@ export default {
         try {
             ctx.commit(SET_SUBMITTING, true);
             const response = await axios.post("/api/users", { ...user });
-            ctx.commit(ADD_USER, response.data.user);
+            ctx.commit(ADD_USER, format(response.data.user));
             showSnackbar(`${user.name} added!`, "success");
             return true;
         } catch (error) {
@@ -57,7 +57,7 @@ export default {
                 `/api/users/${ctx.state.user._id}`,
                 { ...user }
             );
-            ctx.commit(UPDATE_USER, data.user);
+            ctx.commit(UPDATE_USER, format(data.user));
 
             showSnackbar(`${user.name} updated!`, "success");
             return true;
@@ -71,7 +71,7 @@ export default {
     disableUser: async (ctx, user) => {
         try {
             const { data } = await axios.put(`/api/users/${user}/disable`);
-            ctx.commit(UPDATE_USER, data.user);
+            ctx.commit(UPDATE_USER, format(data.user));
             showSnackbar(`${data.user.name} disabled!`, "success");
         } catch (error) {
             showSnackbar("Something went wrong disabling user", "error");
@@ -80,7 +80,7 @@ export default {
     enableUser: async (ctx, user) => {
         try {
             const { data } = await axios.put(`/api/users/${user}/enable`);
-            ctx.commit(UPDATE_USER, data.user);
+            ctx.commit(UPDATE_USER, format(data.user));
             showSnackbar(`${data.user.name} enabled!`, "success");
         } catch (error) {
             showSnackbar("Something went wrong enabling user", "error");
@@ -89,7 +89,7 @@ export default {
     deleteUser: async (ctx, user) => {
         try {
             await axios.delete(`/api/users/${user}`);
-            ctx.commit(DELETE_USER, user);
+            ctx.commit(DELETE_USER, format(user));
             showSnackbar("User deleted", "success");
             router.push("/users");
         } catch (error) {

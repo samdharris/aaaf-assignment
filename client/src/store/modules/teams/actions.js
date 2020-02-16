@@ -35,7 +35,7 @@ export default {
         try {
             ctx.commit(SET_SUBMITTING, true);
             const { data } = await axios.post("/api/teams", { ...team });
-            ctx.commit(ADD_TEAM, data.team);
+            ctx.commit(ADD_TEAM, format(data.team));
             showSnackbar(`Team ${data.team.name} added!`, "success");
             return true;
         } catch (error) {
@@ -51,7 +51,7 @@ export default {
                 `/api/teams/${ctx.state.team._id}`,
                 { ...team }
             );
-            ctx.commit(UPDATE_TEAM, data.team);
+            ctx.commit(UPDATE_TEAM, format(data.team));
             showSnackbar(`Team ${data.team.name} updated!`, "success");
             return true;
         } catch (error) {
@@ -78,7 +78,7 @@ export default {
         try {
             ctx.commit(SET_LOADING, true);
             const { data } = await axios.get(`/api/teams/${teamId}`);
-            ctx.commit(SET_TEAM, data.team);
+            ctx.commit(SET_TEAM, format(data.team));
         } catch (error) {
             showSnackbar(
                 `Something went wrong getting requested team ${error.response.data.message}`,
@@ -110,7 +110,7 @@ export default {
                     member
                 }
             );
-            ctx.commit(SET_MEMBERS, data.members);
+            ctx.commit(SET_MEMBERS, format(data.members));
             showSnackbar("Members added!", "success");
 
             return true;

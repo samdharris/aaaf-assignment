@@ -13,14 +13,17 @@ import {
 import axios from "../../../util/axios";
 import { showSnackbar } from "../../helpers";
 import router from "../../../router";
+import { format } from "../../../util";
 export default {
     getDocuments: async (ctx, teamId) => {
         localStorage.setItem("team", teamId);
         try {
             ctx.commit(SET_LOADING, true);
             const { data } = await axios.get(`/api/teams/${teamId}/documents`);
-            console.log(data);
-            ctx.commit(SET_DOCUMENTS, data.documents);
+            ctx.commit(
+                SET_DOCUMENTS,
+                data.documents.map(document => format(document))
+            );
         } catch (error) {
             showSnackbar(
                 `Something went wrong getting documents: ${error.response.data.message}`,
@@ -39,7 +42,7 @@ export default {
                     "team"
                 )}/documents/${documentId}`
             );
-            ctx.commit(SET_DOCUMENT, data.document);
+            ctx.commit(SET_DOCUMENT, format(data.document));
         } catch (error) {
             showSnackbar(
                 `Something went wrong getting document details: ${error.response.data.message}`,
@@ -68,7 +71,7 @@ export default {
                 }
             );
 
-            ctx.commit(ADD_DOCUMENT, data.document);
+            ctx.commit(ADD_DOCUMENT, format(data.document));
             showSnackbar("Document added!", "success");
             return true;
         } catch (error) {
@@ -100,7 +103,7 @@ export default {
                     "team"
                 )}/documents/${documentId}/checkout`
             );
-            ctx.commit(CHECKOUT_DOCUMENT, data.version);
+            ctx.commit(CHECKOUT_DOCUMENT, format(data.version));
             showSnackbar("Document checked out!", "success");
         } catch (error) {
             showSnackbar(
@@ -116,7 +119,7 @@ export default {
                     "team"
                 )}/documents/${documentId}/checkin`
             );
-            ctx.commit(CHECKIN_DOCUMENT, data.version);
+            ctx.commit(CHECKIN_DOCUMENT, format(data.version));
             showSnackbar("Document checked in!", "success");
         } catch (error) {
             showSnackbar(
@@ -143,7 +146,7 @@ export default {
                 }
             );
 
-            ctx.commit(UPDATE_DOCUMENT, data.document);
+            ctx.commit(UPDATE_DOCUMENT, format(data.document));
             showSnackbar("Document updated!", "success");
             return true;
         } catch (error) {
