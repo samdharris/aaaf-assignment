@@ -1,6 +1,6 @@
 <template>
     <v-list-item>
-        <v-list-item-avatar v-if="message.author">
+        <v-list-item-avatar v-if="message.author && message.author.profilePic">
             <v-img :src="message.author.profilePic"></v-img>
         </v-list-item-avatar>
         <v-list-item-content class="break-word">

@@ -1,7 +1,7 @@
 <template>
     <v-list-item>
         <v-list-item-avatar center>
-            <v-img :src="member.profilePic"></v-img>
+            <v-img v-if="member.profilePic" :src="member.profilePic"></v-img>
         </v-list-item-avatar>
         <v-list-item-content>
             <v-list-item-title class="title">
