@@ -8,7 +8,7 @@ import {
     removeUserId
 } from "../../../util/authHelper";
 import _ from "lodash";
-import { showSnackbar } from "../../helpers";
+import { showSnackbar, clearChat, connectToChat } from "../../helpers";
 import { SocketInstance } from "../../../main";
 
 export default {
@@ -28,9 +28,8 @@ export default {
             setToken(data.token);
             setUserId(data.user._id);
             ctx.commit(SET_CURRENT_USER, data.user);
-            // Don't attempt to connect to ws if the user isn't associated to a team.
             if (!_.isNil(data.user.team)) {
-                SocketInstance.connect();
+                connectToChat();
             }
             router.push("/");
             showSnackbar("You are now logged in!", "success");
@@ -49,7 +48,7 @@ export default {
             const { data } = await axios.post("/verify");
             if (_.isEmpty(ctx.state.currentUser)) {
                 setUserId(data.user._id);
-                SocketInstance.connect();
+                connectToChat();
                 ctx.commit(SET_CURRENT_USER, data.user);
                 showSnackbar("You are now logged in!", "success");
             }
@@ -66,6 +65,7 @@ export default {
      */
     logout: async ctx => {
         SocketInstance.disconnect();
+        clearChat();
         removeToken();
         localStorage.removeItem("team");
         removeUserId();

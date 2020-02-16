@@ -10,9 +10,10 @@ export default {
             }
         });
     },
-    connect: () => {},
+    connect: () => {
+        SocketInstance.open();
+    },
     send: (ctx, message) => {
-        console.log(ctx);
         const msg = {
             text: message,
             author: ctx.rootState.auth.currentUser
