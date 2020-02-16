@@ -110,7 +110,6 @@ export default {
     watch: {
         errors: {
             handler(value) {
-                console.log(value);
                 this.$refs.uploadDocumentForm.setErrors(value);
             }
         }

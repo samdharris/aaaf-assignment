@@ -107,7 +107,6 @@ export default {
         }
     },
     mounted() {
-        console.log("Called mounted");
         if (!_.isEmpty(this.teamToEdit)) {
             this.formData = {
                 name: this.teamToEdit.name
@@ -115,7 +114,6 @@ export default {
         }
     },
     updated() {
-        console.log("Called updated");
         if (!_.isEmpty(this.teamToEdit)) {
             this.formData = {
                 name: this.teamToEdit.name

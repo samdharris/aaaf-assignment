@@ -26,7 +26,6 @@ export default new Vuex.Store({
             });
         },
         "SOCKET_message-sent"(ctx, data) {
-            console.log("hello world");
             ctx.commit("chat/SEND_MESSAGE", data);
         },
         "SOCKET_user-disconnected"(ctx, data) {

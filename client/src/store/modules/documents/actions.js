@@ -36,7 +36,6 @@ export default {
     getDocument: async (ctx, documentId) => {
         try {
             ctx.commit(SET_LOADING, true);
-            console.log(ctx.state);
             const { data } = await axios.get(
                 `/api/teams/${localStorage.getItem(
                     "team"
@@ -53,8 +52,6 @@ export default {
         }
     },
     uploadDocument: async (ctx, { document, teamId }) => {
-        console.log(teamId);
-        console.log(document);
         try {
             ctx.commit(SET_SUBMITTING, true);
 

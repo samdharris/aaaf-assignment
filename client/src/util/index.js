@@ -5,7 +5,6 @@ export const format = data => {
     Object.keys(data).forEach(key => {
         if (_.isArray(data[key])) {
             data[key] = data[key].map(v => format(v));
-            console.log(data[key]);
         }
     });
 

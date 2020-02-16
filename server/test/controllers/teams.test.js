@@ -226,7 +226,6 @@ describe('POST /api/teams/{:id}/members', () => {
     it('should not contain duplicates of a given user', async () => {
         const unExpected = [data.user._id.toString(), data.user._id.toString()];
         const team = await teamSeeder.seed('Team A');
-        console.log(JSON.stringify(team));
         const response = await supertest
             .post(`/api/teams/${team._id}/members`)
             .send({
