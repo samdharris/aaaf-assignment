@@ -3,6 +3,9 @@ import mutations from "./mutations";
 import state from "./state";
 import getters from "./getters";
 
+/**
+ * The documents module
+ */
 export default {
     namespaced: true,
     actions,

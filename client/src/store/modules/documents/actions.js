@@ -15,6 +15,12 @@ import { showSnackbar } from "../../helpers";
 import router from "../../../router";
 import { format } from "../../../util";
 export default {
+    /**
+     * Gets all documents from the backend
+     *
+     * @param {object} ctx
+     * @param {string} teamId
+     */
     getDocuments: async (ctx, teamId) => {
         localStorage.setItem("team", teamId);
         try {
@@ -33,6 +39,12 @@ export default {
             ctx.commit(SET_LOADING, false);
         }
     },
+    /**
+     * gets the requested document from the server
+     *
+     * @param {object} ctx
+     * @param {string} documentId
+     */
     getDocument: async (ctx, documentId) => {
         try {
             ctx.commit(SET_LOADING, true);
@@ -51,6 +63,12 @@ export default {
             ctx.commit(SET_LOADING, false);
         }
     },
+    /**
+     * Uploads the given document to the server
+     *
+     * @param {object} ctx
+     * @param {object} payload
+     */
     uploadDocument: async (ctx, { document, teamId }) => {
         try {
             ctx.commit(SET_SUBMITTING, true);
@@ -78,6 +96,12 @@ export default {
             ctx.commit(SET_SUBMITTING, false);
         }
     },
+    /**
+     * Requests the deletion of the given document
+     *
+     * @param {object} ctx
+     * @param {string} documentId
+     */
     deleteDocument: async (ctx, documentId) => {
         try {
             const team = localStorage.getItem("team");
@@ -93,6 +117,12 @@ export default {
             );
         }
     },
+    /**
+     * Handles document checkout from the backend
+     *
+     * @param {object} ctx
+     * @param {string} documentId
+     */
     checkoutDocument: async (ctx, documentId) => {
         try {
             const { data } = await axios.put(
@@ -109,6 +139,12 @@ export default {
             );
         }
     },
+    /**
+     * Handles document checkin from the backend
+     *
+     * @param {object} ctx
+     * @param {string} documentId
+     */
     checkinDocument: async (ctx, documentId) => {
         try {
             const { data } = await axios.put(
@@ -125,6 +161,12 @@ export default {
             );
         }
     },
+    /**
+     * Uploads the given document to the server
+     *
+     * @param {object} ctx
+     * @param {object} payload
+     */
     editDocument: async (ctx, { documentId, document }) => {
         try {
             ctx.commit(SET_SUBMITTING, true);
