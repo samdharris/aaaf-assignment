@@ -16,7 +16,6 @@ import router from "../../../router";
 export default {
     getDocuments: async (ctx, teamId) => {
         localStorage.setItem("team", teamId);
-        console.log(teamId);
         try {
             ctx.commit(SET_LOADING, true);
             const { data } = await axios.get(`/api/teams/${teamId}/documents`);

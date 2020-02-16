@@ -78,21 +78,15 @@ export default {
             ]
         };
     },
-    watch: {
-        teamId: {
-            handler(value) {
-                if (value) {
-                    this.getDocuments(value);
-                }
-            }
-        }
-    },
     computed: mapState({
         documents: state => state.documents.documents,
         loading: state => state.documents.loading
     }),
     methods: mapActions({
         getDocuments: "documents/getDocuments"
-    })
+    }),
+    mounted() {
+        this.getDocuments(this.teamId);
+    }
 };
 </script>
