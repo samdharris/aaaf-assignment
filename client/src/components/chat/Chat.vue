@@ -1,6 +1,6 @@
 <template>
     <v-card>
-        <v-toolbar primary dark class="align-center">
+        <v-toolbar dark color="primary" class="align-center">
             <v-toolbar-title>
                 Team Chat
             </v-toolbar-title>
