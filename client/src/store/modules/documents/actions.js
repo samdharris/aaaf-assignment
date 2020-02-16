@@ -147,7 +147,6 @@ export default {
             showSnackbar("Document updated!", "success");
             return true;
         } catch (error) {
-            console.error(error);
             showSnackbar(
                 `something went wrong editing document: ${error.message}`,
                 "error"
