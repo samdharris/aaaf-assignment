@@ -15,6 +15,11 @@ import router from "../../../router";
 import { showSnackbar } from "../../helpers";
 import { format } from "../../../util";
 export default {
+    /**
+     * Get all teams from backend and put them into state
+     *
+     * @param {object} ctx
+     */
     getTeams: async ctx => {
         try {
             ctx.commit(SET_LOADING, true);
@@ -31,6 +36,12 @@ export default {
             ctx.commit(SET_LOADING, false);
         }
     },
+    /**
+     * Submits a new team to be created
+     *
+     * @param {object} ctx
+     * @param {object} team
+     */
     createTeam: async (ctx, team) => {
         try {
             ctx.commit(SET_SUBMITTING, true);
@@ -44,6 +55,12 @@ export default {
             ctx.commit(SET_SUBMITTING, false);
         }
     },
+    /**
+     * Submits a team to be updated
+     *
+     * @param {object} ctx
+     * @param {object} team
+     */
     updateTeam: async (ctx, team) => {
         try {
             ctx.commit(SET_SUBMITTING, true);
@@ -60,6 +77,11 @@ export default {
             ctx.commit(SET_SUBMITTING, false);
         }
     },
+    /**
+     * Submits a given team to be deleted
+     *
+     * @param {object} ctx
+     */
     deleteTeam: async ctx => {
         try {
             await axios.delete(`/api/teams/${ctx.state.team._id}`);
@@ -74,6 +96,12 @@ export default {
             return false;
         }
     },
+    /**
+     * Gets the given team from the backend for viewing
+     *
+     * @param {object} ctx
+     * @param {string} teamId
+     */
     getTeam: async (ctx, teamId) => {
         try {
             ctx.commit(SET_LOADING, true);
@@ -88,6 +116,12 @@ export default {
             ctx.commit(SET_LOADING, false);
         }
     },
+    /**
+     * Submits the given member to be removed from the team
+     *
+     * @param {object} ctx
+     * @param {string} memberId
+     */
     removeMember: async (ctx, memberId) => {
         try {
             const teamId = ctx.state.team._id;
@@ -101,6 +135,12 @@ export default {
             );
         }
     },
+    /**
+     * Submits the given user to be added to the team
+     *
+     * @param {object} ctx
+     * @param {string} member
+     */
     addMembers: async (ctx, member) => {
         try {
             ctx.commit(SET_SUBMITTING, true);
