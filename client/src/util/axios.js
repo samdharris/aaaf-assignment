@@ -33,7 +33,7 @@ instance.interceptors.response.use(
 
         if (
             status === httpCodes.BAD_REQUEST ||
-            httpCodes.INTERNAL_SERVER_ERROR
+            (httpCodes.INTERNAL_SERVER_ERROR && !_.isNil(data.message))
         ) {
             showSnackbar(data.message, "error");
         }
