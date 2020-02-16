@@ -34,6 +34,7 @@ export default {
         state.documents = [
             ...state.documents.filter(document => document._id !== id)
         ];
+        state.document = {};
     },
     [UPDATE_DOCUMENT](state, doc) {
         state.documents = [
