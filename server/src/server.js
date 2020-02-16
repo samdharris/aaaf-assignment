@@ -10,7 +10,7 @@ server.use(
     fileUpload({
         safeFileNames: true,
         preserveExtension: true,
-        debug: process.env.NODE_ENV !== 'production',
+        debug: process.env.NODE_ENV === 'debug',
         createParentPath: true,
     })
 );
