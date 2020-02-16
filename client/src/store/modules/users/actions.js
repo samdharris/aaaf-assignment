@@ -14,6 +14,11 @@ import { showSnackbar } from "../../helpers";
 import { format } from "../../../util";
 
 export default {
+    /**
+     * Gets all users from the backend
+     *
+     * @param {object} ctx
+     */
     getUsers: async ctx => {
         try {
             const { data } = await axios.get("/api/users");
@@ -25,6 +30,12 @@ export default {
             showSnackbar("Something went wrong getting users", "error");
         }
     },
+    /**
+     * Gets the given user from the backend for viewing
+     *
+     * @param {object} ctx
+     * @param {string} userId
+     */
     getUser: async (ctx, userId) => {
         try {
             ctx.commit(SET_LOADING, true);
@@ -36,6 +47,12 @@ export default {
             ctx.commit(SET_LOADING, false);
         }
     },
+    /**
+     * Submit the given user for creation
+     *
+     * @param {object} ctx
+     * @param {object} user
+     */
     createUser: async (ctx, user) => {
         try {
             ctx.commit(SET_SUBMITTING, true);
@@ -50,6 +67,12 @@ export default {
             ctx.commit(SET_SUBMITTING, false);
         }
     },
+    /**
+     * Submit the given user for updating
+     *
+     * @param {object} ctx
+     * @param {object} user
+     */
     updateUser: async (ctx, user) => {
         try {
             ctx.commit(SET_SUBMITTING, true);
@@ -68,6 +91,12 @@ export default {
             ctx.commit(SET_SUBMITTING, false);
         }
     },
+    /**
+     * Submit the given user for disabling
+     *
+     * @param {object} ctx
+     * @param {object} user
+     */
     disableUser: async (ctx, user) => {
         try {
             const { data } = await axios.put(`/api/users/${user}/disable`);
@@ -77,6 +106,12 @@ export default {
             showSnackbar("Something went wrong disabling user", "error");
         }
     },
+    /**
+     * Submit the given user for enabling
+     *
+     * @param {object} ctx
+     * @param {object} user
+     */
     enableUser: async (ctx, user) => {
         try {
             const { data } = await axios.put(`/api/users/${user}/enable`);
@@ -86,6 +121,12 @@ export default {
             showSnackbar("Something went wrong enabling user", "error");
         }
     },
+    /**
+     * Submit the given user for being deleted
+     *
+     * @param {object} ctx
+     * @param {object} user
+     */
     deleteUser: async (ctx, user) => {
         try {
             await axios.delete(`/api/users/${user}`);
