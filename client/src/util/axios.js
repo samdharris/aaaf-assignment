@@ -13,6 +13,9 @@ const instance = axios.create({
     }
 });
 
+/**
+ * @see https://github.com/axios/axios#interceptors
+ */
 instance.interceptors.request.use(request => {
     const token = localStorage.getItem("token");
     if (!_.isNil(token)) {
@@ -21,6 +24,9 @@ instance.interceptors.request.use(request => {
     return request;
 });
 
+/**
+ * @see https://github.com/axios/axios#interceptors
+ */
 instance.interceptors.response.use(
     response => {
         return Promise.resolve(response);
