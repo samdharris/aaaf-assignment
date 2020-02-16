@@ -9,7 +9,7 @@ router.get('/', userIsAdmin, controller.index);
 router.get('/:userId', userIsUser, controller.show);
 router.post('/', userIsAdmin, controller.store);
 router.delete('/:userId', userIsAdmin, controller.destory);
-router.put('/:userId', userIsAdmin, controller.update);
+router.put('/:userId', controller.update);
 
 router.put('/:userId/enable', userIsAdmin, controller.enableUser);
 router.put('/:userId/disable', userIsAdmin, controller.disableUser);
