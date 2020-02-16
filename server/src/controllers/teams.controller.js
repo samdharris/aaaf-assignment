@@ -4,6 +4,11 @@ const User = require('../database/models/user.model');
 const validation = require('../validation/team.validation');
 const _ = require('lodash');
 
+/**
+ * GET /api/teams
+ *
+ * Returns all teams. Only accessible by an admin user.
+ */
 exports.index = async (req, res) => {
     try {
         const teams = await Team.find();
@@ -18,6 +23,11 @@ exports.index = async (req, res) => {
     }
 };
 
+/**
+ * GET /api/teams/:teamId
+ *
+ * Gets the requested team with all members.
+ */
 exports.show = async (req, res) => {
     try {
         const team = await Team.findById(req.params.teamId)
@@ -33,6 +43,12 @@ exports.show = async (req, res) => {
         console.error(e.message);
     }
 };
+
+/**
+ * POST /api/teams
+ *
+ * Creates a new team. Only accessible by admin users
+ */
 exports.store = async (req, res) => {
     try {
         const validated = await validation.validateAsync(req.body);
@@ -55,6 +71,12 @@ exports.store = async (req, res) => {
         console.error(e.message);
     }
 };
+
+/**
+ * DELETE /api/teams/:teamId
+ *
+ * Deletes a given team. Only accessible by admin users
+ */
 exports.destory = async (req, res) => {
     try {
         const teamId = req.params.teamId;
@@ -78,6 +100,11 @@ exports.destory = async (req, res) => {
     }
 };
 
+/**
+ * PUT /api/teams/:teamId
+ *
+ * Updates a given team. Only accessible by admin users
+ */
 exports.update = async (req, res) => {
     try {
         const validated = await validation.validateAsync(req.body);
@@ -97,6 +124,11 @@ exports.update = async (req, res) => {
     }
 };
 
+/**
+ * POST /api/teams/members
+ *
+ * Adds a given user to the specified team. Only accessible by admin users
+ */
 exports.addUser = async (req, res) => {
     try {
         const newMemberId = req.body.member;
@@ -132,6 +164,11 @@ exports.addUser = async (req, res) => {
     }
 };
 
+/**
+ * DELETE /api/teams/:teamId/members/:memberId
+ *
+ * Removes a given user from the given team. Only accessible by admin users
+ */
 exports.removeUser = async (req, res) => {
     try {
         const { teamId, memberId } = req.params;

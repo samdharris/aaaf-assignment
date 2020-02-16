@@ -1,5 +1,4 @@
 const Document = require('../database/models/document.model');
-const Team = require('../database/models/team.model');
 const User = require('../database/models/user.model');
 const userRepository = require('../database/respositories/user.respsitory');
 const DocumentVersion = require('../database/models/documentVersion.model');
@@ -11,6 +10,11 @@ const fs = require('fs');
 
 const sizeOf = require('image-size');
 
+/**
+ * GET /api/teams/:teamId/documents
+ *
+ * Returns all documents for a given team
+ */
 exports.index = async (req, res) => {
     try {
         const documents = await Document.find({
@@ -26,6 +30,11 @@ exports.index = async (req, res) => {
         });
     }
 };
+/**
+ * GET /api/teams/:teamId/documents/:documentId
+ *
+ * Returns the given document with all its associated versions.
+ */
 exports.show = async (req, res) => {
     try {
         const document = await await Document.findById(
@@ -45,6 +54,11 @@ exports.show = async (req, res) => {
     } catch (error) {}
 };
 
+/**
+ * POST /api/teams/:teamId/documents
+ *
+ * Uploads and creates a new document.
+ */
 exports.store = async (req, res) => {
     try {
         const document = req.files.document;
@@ -105,6 +119,12 @@ exports.store = async (req, res) => {
         });
     }
 };
+/**
+ * PUT /api/teams/:teamId/documents/:documentId
+ *
+ * Updates a given document. Creating a new version. Can only be accessed by the user who has the requested document
+ * checked out.
+ */
 exports.update = async (req, res) => {
     try {
         const team = req.team;
@@ -162,6 +182,12 @@ exports.update = async (req, res) => {
         res.status(httpCodes.BAD_REQUEST).json({ error });
     }
 };
+/**
+ * DELETE /api/teams/:teamId/documents/:documentId
+ *
+ * Deletes a given document and ALL associated versions. Can only be accessed by the person who has the requested
+ * document checked out
+ */
 exports.destory = async (req, res) => {
     try {
         const { documentId } = req.params;
@@ -187,6 +213,11 @@ exports.destory = async (req, res) => {
     }
 };
 
+/**
+ * PUT /api/teams/:teamId/documents/:documentId/checkout
+ *
+ * Checks out the requested document to the currently logged in user.
+ */
 exports.checkoutDocument = async (req, res) => {
     try {
         const document = await Document.findById(req.params.documentId);
@@ -214,6 +245,11 @@ exports.checkoutDocument = async (req, res) => {
     }
 };
 
+/**
+ * PUT /api/teams/:teamId/documents/:documentId/checkin
+ *
+ * Checks in the requested document.
+ */
 exports.checkinDocument = async (req, res) => {
     try {
         const document = await Document.findById(req.params.documentId);

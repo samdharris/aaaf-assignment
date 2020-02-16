@@ -5,6 +5,12 @@ const Team = require('../database/models/team.model');
 const validation = require('../validation/user.validation');
 const _ = require('lodash');
 const securityUtils = require('../securityUtils');
+
+/**
+ * GET /api/users
+ *
+ * Returns all users. Only accessible by admin users
+ */
 exports.index = async (req, res) => {
     try {
         const users = await User.find();
@@ -20,6 +26,12 @@ exports.index = async (req, res) => {
         console.error(error.message);
     }
 };
+
+/**
+ * GET /api/users/:userId
+ *
+ * Returns the requested user.
+ */
 exports.show = async (req, res) => {
     try {
         const user = await userRepository.findById(req.params.userId, {
@@ -44,6 +56,11 @@ exports.show = async (req, res) => {
         });
     }
 };
+/**
+ * POST /api/users
+ *
+ * Creates a new user. Only accessible by admin users
+ */
 exports.store = async (req, res) => {
     try {
         const validated = await validation.validateAsync(req.body);
@@ -79,6 +96,12 @@ exports.store = async (req, res) => {
         console.error(error.message);
     }
 };
+
+/**
+ * DELETE /api/users/:userId
+ *
+ * Deletes a given user. Only accessible by admin users
+ */
 exports.destory = async (req, res) => {
     try {
         // Remove user from team
@@ -99,6 +122,11 @@ exports.destory = async (req, res) => {
         console.error(e.message);
     }
 };
+/**
+ * PUT /api/users/:userId
+ *
+ * Updates a given user
+ */
 exports.update = async (req, res) => {
     try {
         const id = req.params.userId;
@@ -126,6 +154,11 @@ exports.update = async (req, res) => {
     }
 };
 
+/**
+ * PUT /api/users/:userId/enable
+ *
+ * Enables a given user allowing them to use the system. Only accessible by admin users
+ */
 exports.enableUser = async (req, res) => {
     try {
         const user = await userRepository.enableUser(req.params.userId);
@@ -145,6 +178,11 @@ exports.enableUser = async (req, res) => {
     }
 };
 
+/**
+ * PUT /api/users/:userId/disable
+ *
+ * Disables a given user preventing them from using the system. Only accessible by admin users
+ */
 exports.disableUser = async (req, res) => {
     try {
         const user = await userRepository.disableUser(req.params.userId);

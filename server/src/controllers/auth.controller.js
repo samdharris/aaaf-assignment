@@ -3,6 +3,10 @@ const userRepository = require('../database/respositories/user.respsitory');
 const httpCodes = require('http-status-codes');
 const _ = require('lodash');
 const securityUtils = require('../securityUtils');
+/**
+ * POST /login
+ * Handles the login request for a user
+ */
 exports.login = async (req, res) => {
     try {
         const validated = await validation.validateAsync(req.body);
@@ -54,6 +58,11 @@ exports.login = async (req, res) => {
     }
 };
 
+/**
+ * POST /verify
+ *
+ * Verfies a given JWT token to ensure it's valid
+ */
 exports.verify = async (req, res) => {
     try {
         const user = await userRepository.findById(req.userId, {
