@@ -34,8 +34,8 @@
                 ></team-members>
             </v-col>
         </v-row>
-        <team-documents :team-id="team._id"></team-documents>
-        <v-dialog v-model="dialog">
+        <team-documents v-if="!loading" :team-id="team._id"></team-documents>
+        <v-dialog v-model="dialog" v-if="!loading">
             <new-team-form
                 v-on:closeNewTeamForm="dialog = false"
                 :is-edit-mode="true"

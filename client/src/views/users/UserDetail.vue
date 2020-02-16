@@ -2,7 +2,7 @@
     <v-container>
         <v-row>
             <v-col>
-                <v-card class="mx-auto" tile v-if="!loading">
+                <v-card class="mx-auto" tile :loading="loading">
                     <v-img
                         src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
                         class="white--text align-center justify-center"
@@ -54,8 +54,6 @@
                         </p>
                     </v-card-text>
                 </v-card>
-                <v-progress-circular indeterminate v-else>
-                </v-progress-circular>
             </v-col>
         </v-row>
     </v-container>
