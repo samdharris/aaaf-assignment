@@ -3,6 +3,9 @@ const httpCodes = require('http-status-codes');
 const _ = require('lodash');
 const User = require('../database/models/user.model');
 
+/**
+ * Middleware to validate the JWT token in the request.
+ */
 module.exports = async (req, res, next) => {
     try {
         const header = req.header('Authorization');

@@ -2,6 +2,9 @@ const Team = require('../database/models/team.model');
 const _ = require('lodash');
 const httpCodes = require('http-status-codes');
 
+/**
+ * Middleware to ensure the requested team exists
+ */
 module.exports = async (req, res, next) => {
     const team = await Team.findById(req.params.teamId);
     if (_.isNil(team)) {

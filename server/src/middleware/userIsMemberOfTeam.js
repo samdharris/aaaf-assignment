@@ -3,6 +3,9 @@ const Team = require('../database/models/team.model');
 const User = require('../database/models/user.model');
 const _ = require('lodash');
 
+/**
+ * Middleware to ensure that the current user is a member of the given team.
+ */
 module.exports = async (req, res, next) => {
     const userId = req.userId;
     if (_.isNil(userId)) {

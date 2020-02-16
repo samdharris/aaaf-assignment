@@ -2,6 +2,9 @@ const userRepository = require('../database/respositories/user.respsitory');
 const _ = require('lodash');
 const httpCodes = require('http-status-codes');
 
+/**
+ * Middleware to ensure that the given user has the requested document checked out
+ */
 module.exports = async (req, res, next) => {
     const user = userRepository.findById(req.userId);
 
