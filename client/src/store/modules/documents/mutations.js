@@ -40,6 +40,8 @@ export default {
             ...state.documents.filter(document => document._id !== doc._id),
             doc
         ];
+
+        state.document = { ...doc };
     },
     [CHECKOUT_DOCUMENT](state, version) {
         state.document.versions = [
