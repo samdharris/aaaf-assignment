@@ -25,5 +25,5 @@ export function clearChat() {
  * Dispatches action to connect to the chat server.
  */
 export function connectToChat() {
-    store.dispatch(`chat/connect`);
+    store.dispatch(`chat/connect`, null, { root: true });
 }
