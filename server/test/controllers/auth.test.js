@@ -6,13 +6,10 @@ const securityUtils = require('../../src/securityUtils');
 require('dotenv').config();
 
 beforeAll(() => {
-    return mongoose.connect(
-        `mongodb+srv://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@cluster0-gui1q.mongodb.net/test?retryWrites=true&w=majority`,
-        {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-        }
-    );
+    return mongoose.connect(process.env.MONGO_URI, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+    });
 });
 
 afterAll(() => {
