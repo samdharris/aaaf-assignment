@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 require('dotenv').config();
 
 beforeAll(() => {
-    return mongoose.connect(process.env.MONGO_URI, {
+    return mongoose.connect(process.env.MONGO_URI_TEST, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
     });

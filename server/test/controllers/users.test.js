@@ -6,13 +6,10 @@ require('dotenv').config();
 
 beforeAll(() => {
     return mongoose
-        .connect(
-            `mongodb+srv://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@cluster0-gui1q.mongodb.net/test?retryWrites=true&w=majority`,
-            {
-                useNewUrlParser: true,
-                useUnifiedTopology: true,
-            }
-        )
+        .connect(process.env.MONGO_URI_TEST, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+        })
         .then(() => {
             return mongoose.connection.dropCollection('users');
         });
