@@ -1,3 +1,3 @@
 #!/bin/bash
 
-yarn && cp .env.example .env
+yarn --frozen-lockfile && cp .env.example .env
