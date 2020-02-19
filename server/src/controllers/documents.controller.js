@@ -19,7 +19,7 @@ exports.index = async (req, res) => {
     try {
         const documents = await Document.find({
             team: req.params.teamId,
-        }).exec();
+        });
         res.json({
             message: 'Documents found!',
             documents,
@@ -173,9 +173,17 @@ exports.update = async (req, res) => {
         mongoDoc.versions.push(version);
         mongoDoc = await mongoDoc.save();
 
+        const doc = await Document.findById(req.params.documentId).populate({
+            path: 'versions',
+            populate: {
+                path: 'checkedOutBy',
+                model: User,
+            },
+        });
+
         res.json({
             message: 'Document updated',
-            document: mongoDoc,
+            document: doc,
         });
     } catch (error) {
         console.error(error);
