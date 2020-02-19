@@ -66,12 +66,12 @@ export default {
     [UPDATE_USER](state, user) {
         state.user = { ...user };
         state.users = [...state.users.filter(u => u._id !== user._id), user];
-    }
+    },
     /**
      * Remove the given user from state
      * @param {object} state
      * @param {object} user
-     */,
+     */
     [DELETE_USER](state, user) {
         state.user = {};
         state.users = [...state.users.filter(u => u._id !== user._id)];

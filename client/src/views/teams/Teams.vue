@@ -12,6 +12,7 @@
                     :headers="headers"
                     :items="teams"
                     class="elevation-1"
+                    :loading="loading"
                 >
                     <template v-slot:top>
                         <v-toolbar flat>
@@ -73,7 +74,8 @@ export default {
     },
     computed: {
         ...mapState({
-            teams: state => state.teams.teams
+            teams: state => state.teams.teams,
+            loading: state => state.teams.loading
         })
     },
     methods: {

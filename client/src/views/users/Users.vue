@@ -12,6 +12,7 @@
                     :headers="headers"
                     :items="users"
                     class="elevation-1"
+                    :loading="loading"
                 >
                     <template v-slot:top>
                         <v-toolbar flat>
@@ -85,7 +86,8 @@ export default {
     },
     computed: {
         ...mapState({
-            users: state => state.users.users
+            users: state => state.users.users,
+            loading: state => state.users.loading
         })
     },
     methods: {

@@ -21,6 +21,7 @@ export default {
      */
     getUsers: async ctx => {
         try {
+            ctx.commit(SET_LOADING, true);
             const { data } = await axios.get("/api/users");
             ctx.commit(
                 SET_USERS,
@@ -28,6 +29,8 @@ export default {
             );
         } catch (error) {
             showSnackbar("Something went wrong getting users", "error");
+        } finally {
+            ctx.commit(SET_LOADING, false);
         }
     },
     /**
