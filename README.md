@@ -2,7 +2,8 @@
 
 ## About
 
-This project was an assignment for the Application Architectures and Frameworks module at university where we were tasked to create a document management system based off a case study. The requirements for this project were to:
+This project was an assignment for the Application Architectures and Frameworks module at university where we were
+tasked to create a document management system based off a case study. The requirements for this project were to:
 
 -   Handle the metadata that is used to describe each file.
 -   Manage multiple versions for each file. As files are edited and used new versions will be
@@ -25,7 +26,8 @@ The final requirements that were implemented in this project along with the abov
 
 ## Architecture
 
-This is a traditional client / server layout. The Client is a Vue.js application with the backend a RESTFul service running off Express.js.
+This is a traditional client / server layout. The Client is a Vue.js application with the backend a RESTFul service
+running off Express.js.
 
 ## Technical
 
@@ -37,7 +39,8 @@ This is a full-stack MEVN app that runs on:
 -   Node.js
 -   Socket.io
 
-For Authentication, JWT tokens were used and for authorisation, a basic `isAdmin` flag was set against a user and that flag was checked on API requests as well as the route guards for Vue Routing.
+For Authentication, JWT tokens were used and for authorisation, a basic `isAdmin` flag was set against a user and that
+flag was checked on API requests as well as the route guards for Vue Routing.
 
 ## Setup and run.
 
@@ -45,4 +48,5 @@ To Setup and run this system, please refer to the README files in both folders.
 
 ## Known Issues
 
--   There is an issue where upon logging in, the chat fails to connect. This is due to how the token is currently being passed through to the socket.io endpoint. This can be resolved by refreshing the page **after logging in**.
+-   There is an issue where upon logging in, the chat fails to connect. This is due to how the token is currently being
+    passed through to the socket.io endpoint. This can be resolved by refreshing the page **after logging in**.
